@@ -1,0 +1,9 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "composite_mini_app",
+  "appid": "wxc3c4b5bcef853b6d",
+  "setting": {
+    "es6": false,
+    "minified": false
+  }
+}
