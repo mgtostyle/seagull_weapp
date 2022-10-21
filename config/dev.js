@@ -4,6 +4,9 @@ module.exports = {
   },
   defineConstants: {
   },
+  cache: {
+    enable: true
+  },
   mini: {},
   h5: {}
 }

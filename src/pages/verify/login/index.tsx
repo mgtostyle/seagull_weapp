@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import type { PropsWithChildren, ReactNode } from 'react'
 import type { PageProps, PageState } from './interface'
-import { UsButton } from '../../../components/usComp'
+import './index.less'
+import { View } from '@tarojs/components'
+import { UsButton } from '@components/usComp'
 
 class VerifyLogin extends Component<PropsWithChildren<PageProps>, PageState> {
 
@@ -13,6 +15,13 @@ class VerifyLogin extends Component<PropsWithChildren<PageProps>, PageState> {
   public render (): ReactNode {
     return (
       <React.Fragment>
+        <View
+          className="iconfont"
+          style={{
+            display: 'block',
+            marginTop: 100
+          }}
+        >&#xe723;</View>
         <UsButton>测试</UsButton>
       </React.Fragment>
     )
