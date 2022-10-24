@@ -9,7 +9,7 @@ export const globalSlice = createSlice({
     navigate: {
       xBetween: systemRect.screenWidth - menuRect.right,
       yTop: menuRect.top,
-      yBottom: (menuRect.top - (systemRect?.statusBarHeight || 0)) * 2,
+      yBottom: menuRect.top - (systemRect?.statusBarHeight || 0),
       bWidth: menuRect.width,
       bHeight: menuRect.height
     },

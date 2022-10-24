@@ -1,9 +1,7 @@
-import React, { Component } from 'react'
-import type { PropsWithChildren, ReactNode } from 'react'
+import React, { Component, PropsWithChildren, ReactNode } from 'react'
 import type { PageProps, PageState } from './interface'
 import './index.less'
-import { View } from '@tarojs/components'
-import { UsContainer } from '@components/usComp'
+import { UsContainer, UsForm, UsFormField } from '@components/usComp'
 
 class VerifyLogin extends Component<PropsWithChildren<PageProps>, PageState> {
 
@@ -14,7 +12,14 @@ class VerifyLogin extends Component<PropsWithChildren<PageProps>, PageState> {
 
   public render (): ReactNode {
     return (
-      <UsContainer title="首页"></UsContainer>
+      <React.Fragment>
+        <UsContainer title="首页">
+          <UsForm>
+            <UsFormField.Item></UsFormField.Item>
+            <UsFormField.Item></UsFormField.Item>
+          </UsForm>
+        </UsContainer>
+      </React.Fragment>
     )
   }
 

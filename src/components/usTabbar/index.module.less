@@ -1,0 +1,39 @@
+.back_offset {
+  display: block;
+  padding-top: 110rpx;
+}
+.back_container{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  height: 110rpx;
+  background-color: #ffffff;
+  .inline_box{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .icon{
+      font-size: 38rpx;
+      color: #8c8c8c;
+    }
+    .name{
+      font-size: 20rpx;
+      color: #8c8c8c;
+      margin-top: 6rpx;
+    }
+    &.active{
+      .icon{
+        color: #262626;
+      }
+      .name{
+        color: #262626;
+      }
+    }
+  }
+}

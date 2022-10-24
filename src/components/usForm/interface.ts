@@ -1,3 +1,8 @@
 export interface PageProps {
-  block: boolean;
+  
+}
+
+export interface PageItemProps {
+  label: string;
+  direction: 'horizontal' | 'vertical';
 }

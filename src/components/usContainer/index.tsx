@@ -1,5 +1,4 @@
-import React, { Component, ReactNode } from 'react'
-import type { PropsWithChildren } from 'react'
+import React, { Component, PropsWithChildren, ReactNode } from 'react'
 import type { PageProps } from './interface'
 import less from './index.module.less'
 import { View, Text } from '@tarojs/components'
@@ -7,9 +6,14 @@ import { connect } from 'react-redux'
 
 class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<typeof mapStateToProps>> {
 
+  static defaultProps: PageProps = {
+    back: 2,
+    title: '',
+    menu: []
+  }
+
   render (): ReactNode {
-    console.log(this.props)
-    const { global, title }: PageProps = this.props
+    const { global, back, title }: PageProps = this.props
     const { navigate, safeAreaHeight } = global || {}
     return (
       <React.Fragment>
@@ -20,12 +24,37 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
             height: `${navigate.bHeight}px`
           }}
         >
-          <View className={`${less.inline_icon} iconfont`}>&#xe739;</View>
+          {back === 1 ? (
+            <View
+              className={`${less.inline_single_icon} iconfont`}
+              style={{
+                left: `${navigate.xBetween}px`,
+                width: `${navigate.bHeight}px`,
+                height: `${navigate.bHeight}px`
+              }}
+            >&#xe739;</View>
+          ) : back === 2 && (
+            <React.Fragment>
+              <View
+                className={less.inline_icon_box}
+                style={{
+                  left: `${navigate.xBetween}px`,
+                  width: `${navigate.bWidth - 1}px`,
+                  height: `${navigate.bHeight - 1}px`
+                }}
+              >
+                <View className={`${less.left_icon} iconfont`}>&#xe739;</View>
+                <View className={less.line} />
+                <View className={`${less.right_icon} iconfont`}>&#xe750;</View>
+              </View>
+            </React.Fragment>
+          )}
           <Text className={less.inline_title}>{title}</Text>
         </View>
         <View
           className={less.block_container}
           style={{
+            paddingTop: `${navigate.yTop + navigate.yBottom + navigate.bHeight}px`,
             paddingBottom: `${safeAreaHeight}rpx`
           }}
         >{this.props.children}</View>

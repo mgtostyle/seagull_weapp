@@ -1,4 +1,11 @@
 export interface PageProps {
-  global?: {[propsName: string]: any};
+  global?: any;
+  back: 0 | 1 | 2;
+  menu: MenuItem[];
   title: string;
+}
+
+export interface MenuItem {
+  name: string;
+  path: string;
 }

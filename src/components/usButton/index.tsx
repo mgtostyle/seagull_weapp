@@ -1,5 +1,4 @@
-import { Component, ReactNode } from 'react'
-import type { PropsWithChildren } from 'react'
+import { Component, ReactNode, PropsWithChildren } from 'react'
 import type { PageProps } from './interface'
 import less from './index.module.less'
 import { Button } from '@tarojs/components'
