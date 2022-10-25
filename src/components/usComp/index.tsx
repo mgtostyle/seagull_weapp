@@ -4,6 +4,8 @@ import * as UsFormComponent from '../usForm'
 import * as UsFormItemComponent from '../usForm/Item'
 import UsFormItemGroup from '../usForm/ItemGroup'
 import UsInput from '../usInput'
+import UsTextArea from '../usTextArea'
+import UsRadio from '../usRadio'
 import * as UsButtonComponent from '../usButton'
 import UsButtonGroup from '../usButton/group'
 
@@ -20,5 +22,7 @@ export {
   UsTabbar,
   UsForm,
   UsInput,
+  UsTextArea,
+  UsRadio,
   UsButton,
 }
