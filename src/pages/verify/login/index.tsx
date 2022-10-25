@@ -1,7 +1,7 @@
 import React, { Component, PropsWithChildren, ReactNode } from 'react'
 import type { PageProps, PageState } from './interface'
 import './index.less'
-import { UsContainer, UsForm, UsFormField } from '@components/usComp'
+import { UsContainer, UsForm, UsInput } from '@components/usComp'
 
 class VerifyLogin extends Component<PropsWithChildren<PageProps>, PageState> {
 
@@ -15,8 +15,14 @@ class VerifyLogin extends Component<PropsWithChildren<PageProps>, PageState> {
       <React.Fragment>
         <UsContainer title="首页">
           <UsForm>
-            <UsFormField.Item></UsFormField.Item>
-            <UsFormField.Item></UsFormField.Item>
+            <UsForm.Item.Group>
+              <UsForm.Item label="测试" direction="horizontal">
+                <UsInput placeholderClass="placeholderClass" placeholder="请输入..." />
+              </UsForm.Item>
+              <UsForm.Item label="测试" direction="horizontal">
+                <UsInput placeholderClass="placeholderClass" placeholder="请输入..." />
+              </UsForm.Item>
+            </UsForm.Item.Group>
           </UsForm>
         </UsContainer>
       </React.Fragment>

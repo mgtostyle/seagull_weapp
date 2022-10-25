@@ -1,5 +1,4 @@
 export interface PageProps {
-  global?: any;
   current: CurrentIndex;
   readonly list: [Tabbar, Tabbar, Tabbar?, Tabbar?, Tabbar?];
   change?: (value: CurrentIndex) => void;

@@ -1,9 +1,9 @@
 import type { ButtonProps } from '@tarojs/components'
 
-export interface PageProps {
+export interface PageProps extends ButtonProps {
+  nodeKey?: 'ButtonGroup';
   block: boolean;
-  size: 'small' | 'default' | 'large';
   theme?: 'default' | 'primary' | 'danger';
   ghost: boolean;
-  field?: ButtonProps;
+  width: string | number;
 }

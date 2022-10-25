@@ -13,8 +13,8 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
   }
 
   render (): ReactNode {
-    const { global, back, title }: PageProps = this.props
-    const { navigate, safeAreaHeight } = global || {}
+    const { back, title }: PageProps = this.props
+    const { navigate, safeAreaHeight } = this.props.global
     return (
       <React.Fragment>
         <View

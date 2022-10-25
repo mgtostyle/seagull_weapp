@@ -4,22 +4,23 @@ import less from './index.module.less'
 import { View } from '@tarojs/components'
 import { connect } from 'react-redux'
 
-class UsTabbar extends Component<PropsWithChildren<PageProps>> {
+class UsTabbar extends Component<PropsWithChildren<PageProps> & ReturnType<typeof mapStateToProps>> {
 
   render (): ReactNode {
-    const { global, list, current, change }: PageProps = this.props
+    const { list, current, change }: PageProps = this.props
+    const { safeAreaHeight } = this.props.global
     return (
       <React.Fragment>
         <View
           className={less.back_offset}
           style={{
-            paddingBottom: `${global.safeAreaHeight}rpx`
+            paddingBottom: `${safeAreaHeight}rpx`
           }}
         />
         <View
           className={less.back_container}
           style={{
-            paddingBottom: `${global.safeAreaHeight}rpx`
+            paddingBottom: `${safeAreaHeight}rpx`
           }}
         >
           {list.map((item: any, index: CurrentIndex) => (

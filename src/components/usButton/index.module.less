@@ -1,3 +1,11 @@
+.block_button_group_container{
+  display: flex;
+  align-items: center;
+  border-radius: 50px;
+  overflow: hidden;
+  box-sizing: content-box;
+}
+
 .block_container{
   width: auto;
   height: auto;
@@ -8,8 +16,25 @@
   background-color: transparent;
   border-radius: 8rpx;
   font-weight: normal;
-  margin-bottom: 20rpx;
+  border-radius: 50PX;
+  height: 50PX;
   &::after{
     border: 0;
+  }
+  &.ghost{
+    height: 50PX;
+  }
+  &.inline_button_group{
+    flex: 1;
+    border-radius: 0;
+    border-right: 1PX solid #f4f4f4!important;
+    overflow: hidden;
+    &:first-child{
+      border-radius: 50PX 0 0 50PX;
+    }
+    &:last-child{
+      border-right: 0!important;
+      border-radius: 0 50PX 50PX 0;
+    }
   }
 }

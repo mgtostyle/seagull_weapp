@@ -1,32 +1,46 @@
-import React, { Component, ReactNode, PropsWithChildren } from 'react'
+import { Component, ReactNode, PropsWithChildren } from 'react'
 import type { PageProps } from './interface'
-import indexCss from './index.module.less'
-import { Form, Checkbox, CheckboxGroup, Editor, Radio, RadioGroup, Switch, Slider, Picker, PickerView, KeyboardAccessory, Label, Input, Textarea, Button } from '@tarojs/components'
+import less from './index.module.less'
+import { View, Form } from '@tarojs/components'
+import { connect } from 'react-redux'
+
 import { UsButton } from '../usComp'
 
-class UsForm extends Component<PropsWithChildren<PageProps>> {
+export class UsForm extends Component<PropsWithChildren<PageProps> & ReturnType<typeof mapStateToProps>> {
 
   render (): ReactNode {
+    const { ...params }: PageProps = this.props
+    const { safeAreaHeight } = this.props.global
     return (
       <Form
-        onReset={() => console.log('重置成功')}
-        onSubmit={(values) => console.log(values)}
+        className={less.block_form_container}
+        {...params}
       >
         {this.props.children}
-        <UsButton
-          field={{
-            formType: "reset"
+        <View
+          className={less.inline_button_box}
+          style={{
+            paddingBottom: `${safeAreaHeight}rpx`
           }}
-        >重置</UsButton>
-        <UsButton
-          field={{
-            formType: "submit"
-          }}
-        >提交</UsButton>
+        >
+          <UsButton.Group>
+            <UsButton
+              ghost
+              formType="reset"
+            >重置</UsButton>
+            <UsButton
+              formType="submit"
+            >提交</UsButton>
+          </UsButton.Group>
+        </View>
       </Form>
     )
   }
 
 }
 
-export default UsForm;
+const mapStateToProps = (state) => ({
+  global: state.global
+})
+
+export default connect(mapStateToProps)(UsForm);
