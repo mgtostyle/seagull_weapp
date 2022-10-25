@@ -1,36 +1,41 @@
-import React, { Component, PropsWithChildren, ReactNode } from 'react'
-import type { PageProps, PageState } from './interface'
-import './index.less'
-import { UsContainer, UsForm, UsInput, UsTextArea, UsRadio } from '@components/usComp'
+import React, { PropsWithChildren } from 'react'
+import type { PageProps } from './interface'
 
-class VerifyLogin extends Component<PropsWithChildren<PageProps>, PageState> {
+import { UsForm, UsInput, UsTextArea, UsRadio, UsCheckbox, UsUpload, UsContainer } from '../../../components/usComp'
 
-  constructor (props) {
-    super (props)
-    console.log(props)
-  }
+const VerifyLogin: React.FC<PropsWithChildren<PageProps>> = () => {
 
-  public render (): ReactNode {
-    return (
-      <React.Fragment>
-        <UsContainer title="首页">
-          <UsForm
-            onSubmit={(values) => console.log(values.detail.value)}
-          >
-            <UsForm.Item label="输入框" name="input">
-              <UsInput placeholder="请输入..." />
-            </UsForm.Item>
-            <UsForm.Item label="文本域" name="textarea">
-              <UsTextArea placeholder="请输入..." />
-            </UsForm.Item>
-            <UsForm.Item label="单选框" name="radio">
-              <UsRadio>1</UsRadio>
-            </UsForm.Item>
-          </UsForm>
-        </UsContainer>
-      </React.Fragment>
-    )
-  }
+  return (
+    <UsContainer title="头部信息">
+      <UsForm
+        onSubmit={(values) => console.log(values.detail.value)}
+      >
+        <UsForm.Item label="输入框" name="input">
+          <UsInput placeholder='请输入...' />
+        </UsForm.Item>
+        <UsForm.Item label="文本域" name="textarea">
+          <UsTextArea placeholder='请输入...' />
+        </UsForm.Item>
+        <UsForm.Item label="单选框" name="radio">
+          <UsRadio.Group>
+            <UsRadio value={1}>1</UsRadio>
+            <UsRadio value={2}>2</UsRadio>
+            <UsRadio value={3}>3</UsRadio>
+            <UsRadio value={4}>4</UsRadio>
+          </UsRadio.Group>
+        </UsForm.Item>
+        <UsForm.Item label="复选框" name="checkbox">
+          <UsCheckbox.Group>
+            <UsCheckbox value={1}>1</UsCheckbox>
+            <UsCheckbox value={2}>2</UsCheckbox>
+            <UsCheckbox value={3}>3</UsCheckbox>
+            <UsCheckbox value={4}>4</UsCheckbox>
+          </UsCheckbox.Group>
+        </UsForm.Item>
+        <UsUpload />
+      </UsForm>
+    </UsContainer>
+  )
 
 }
 

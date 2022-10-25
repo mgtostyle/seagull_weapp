@@ -1,5 +1,7 @@
-export interface PageProps {
-  
+import type { FormProps } from '@tarojs/components'
+
+export interface PageProps extends FormProps {
+
 }
 
 export interface PageItemProps {
@@ -7,4 +9,8 @@ export interface PageItemProps {
   label: string;
   name: string;
   direction: 'horizontal' | 'vertical';
+}
+
+export interface PageFieldState {
+  value: string;
 }
