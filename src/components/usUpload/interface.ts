@@ -1,4 +1,4 @@
 export interface PageProps {
-  name?: string;
-  value?: string;
+  initialValue: string;
+  onChange?: (value: any) => void;
 }

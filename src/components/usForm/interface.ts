@@ -1,7 +1,18 @@
 import type { FormProps } from '@tarojs/components'
 
-export interface PageProps extends FormProps {
+export interface FieldValue {
+  name: string;
+  value: any;
+}
 
+export interface PageProps extends FormProps {
+  initialValues: {[propsName: string]: any};
+  setFieldValue?: (fieldValue: FieldValue) => void;
+  onSubmit?: (values: any) => void;
+}
+
+export interface PageState {
+  initialValues: {[propsName: string]: any};
 }
 
 export interface PageItemProps {
@@ -9,6 +20,8 @@ export interface PageItemProps {
   label: string;
   name: string;
   direction: 'horizontal' | 'vertical';
+  initialValue: string;
+  setFieldValue?: (fieldValue: FieldValue) => void;
 }
 
 export interface PageFieldState {

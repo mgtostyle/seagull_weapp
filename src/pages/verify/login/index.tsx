@@ -1,14 +1,18 @@
 import React, { PropsWithChildren } from 'react'
 import type { PageProps } from './interface'
 
-import { UsForm, UsInput, UsTextArea, UsRadio, UsCheckbox, UsUpload, UsContainer } from '../../../components/usComp'
+import { UsForm, UsInput, UsTextArea, UsRadio, UsCheckbox, UsUpload, UsContainer, UsPicker } from '../../../components/usIndex'
 
 const VerifyLogin: React.FC<PropsWithChildren<PageProps>> = () => {
 
   return (
     <UsContainer title="头部信息">
       <UsForm
-        onSubmit={(values) => console.log(values.detail.value)}
+        initialValues={{
+          input: 'dasdadasd',
+          picker: [1, 2, 3, 4]
+        }}
+        onSubmit={(values) => console.log(values)}
       >
         <UsForm.Item label="输入框" name="input">
           <UsInput placeholder='请输入...' />
@@ -32,7 +36,41 @@ const VerifyLogin: React.FC<PropsWithChildren<PageProps>> = () => {
             <UsCheckbox value={4}>4</UsCheckbox>
           </UsCheckbox.Group>
         </UsForm.Item>
-        <UsUpload />
+        <UsForm.Item label="上传图片" name="upload">
+          <UsUpload />
+        </UsForm.Item>
+        <UsForm.Item label="选择器" name="picker">
+          <UsPicker
+            placeholder="请选择..."
+            modal={{
+              title: '选择XXXX',
+              range: [
+                {
+                  value: 1,
+                  label: '广东省',
+                  children: [
+                    {
+                      value: 2,
+                      label: '深圳市',
+                      children: [
+                        {
+                          value: 3,
+                          label: '龙华区',
+                          children: [
+                            {
+                              value: 4,
+                              label: '龙华街道'
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }}
+          />
+        </UsForm.Item>
       </UsForm>
     </UsContainer>
   )

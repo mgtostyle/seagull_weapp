@@ -1,23 +1,27 @@
-import { Component, ReactNode } from 'react'
+import { Component, PropsWithChildren, ReactNode } from 'react'
 import type { PageProps } from './interface'
 import less from './index.module.less'
-import { Input } from '@tarojs/components'
+import { View } from '@tarojs/components'
 
-class UsUpload extends Component<any> {
+class UsUpload extends Component<PropsWithChildren<PageProps>> {
 
-  constructor(props: any) {
-    super(props)
-    console.log(this)
+  static defaultProps: PageProps = {
+    initialValue: ''
   }
 
-  static defaultProps = {
-    name: 'dasdas',
-    value: 'dasdas'
+  private toInputValue () {
+    typeof this.props.onChange === 'function' && this.props.onChange({
+      value: 'dasdajsdasdasda'
+    })
   }
 
   render (): ReactNode {
     return (
-      <Input placeholder='请输入...' />
+      <View style={{
+        display: 'flex',
+        height: 100,
+        border: '1PX solid black'
+      }} onClick={() => this.toInputValue()}>{this.props.initialValue}</View>
     )
   }
 

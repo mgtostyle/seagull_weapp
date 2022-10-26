@@ -10,6 +10,7 @@ import UsRadioGroup from '../usRadio/group'
 import * as UsCheckboxComponent from '../usCheckbox'
 import UsCheckboxGroup from '../usCheckbox/group'
 import UsUpload from '../usUpload'
+import * as UsPickerComponent from '../usPicker'
 import * as UsButtonComponent from '../usButton'
 import UsButtonGroup from '../usButton/group'
 
@@ -24,6 +25,8 @@ UsRadio.Group = UsRadioGroup
 const UsCheckbox = (UsCheckboxComponent as any).default
 UsCheckbox.Group = UsCheckboxGroup
 
+const UsPicker = (UsPickerComponent as any).default
+
 const UsButton = (UsButtonComponent as any).default
 UsButton.Group = UsButtonGroup
 
@@ -36,5 +39,6 @@ export {
   UsRadio,
   UsCheckbox,
   UsUpload,
+  UsPicker,
   UsButton,
 }
