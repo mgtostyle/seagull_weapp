@@ -3,19 +3,18 @@ export interface PageProps {
   placeholder: string;
   initialValue: string;
   modal: Modal;
+  onChange?: (value: any) => void;
 }
 
 export interface PageState {
   initialValue: Array<string | number>;
   visible: boolean;
   current: number;
-  onChange?: (value: Array<string | number>) => void;
 }
 
 export interface Modal {
   title: string;
   range: Array<Range>;
-  rangeKey?: string;
 }
 
 export interface Range {

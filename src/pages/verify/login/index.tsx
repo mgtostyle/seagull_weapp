@@ -10,6 +10,7 @@ const VerifyLogin: React.FC<PropsWithChildren<PageProps>> = () => {
       <UsForm
         initialValues={{
           input: 'dasdadasd',
+          radio: 1,
           picker: [1, 2, 3, 4]
         }}
         onSubmit={(values) => console.log(values)}
@@ -22,10 +23,10 @@ const VerifyLogin: React.FC<PropsWithChildren<PageProps>> = () => {
         </UsForm.Item>
         <UsForm.Item label="单选框" name="radio">
           <UsRadio.Group>
-            <UsRadio value={1}>1</UsRadio>
-            <UsRadio value={2}>2</UsRadio>
-            <UsRadio value={3}>3</UsRadio>
-            <UsRadio value={4}>4</UsRadio>
+            <UsRadio value={1}>测试数据 1</UsRadio>
+            <UsRadio value={2}>测试数据 2</UsRadio>
+            <UsRadio value={3}>测试数据 3</UsRadio>
+            <UsRadio value={4}>测试数据 4</UsRadio>
           </UsRadio.Group>
         </UsForm.Item>
         <UsForm.Item label="复选框" name="checkbox">

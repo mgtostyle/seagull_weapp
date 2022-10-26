@@ -1,20 +1,39 @@
 import { Component, ReactNode, PropsWithChildren } from 'react'
 import type { PageProps } from './interface'
 import less from './index.module.less'
-import { Radio } from '@tarojs/components'
+import { View } from '@tarojs/components'
+import { connect } from 'react-redux'
 
-class UsRadio extends Component<PropsWithChildren<PageProps>> {
-  
+class UsRadio extends Component<PropsWithChildren<PageProps & ReturnType<typeof mapStateToProps>>> {
+
   render (): ReactNode {
-    const { children, ...params }: PageProps = this.props
+    const { initialValue, value, onChange }: PageProps = this.props
+    const { theme } = this.props.global
     return (
-      <Radio
+      <View
         className={less.block_container}
-        {...params}
-      >{children}</Radio>
+        onClick={() => typeof onChange === 'function' && onChange(value)}
+      >
+        <View
+          className={less.text}
+          style={{
+            color: value === initialValue ? theme : '#262626'
+          }}
+        >{this.props.children}</View>
+        {value === initialValue && (
+          <View
+            className={`${less.icon} iconfont icon-line-accurate1`}
+            style={{ color: theme }}
+          />
+        )}
+      </View>
     )
   }
 
 }
 
-export default UsRadio;
+const mapStateToProps = (state) => ({
+  global: state.global
+})
+
+export default connect(mapStateToProps)(UsRadio);

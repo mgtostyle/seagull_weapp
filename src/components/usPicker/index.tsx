@@ -4,6 +4,8 @@ import less from './index.module.less'
 import { View, ScrollView } from '@tarojs/components'
 import { connect } from 'react-redux'
 
+import { UsRadio } from '../usIndex'
+
 class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof mapStateToProps>>, PageState> {
 
   static defaultProps: PageProps = {
@@ -20,8 +22,8 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
     super(props)
     this.state = {
       initialValue: props.initialValue,
-      visible: true,
-      current: 0
+      visible: false,
+      current: props.initialValue.length - 1
     }
   }
 
@@ -34,24 +36,34 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
     }
   }
 
-  private getRangeIndex (index: number) {
-    this.setState((state: PageState) => {
-      state.initialValue = state.initialValue.slice(0, index + 1)
-      state.current = index
-      return state;
-    })
-  }
-
-  private getRangeCurrentList (list, index = 0) {
+  private setRangeList (list, index = 0) {
     const { initialValue, current }: PageState = this.state
-    if (typeof current !== 'number' || current === NaN) {
+    if (typeof current !== 'number') {
       return []
     } else if (current > index) {
-      return this.getRangeCurrentList(list?.find((item: any) => item.value === [initialValue[index]])?.children || [], index + 1)
+      return this.setRangeList(list?.find((item: any) => +item.value === +[initialValue[index]])?.children || [], index + 1)
     } else if (current === index) {
-      return list?.find((item: any) => item.value === [initialValue[index]])?.children || []
+      return list
     } else {
       return []
+    }
+  }
+
+  private onChange (value) {
+    const { modal, onChange }: PageProps = this.props
+    const detail = this.setRangeList(modal.range).find((item: any) => item.value === value)
+    if (detail?.children) {
+      this.setState((state: PageState) => {
+        state.initialValue = state.initialValue.slice(0, state.current).concat([value])
+        state.current = state.current + 1
+        return state;
+      })
+    } else {
+      this.setState((state: PageState) => {
+        state.initialValue = state.initialValue.slice(0, state.current).concat([value]),
+        state.visible = false
+        return state;
+      }, () => typeof onChange === 'function' && onChange({ value: this.state.initialValue }))
     }
   }
 
@@ -92,23 +104,36 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
                     <View
                       className={less.line_box}
                       key={index}
-                      onClick={() => this.getRangeIndex(index)}
+                      onClick={() => this.setState({ current: index })}
                     >
                       <View className={less.line_circle} style={{ borderColor: theme }} />
                       <View className={less.line_messa}>
-                        <View className={less.text}>{item}</View>
-                        <View className={`${less.icon} iconfont icon-line-edit`} />
+                        <View
+                          className={less.text}
+                          style={{
+                            color: current === index ? theme : '#262626'
+                          }}
+                        >{item}</View>
+                        <View
+                          className={`${less.icon} iconfont icon-line-edit`}
+                          style={{
+                            color: current === index ? theme : '#262626'
+                          }}
+                        />
                       </View>
                     </View>
                   ))}
                 </View>
               </ScrollView>
               <ScrollView className={less.body_list} scrollY>
-                <View className={less.result_line}>
-                  {this.getRangeCurrentList(modal.range).map((element: any) => (
-                    <View>{element.label}</View>
+                <UsRadio.Group
+                  initialValue={initialValue[current]}
+                  onChange={(e) => this.onChange(e.value)}
+                >
+                  {this.setRangeList(modal.range).map((element: any, index: number) => (
+                    <UsRadio value={element.value} key={index}>{element.label}</UsRadio>
                   ))}
-                </View>
+                </UsRadio.Group>
               </ScrollView>
             </View>
           </View>
