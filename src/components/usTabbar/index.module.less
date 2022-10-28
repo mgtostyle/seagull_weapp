@@ -1,3 +1,5 @@
+@import url('@assets/less/common.less');
+
 .back_offset {
   display: block;
   padding-top: 110rpx;
@@ -20,19 +22,19 @@
     justify-content: center;
     .icon{
       font-size: 38rpx;
-      color: #8c8c8c;
+      color: @labelColor;
     }
     .name{
       font-size: 20rpx;
-      color: #8c8c8c;
+      color: @labelColor;
       margin-top: 6rpx;
     }
     &.active{
       .icon{
-        color: #262626;
+        color: @textColor;
       }
       .name{
-        color: #262626;
+        color: @textColor;
       }
     }
   }

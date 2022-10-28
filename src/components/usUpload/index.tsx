@@ -19,7 +19,7 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
     return (
       <View style={{
         display: 'flex',
-        height: 100,
+        height: '98rpx',
         border: '1PX solid black'
       }} onClick={() => this.toInputValue()}>{this.props.initialValue}</View>
     )

@@ -8,7 +8,8 @@ class UsFormItemGroup extends PureComponent<PropsWithChildren> {
     return (
       <View className={less.block_item_group_container}>
         {React.Children.map(this.props.children, (childrenNode: any) => React.cloneElement(childrenNode, {
-          nodeKey: 'ItemGroup'
+          nodeKey: 'ItemGroup',
+          direction: 'horizontal'
         }))}
       </View>
     )

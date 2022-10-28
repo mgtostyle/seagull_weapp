@@ -24,8 +24,8 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
         lineHeight: '70rpx'
       },
       theme === 'primary' ? this.ghost(ghost, this.props.global.theme)
-        : theme === 'danger' ? this.ghost(ghost, '#e34d59')
-        : theme === 'default' && this.ghost(true, '#262626')
+        : theme === 'danger' ? this.ghost(ghost, '#f24142')
+        : theme === 'default' && this.ghost(true, '#15161a')
     )
     return style
   }
@@ -43,12 +43,12 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
   }
 
   render (): ReactNode {
-    const { block, theme, ghost, children, nodeKey, ...params } = this.props
+    const { block, theme, ghost, children, nodeKey, className, ...params }: PageProps = this.props
     const nodeClass = `inline${(nodeKey || '').replace(/[A-Z]/g, value => `_${value.toLocaleLowerCase()}`)}`
     const value = typeof children === 'string' && children?.length == 2 ? children.split('').join(' ') : children
     return (
       <Button
-        className={`${less.block_container} ${less[nodeClass]} ${ghost && less.ghost}`}
+        className={`${less.block_container} ${less[nodeClass]} ${ghost && less.ghost} ${className}`}
         {...params}
         style={this.style}
       >&nbsp;{value}&nbsp;</Button>

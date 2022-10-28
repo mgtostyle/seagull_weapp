@@ -1,35 +1,52 @@
+@import url('@assets/less/common.less');
+
 .block_form_container {
   display: block;
   max-width: 100vw;
-  padding: 20rpx 20rpx 100rpx;
-  .inline_button_box{
+  padding: 0 20rpx 200rpx;
+  .inline_item_submit{
     position: fixed;
     z-index: 100;
     bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0 20rpx;
-    background-color: #f4f4f4;
-    margin-top: -50rpx;
+    left: 20rpx;
+    right: 20rpx;
+    background-color: @pageBackgroundColor;
+    .submit_box{
+      display: flex;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 20rpx;
+      border-radius: 12rpx;
+      overflow: hidden;
+      .button{
+        flex: 1;
+        margin-right: 20rpx;
+        &:last-child{
+          margin-right: 0;
+        }
+      }
+    }
   }
 }
 
 .block_item_group_container{
   overflow: hidden;
   border-radius: 12rpx;
-  margin-bottom: 20rpx;
+  margin-top: 20rpx;
 }
 
 .block_item_container {
   display: flex;
   &.horizontal {
-    align-items: center;
+    align-items: flex-start;
     background-color: #ffffff;
     border-radius: 12rpx;
     overflow: hidden;
+    margin-top: 20rpx;
     &.inline_item_group {
       border-radius: 0;
       overflow: visible;
+      margin-top: 0rpx;
       &:last-child {
         label {
           border-bottom: 0;
@@ -37,10 +54,12 @@
       }
     }
     text {
+      display: flex;
+      align-items: center;
       font-size: 28rpx;
-      color: #8c8c8c;
-      padding-left: 20rpx;
-      margin-right: 20rpx;
+      color: @labelColor;
+      padding: 0 20rpx;
+      height: 98rpx;
     }
     label {
       flex: 1;
@@ -51,13 +70,12 @@
   }
   &.vertical {
     flex-direction: column;
-    margin-bottom: 20rpx;
     text {
       display: flex;
       align-items: center;
       font-size: 26rpx;
-      color: #8c8c8c;
-      height: 66rpx;
+      color: @labelColor;
+      height: 98rpx;
       padding: 0 20rpx;
     }
     label {

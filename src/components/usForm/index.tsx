@@ -43,21 +43,23 @@ export class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<t
           initialValue: initialValues?.[childrenNode.props.name] || '',
           setFieldValue: this.setFieldValue.bind(this)
         }))}
-        <View
-          className={less.inline_button_box}
-          style={{
-            paddingBottom: `${safeAreaHeight}rpx`
-          }}
-        >
-          <UsButton.Group>
+        <View className={less.inline_item_submit}>
+          <View
+            className={less.submit_box}
+            style={{
+              marginBottom: `${safeAreaHeight}rpx`
+            }}
+          >
             <UsButton
+              className={less.button}
               ghost
               formType="reset"
             >重置</UsButton>
             <UsButton
+              className={less.button}
               formType="submit"
             >提交</UsButton>
-          </UsButton.Group>
+          </View>
         </View>
       </Form>
     )

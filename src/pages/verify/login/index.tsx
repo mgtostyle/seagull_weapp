@@ -21,6 +21,14 @@ const VerifyLogin: React.FC<PropsWithChildren<PageProps>> = () => {
         <UsForm.Item label="文本域" name="textarea">
           <UsTextArea placeholder='请输入...' />
         </UsForm.Item>
+        <UsForm.Item.Group direction="horizontal">
+          <UsForm.Item label="输入框" name="input">
+            <UsInput placeholder='请输入...' />
+          </UsForm.Item>
+          <UsForm.Item label="文本域" name="textarea">
+            <UsTextArea placeholder='请输入...' />
+          </UsForm.Item>
+        </UsForm.Item.Group>
         <UsForm.Item label="单选框" name="radio">
           <UsRadio.Group>
             <UsRadio value={1}>测试数据 1</UsRadio>

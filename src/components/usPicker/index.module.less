@@ -1,7 +1,9 @@
+@import url('@assets/less/common.less');
+
 .block_container {
   display: flex;
   align-items: center;
-  height: 100rpx;
+  height: 98rpx;
   .inline_text {
     flex: 1;
     overflow: hidden;
@@ -9,15 +11,15 @@
     text-overflow: ellipsis;
     font-size: 26rpx;
     &.value {
-      color: #262626;
+      color: @textColor;
     }
     &.placeholder {
-      color: #8c8c8c;
+      color: @placeholderColor;
     }
   }
   .inline_icon {
     font-size: 32rpx;
-    color: #8c8c8c;
+    color: @placeholderColor;
     padding-left: 20rpx;
   }
 }
@@ -30,7 +32,7 @@
   z-index: 200;
   flex-direction: column;
   justify-content: flex-end;
-  background-color: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.6);
   &.show{
     display: flex;
   }
@@ -48,15 +50,15 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 20rpx;
-      height: 100rpx;
+      height: 98rpx;
       .title{
         font-size: 32rpx;
-        color: #262626;
+        color: @textColor;
         font-weight: bolder;
       }
       .icon{
         font-size: 42rpx;
-        color: #8c8c8c;
+        color: @placeholderColor;
         font-weight: bolder;
         transform: rotateZ(45deg);
       }
@@ -110,7 +112,7 @@
               }
               .icon{
                 font-size: 30rpx;
-                color: #8c8c8c;
+                color: @placeholderColor;
               }
             }
           }
