@@ -2,7 +2,9 @@ import { Component, PropsWithChildren } from 'react'
 import './app.less'
 import store from './store/index'
 import { Provider } from 'react-redux'
+import Https from './config/network/https'
 
+console.log(new Https())
 class App extends Component<PropsWithChildren> {
 
   componentDidMount () {}
