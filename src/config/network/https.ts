@@ -4,6 +4,10 @@ import Taro, { RequestParams } from "@tarojs/taro"
 
 export default class Https extends Environment {
 
+  constructor (joggle: string) {
+    super ()
+  }
+
   setPromise () {
     const { DOMAIN_NAME }: EnvironmentParams = super.env()
     const handler: RequestParams = {

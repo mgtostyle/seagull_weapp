@@ -2,9 +2,10 @@ import { Component, PropsWithChildren } from 'react'
 import './app.less'
 import store from './store/index'
 import { Provider } from 'react-redux'
-import Https from './config/network/https'
+import Request from './config/network/request'
 
-console.log(new Https())
+new Request('/composite/terminal/verify/wxLogin').POST({}, 'String')
+
 class App extends Component<PropsWithChildren> {
 
   componentDidMount () {}
