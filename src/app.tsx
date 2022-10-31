@@ -2,9 +2,6 @@ import { Component, PropsWithChildren } from 'react'
 import './app.less'
 import store from './store/index'
 import { Provider } from 'react-redux'
-import Request from './config/network/request'
-
-new Request('/composite/terminal/verify/wxLogin').POST({}, 'String')
 
 class App extends Component<PropsWithChildren> {
 

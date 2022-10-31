@@ -1,19 +1,39 @@
 import Environment from "./environment"
-import type { EnvironmentParams } from "./interface"
+import type { EnvironmentParams, HttpsDefaultProps, Method } from "./interface"
 import Taro, { RequestParams } from "@tarojs/taro"
 
-export default class Https extends Environment {
+export default class Https<T> extends Environment {
 
-  constructor (joggle: string) {
+  #environment: EnvironmentParams = super.env()
+  #defaultProps: HttpsDefaultProps
+
+  constructor (method: Method) {
     super ()
+    this.#defaultProps = {
+      method,
+      timeout: 5000
+    }
   }
 
-  setPromise () {
-    const { DOMAIN_NAME }: EnvironmentParams = super.env()
-    const handler: RequestParams = {
-      url: `${DOMAIN_NAME}`
+  setPromise (joggle: string, params?: T) {
+    const { DOMAIN_NAME }: EnvironmentParams = this.#environment
+    const { method, timeout }: HttpsDefaultProps = this.#defaultProps
+    const requestHandler = (resolve, reject) => {
+      let handler: RequestParams = {
+        method,
+        url: `${DOMAIN_NAME}${joggle}`,
+        timeout
+      }
+      if (Object.prototype.toString.call(params) === '[object Object]') handler.data = params
+      handler.success = (result) => {
+        resolve(result)
+      }
+      handler.fail = (error) => {
+        reject(error)
+      }
+      return Taro.request(handler)
     }
-    return Taro.request(handler)
+    return new Promise((resolve, reject) => requestHandler(resolve, reject))
   }
 
 }

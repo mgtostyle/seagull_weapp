@@ -1,16 +1,14 @@
 export interface EnvironmentParams {
-  [propsName: string]: any;
+  DOMAIN_NAME: string;
 }
 
-export interface RequestProps {
-  joggle: string;
+export interface HttpsDefaultProps {
+  method: Method;
+  timeout: number;
 }
 
-export type Method = 'POST' | 'GET' | 'DELETE' | 'PUT' | 'PATCH'
+export type Method = 'POST' | 'GET' | 'DELETE' | 'PUT';
 
-export type RequestHandler<T> = [
-  T,
-  FormDataType
-]
+export type RequestHandler<T> = [T, DataType];
 
-export type FormDataType = 'Object' | 'String'
+export type DataType = 'Object' | 'Suffix';
