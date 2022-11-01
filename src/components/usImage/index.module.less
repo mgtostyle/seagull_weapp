@@ -1,0 +1,24 @@
+@import url('@assets/less/common.less');
+
+.block_image_container{
+  display: block;
+  &.circle{
+    border-radius: 1000rpx;
+    overflow: hidden;
+  }
+  &.square{
+    border-radius: 0;
+    overflow: hidden;
+  }
+  &.hidden::before{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    content: 'CRM';
+    font-size: large;
+    color: @placeholderColor;
+    background-color: @backGColor;
+    width: 100%;
+    height: 100%;
+  }
+}

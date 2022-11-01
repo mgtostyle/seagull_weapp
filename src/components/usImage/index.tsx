@@ -1,17 +1,31 @@
-import { Component, PropsWithChildren, ReactNode } from 'react'
-import type { PageProps } from './interface'
+import React, { Component, PropsWithChildren, ReactNode } from 'react'
+import type { PageProps, PageState } from './interface'
 import less from './index.module.less'
 import { Image } from '@tarojs/components'
 
-export default class UsImage extends Component<PropsWithChildren<PageProps>> {
-  
+export default class UsImage extends Component<PropsWithChildren<PageProps>, PageState> {
+
+  static defaultProps: PageProps = {
+    className: '',
+    shape: 'square',
+    src: ''
+  }
+
+  static state: PageState = {
+    visible: false
+  }
+
   render (): ReactNode {
-    const { className, src }: PageProps = this.props
+    const { className, shape, onError, onLoad, ...params }: PageProps = this.props
     return (
-      <Image
-        className={`${less.block_image_container} ${className}`}
-        src={src}
-      />
+      <React.Fragment>
+        <Image
+          className={`${less.block_image_container} ${className} ${less[shape]} ${!this.state?.visible && less.hidden}`}
+          {...params}
+          onLoad={() => this.setState({ visible: true })}
+          onError={() => this.setState({ visible: false })}
+        />
+      </React.Fragment>
     )
   }
 

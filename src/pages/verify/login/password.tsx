@@ -27,17 +27,18 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
           </View>
         </View>
         <View className="inline_form_button">
+          <View className="inline_mode">
+            <Text className="mode" onClick={() => this.props.setLoginStatus(true)}>切换授权模式</Text>
+            <Text className="mode">尚未授权注册？</Text>
+          </View>
           <UsButton
+            className="inline_button"
             width={600}
             formType="submit"
           >登 录</UsButton>
-          <Text
-            className="mode"
-            onClick={() => this.props.setLoginStatus(true)}
-          >切换授权模式</Text>
         </View>
       </Form>
     )
   }
-  
+
 }

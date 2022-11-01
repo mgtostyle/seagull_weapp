@@ -10,6 +10,8 @@ import Wechat from './wechat'
 
 const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({ $apis }) => {
 
+  console.log($apis)
+
   const storeGlobal = useSelector(state => (state as any).global)
 
   const [loginStatus, setLoginStatus] = useState<boolean>(false)
@@ -20,7 +22,7 @@ const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({
     return {
       diam,
       x: `calc(${100 - Math.random() * 100}vw - ${diam/2}rpx)`,
-      y: `calc(${100 - Math.random() * 100}vh - ${diam/2}rpx + ${storeGlobal.navigateHeight}px)`,
+      y: `calc(${100 - Math.random() * 100}vh - ${diam/2}rpx)`,
       color: storeGlobal.themeList[rand]
     }
   })
@@ -51,4 +53,4 @@ const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({
 
 }
 
-export default VerifyLogin
+export default VerifyLogin;
