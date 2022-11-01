@@ -13,6 +13,7 @@ import UsUpload from '../usUpload'
 import * as UsPickerComponent from '../usPicker'
 import * as UsButtonComponent from '../usButton'
 import UsButtonGroup from '../usButton/group'
+import UsImage from '../usImage/index'
 
 const UsForm = (UsFormComponent as any).default
 const UsFormItem = (UsFormItemComponent as any).default
@@ -41,4 +42,5 @@ export {
   UsUpload,
   UsPicker,
   UsButton,
+  UsImage,
 }
