@@ -13,9 +13,11 @@ export const globalSlice = createSlice({
       bWidth: menuRect.width,
       bHeight: menuRect.height
     },
+    navigateHeight: menuRect.top * 2 + menuRect.height - (systemRect?.statusBarHeight || 0),
     safeAreaHeight: (systemRect.safeArea?.bottom || 0) - (systemRect.safeArea?.height || 0),
     device: systemRect,
-    theme: '#1890ff'
+    theme: '#15161a',
+    themeList: ['#15161a','#f5222d','#fa541c','#fa8c16','#faad14','#fadb14','#a0d911','#52c41a','#13c2c2','#1890ff','#2f54eb','#722ed1','#eb2f96']
   },
   reducers: {
     setAppTheme: (state, action: PayloadAction<string>) => {

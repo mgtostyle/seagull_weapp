@@ -19,3 +19,8 @@ declare namespace NodeJS {
   }
 }
 
+declare namespace React {
+  interface Component {
+    $apis: {[propsName: string]: object};
+  }
+}

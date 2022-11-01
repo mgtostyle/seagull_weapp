@@ -1,10 +1,10 @@
-import Request from "@config/network/request"
+import Request from "@/config/network/request"
 import type {
   CompositeSettingMiniAppList,
   CompositeSettingMiniAppUpdate,
   CompositeSettingAdministratorList,
   CompositeSettingAdministratorAdds
-} from '@config/apis/index/interface'
+} from '@/config/apis/index/interface'
 
 export const miniAppList = new Request<CompositeSettingMiniAppList>('POST', '/composite/terminal/setting/miniAppList')
 

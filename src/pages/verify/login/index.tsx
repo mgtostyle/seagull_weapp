@@ -1,86 +1,51 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useState } from 'react'
 import type { PageProps } from './interface'
+import './index.less'
+import { Text } from '@tarojs/components'
+import { useSelector } from 'react-redux'
 
-import { UsForm, UsInput, UsTextArea, UsRadio, UsCheckbox, UsUpload, UsContainer, UsPicker } from '../../../components/usIndex'
+import { UsContainer } from '@components/usIndex'
+import Password from './password'
+import Wechat from './wechat'
 
-const VerifyLogin: React.FC<PropsWithChildren<PageProps>> = () => {
+const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({ $apis }) => {
+
+  const storeGlobal = useSelector(state => (state as any).global)
+
+  const [loginStatus, setLoginStatus] = useState<boolean>(false)
+
+  const bubbleList: Array<any> = new Array(20).fill(1).map(() => {
+    let diam = Math.floor(Math.random() * 150 + 50)
+    let rand = Math.ceil(Math.random() * (storeGlobal.themeList.length - 1))
+    return {
+      diam,
+      x: `calc(${100 - Math.random() * 100}vw - ${diam/2}rpx)`,
+      y: `calc(${100 - Math.random() * 100}vh - ${diam/2}rpx + ${storeGlobal.navigateHeight}px)`,
+      color: storeGlobal.themeList[rand]
+    }
+  })
 
   return (
-    <UsContainer title="头部信息">
-      <UsForm
-        initialValues={{
-          input: 'dasdadasd',
-          radio: 1,
-          picker: [1, 2, 3, 4]
-        }}
-        onSubmit={(values) => console.log(values)}
-      >
-        <UsForm.Item label="输入框" name="input">
-          <UsInput placeholder='请输入...' />
-        </UsForm.Item>
-        <UsForm.Item label="文本域" name="textarea">
-          <UsTextArea placeholder='请输入...' />
-        </UsForm.Item>
-        <UsForm.Item.Group direction="horizontal">
-          <UsForm.Item label="输入框" name="input">
-            <UsInput placeholder='请输入...' />
-          </UsForm.Item>
-          <UsForm.Item label="文本域" name="textarea">
-            <UsTextArea placeholder='请输入...' />
-          </UsForm.Item>
-        </UsForm.Item.Group>
-        <UsForm.Item label="单选框" name="radio">
-          <UsRadio.Group>
-            <UsRadio value={1}>测试数据 1</UsRadio>
-            <UsRadio value={2}>测试数据 2</UsRadio>
-            <UsRadio value={3}>测试数据 3</UsRadio>
-            <UsRadio value={4}>测试数据 4</UsRadio>
-          </UsRadio.Group>
-        </UsForm.Item>
-        <UsForm.Item label="复选框" name="checkbox">
-          <UsCheckbox.Group>
-            <UsCheckbox value={1}>1</UsCheckbox>
-            <UsCheckbox value={2}>2</UsCheckbox>
-            <UsCheckbox value={3}>3</UsCheckbox>
-            <UsCheckbox value={4}>4</UsCheckbox>
-          </UsCheckbox.Group>
-        </UsForm.Item>
-        <UsForm.Item label="上传图片" name="upload">
-          <UsUpload />
-        </UsForm.Item>
-        <UsForm.Item label="选择器" name="picker">
-          <UsPicker
-            placeholder="请选择..."
-            modal={{
-              title: '选择XXXX',
-              range: [
-                {
-                  value: 1,
-                  label: '广东省',
-                  children: [
-                    {
-                      value: 2,
-                      label: '深圳市',
-                      children: [
-                        {
-                          value: 3,
-                          label: '龙华区',
-                          children: [
-                            {
-                              value: 4,
-                              label: '龙华街道'
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }}
-          />
-        </UsForm.Item>
-      </UsForm>
+    <UsContainer title="登录">
+      {bubbleList.map((item, index: number) => (
+        <Text
+          className="inline_index_bubble"
+          style={{
+            width: `${item.diam}rpx`,
+            height: `${item.diam}rpx`,
+            top: item.y,
+            left: item.x,
+            animationDelay: `${Math.random()*20}s`,
+            backgroundColor: item.color
+          }}
+          key={index}
+        />
+      ))}
+      {loginStatus ? (
+        <Wechat setLoginStatus={setLoginStatus} />
+      ) : (
+        <Password setLoginStatus={setLoginStatus} />
+      )}
     </UsContainer>
   )
 

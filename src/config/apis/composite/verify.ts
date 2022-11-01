@@ -1,9 +1,9 @@
-import Request from "@config/network/request"
+import Request from "@/config/network/request"
 import type {
   CompositeVerifyRegister,
   CompositeVerifyUpLogin,
   CompositeVerifyWxLogin
-} from '@config/apis/index/interface'
+} from '@/config/apis/index/interface'
 
 export const checkLogin = new Request<string>('GET', '/composite/terminal/verify/checkLogin')
 

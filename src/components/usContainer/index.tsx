@@ -7,21 +7,24 @@ import { connect } from 'react-redux'
 class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<typeof mapStateToProps>> {
 
   static defaultProps: PageProps = {
-    back: 2,
+    back: 0,
     title: '',
-    menu: []
+    menu: [],
+    isfull: false,
+    bcolor: '#ffffff'
   }
 
   render (): ReactNode {
-    const { back, title }: PageProps = this.props
-    const { navigate, safeAreaHeight } = this.props.global
+    const { back, title, isfull, bcolor, tcolor }: PageProps = this.props
+    const { navigate, navigateHeight, safeAreaHeight } = this.props.global
     return (
       <React.Fragment>
         <View
           className={less.block_navigate}
           style={{
             padding: `${navigate.yTop}px ${navigate.xBetween}px ${navigate.yBottom}px`,
-            height: `${navigate.bHeight}px`
+            height: `${navigate.bHeight}px`,
+            background: isfull ? bcolor : 'transparent',
           }}
         >
           {back === 1 ? (
@@ -49,15 +52,24 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
               </View>
             </React.Fragment>
           )}
-          <Text className={less.inline_title}>{title}</Text>
+          <Text
+            className={less.inline_title}
+            style={Object.assign({}, tcolor && { color: tcolor })}
+          >{title}</Text>
         </View>
         <View
-          className={less.block_container}
+          className={less.block_index_padding}
           style={{
-            paddingTop: `${navigate.yTop + navigate.yBottom + navigate.bHeight}px`,
+            paddingTop: isfull ? 0 : `${navigateHeight}px`
+          }}
+        />
+        <React.Fragment>{this.props.children}</React.Fragment>
+        <View
+          className={less.block_index_padding}
+          style={{
             paddingBottom: `${safeAreaHeight}rpx`
           }}
-        >{this.props.children}</View>
+        />
       </React.Fragment>
     )
   }

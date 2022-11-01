@@ -24,6 +24,7 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
         lineHeight: '70rpx'
       },
       theme === 'primary' ? this.ghost(ghost, this.props.global.theme)
+        : theme === 'authorize' ? this.ghost(ghost, '#52c41a')
         : theme === 'danger' ? this.ghost(ghost, '#f24142')
         : theme === 'default' && this.ghost(true, '#15161a')
     )

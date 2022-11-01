@@ -1,6 +1,6 @@
-import localhost from '@config/env/localhost.json'
-import development from '@config/env/development.json'
-import production from '@config/env/production.json'
+import localhost from '@/config/env/localhost.json'
+import development from '@/config/env/development.json'
+import production from '@/config/env/production.json'
 import Taro from '@tarojs/taro'
 import type { EnvironmentParams } from './interface'
 

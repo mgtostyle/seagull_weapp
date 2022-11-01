@@ -1,8 +1,8 @@
-import Request from "@config/network/request"
+import Request from "@/config/network/request"
 import type {
   CompositeSelectRegisterList,
   CompositeSelectAdministratorList
-} from '@config/apis/index/interface'
+} from '@/config/apis/index/interface'
 
 export const registerList = new Request<CompositeSelectRegisterList>('POST', '/composite/terminal/select/registerList')
 

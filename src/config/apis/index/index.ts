@@ -1,4 +1,4 @@
-import * as compositeVerify from '@config/apis/composite/verify'
+import * as compositeVerify from '@/config/apis/composite/verify'
 
 export default {
   composite: {

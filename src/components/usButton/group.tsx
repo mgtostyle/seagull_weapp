@@ -17,7 +17,8 @@ class UsButtonGroup extends Component<PropsWithChildren<PageGroupProps>> {
       <View className={less.block_button_group_container}>
         {React.Children.map(this.props.children, (childrenNode: any) => React.cloneElement(childrenNode, {
           nodeKey: 'Group',
-          size
+          size,
+          
         }))}
       </View>
     )
