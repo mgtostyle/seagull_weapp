@@ -11,8 +11,11 @@ export default class UsImage extends Component<PropsWithChildren<PageProps>, Pag
     src: ''
   }
 
-  static state: PageState = {
-    visible: false
+  constructor (props: PageProps) {
+    super (props)
+    this.state = {
+      visible: false
+    }
   }
 
   render (): ReactNode {

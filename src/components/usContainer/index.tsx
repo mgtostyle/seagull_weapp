@@ -1,6 +1,7 @@
 import React, { Component, PropsWithChildren, ReactNode } from 'react'
 import type { PageProps } from './interface'
 import less from './index.module.less'
+import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { connect } from 'react-redux'
 
@@ -35,6 +36,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                 width: `${navigate.bHeight}px`,
                 height: `${navigate.bHeight}px`
               }}
+              onClick={() => Taro.navigateBack()}
             >&#xe739;</View>
           ) : back === 2 && (
             <React.Fragment>
@@ -46,7 +48,10 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                   height: `${navigate.bHeight - 1}px`
                 }}
               >
-                <View className={`${less.left_icon} iconfont`}>&#xe739;</View>
+                <View
+                  className={`${less.left_icon} iconfont`}
+                  onClick={() => Taro.navigateBack()}
+                >&#xe739;</View>
                 <View className={less.line} />
                 <View className={`${less.right_icon} iconfont`}>&#xe750;</View>
               </View>

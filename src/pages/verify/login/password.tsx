@@ -1,17 +1,39 @@
 import { Component, PropsWithChildren, ReactNode } from 'react'
-import type { PagePasswordProps } from './interface'
+import type { PagePasswordProps, PagePasswordState } from './interface'
 import './index.less'
-import { Form, View, Text, Input } from '@tarojs/components'
-import { UsButton } from '@/components/usIndex'
+import Taro from '@tarojs/taro'
+import { Form, View, Text } from '@tarojs/components'
+import { UsInput, UsButton } from '@/components/usIndex'
 
-export default class Password extends Component<PropsWithChildren<PagePasswordProps>> {
+export default class Password extends Component<PropsWithChildren<PagePasswordProps>, PagePasswordState> {
+
+  constructor (props: PagePasswordProps) {
+    super (props)
+    this.state = {
+      visible: true
+    }
+  }
+
+  private onSubmit (values) {
+    this.$apis.composite.verify.upLogin.post(values).then(res => {
+      Taro.setStorage({
+        key: 'token',
+        data: res.data.token,
+        encrypt: true,
+        success: (res) => Taro.reLaunch({
+          url: res.data.path
+        })
+      } as any)
+    })
+  }
 
   render (): ReactNode {
     const { setLoginStatus, onRegister }: PagePasswordProps = this.props
+    const { visible }: PagePasswordState = this.state
     return (
       <Form
         className="block_form_container"
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(e) => this.onSubmit(e.detail.value)}
       >
         <View className="inline_password_header">
           <View className="title">CRM管理系统</View>
@@ -20,11 +42,26 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
         <View className="inline_password_box">
           <View className="inline_input">
             <View className="iconfont icon-line-userset" />
-            <Input className="input" placeholderClass="placeholder" placeholder="Username" />
+            <UsInput
+              className="input"
+              placeholderClass="placeholder"
+              placeholder="Username"
+              name="account"
+            />
           </View>
           <View className="inline_input">
-            <View className="iconfont icon-line-safe1" />
-            <Input className="input" placeholderClass="placeholder" placeholder="Password" />
+            <View
+              className={`iconfont ${visible ? 'icon-line-safe1' : 'icon-line-see1'}`}
+              onClick={() => this.setState({ visible: !visible })}
+            />
+            <UsInput
+              className="input"
+              placeholderClass="placeholder"
+              placeholder="Password"
+              type="safe-password"
+              name="password"
+              password={visible}
+            />
           </View>
         </View>
         <View className="inline_form_button">

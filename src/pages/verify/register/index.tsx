@@ -2,10 +2,10 @@ import React, { PropsWithChildren, useState } from 'react'
 import type { PageProps } from './interface'
 import './index.less'
 import Taro from '@tarojs/taro'
-import { Form, View, Input, Text, Button } from '@tarojs/components'
+import { Form, View, Text, Button } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
-import { UsContainer, UsButton, UsImage } from '@components/usIndex'
+import { UsContainer, UsButton, UsImage, UsInput } from '@components/usIndex'
 
 const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({ $apis }) => {
 
@@ -40,7 +40,7 @@ const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> =
     ]).then(async (spread) => {
       const [jscode, { encryptedData, iv }] = (spread as any)
       const result = await $apis.composite.verify.register.post({
-        ...e.detail.value,
+        nickName: e.detail.value.nickName,
         avatarUrl,
         jscode,
         encryptedData,
@@ -57,7 +57,7 @@ const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> =
   }
 
   return (
-    <UsContainer title="登录" back={1}>
+    <UsContainer title="注册" back={1}>
       {bubbleList.map((item, index: number) => (
         <Text
           className="inline_index_bubble"
@@ -93,7 +93,7 @@ const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> =
         <View className="inline_password_box">
           <View className="inline_input">
             <View className="iconfont icon-line-userset" />
-            <Input
+            <UsInput
               className="input"
               placeholderClass="placeholder"
               placeholder="用户昵称"

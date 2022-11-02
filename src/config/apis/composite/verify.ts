@@ -10,6 +10,6 @@ export const checkLogin = new Request<CompositeVerifyCheckLogin>('POST', '/compo
 
 export const register = new Request<CompositeVerifyRegister>('POST', '/composite/terminal/verify/register')
 
-export const upLogin = new Request<CompositeVerifyUpLogin>('GET', '/composite/terminal/verify/upLogin')
+export const upLogin = new Request<CompositeVerifyUpLogin>('POST', '/composite/terminal/verify/upLogin')
 
 export const wxLogin = new Request<CompositeVerifyWxLogin>('POST', '/composite/terminal/verify/wxLogin')

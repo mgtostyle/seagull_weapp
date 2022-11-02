@@ -4,6 +4,14 @@ export default defineAppConfig({
     'pages/verify/login/index',
     'pages/verify/register/index'
   ],
+  subPackages: [
+    {
+      root: 'composite',
+      pages: [
+        'pages/index/index'
+      ]
+    }
+  ],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
