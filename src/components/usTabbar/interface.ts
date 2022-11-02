@@ -1,7 +1,7 @@
 export interface PageProps {
   current: CurrentIndex;
   readonly list: [Tabbar, Tabbar, Tabbar?, Tabbar?, Tabbar?];
-  change?: (value: CurrentIndex) => void;
+  onChange?: (value: CurrentIndex) => void;
 }
 
 export type CurrentIndex = 0 | 1 | 2 | 3 | 4;

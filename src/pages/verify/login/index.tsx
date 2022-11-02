@@ -36,16 +36,17 @@ const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({
       success: result => resolve(result?.code || ''),
       fail: () => resolve('')
     }))
-    const result = await $apis.composite.verify.checkLogin.post({
+    $apis.composite.verify.checkLogin.post({
       jscode
+    }).then(res => {
+      if (res.data.loginInit) {
+        Taro.reLaunch({
+          url: res.data.path
+        })
+      } else {
+        setUserInfo(res.data?.userInfo || null)
+      }
     })
-    if (result.data.loginInit) {
-      Taro.reLaunch({
-        url: result.data.path
-      })
-    } else {
-      setUserInfo(result.data?.userInfo || null)
-    }
   }
 
   const onRegister = () => Taro.navigateTo({
@@ -53,7 +54,7 @@ const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({
   })
 
   return (
-    <UsContainer title="登录">
+    <UsContainer title="登录" bcolor="transparent">
       {bubbleList.map((item, index: number) => (
         <Text
           className="inline_index_bubble"

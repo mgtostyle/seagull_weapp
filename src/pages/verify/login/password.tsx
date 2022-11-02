@@ -10,7 +10,7 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
   constructor (props: PagePasswordProps) {
     super (props)
     this.state = {
-      visible: true
+      visible: false
     }
   }
 
@@ -20,7 +20,7 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
         key: 'token',
         data: res.data.token,
         encrypt: true,
-        success: (res) => Taro.reLaunch({
+        success: () => Taro.reLaunch({
           url: res.data.path
         })
       } as any)
@@ -51,16 +51,15 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
           </View>
           <View className="inline_input">
             <View
-              className={`iconfont ${visible ? 'icon-line-safe1' : 'icon-line-see1'}`}
+              className={`iconfont ${!visible ? 'icon-line-safe1' : 'icon-line-see1'}`}
               onClick={() => this.setState({ visible: !visible })}
             />
             <UsInput
               className="input"
               placeholderClass="placeholder"
               placeholder="Password"
-              type="safe-password"
               name="password"
-              password={visible}
+              password={!visible}
             />
           </View>
         </View>

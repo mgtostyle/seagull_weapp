@@ -11,7 +11,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
     back: 0,
     title: '',
     menu: [],
-    isfull: false,
+    isfull: true,
     bcolor: '#ffffff'
   }
 
@@ -65,7 +65,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
         <View
           className={less.block_index_padding}
           style={{
-            paddingTop: isfull ? 0 : `${navigateHeight}px`
+            paddingTop: isfull ? `${navigateHeight}px` : 0
           }}
         />
         <React.Fragment>{this.props.children}</React.Fragment>

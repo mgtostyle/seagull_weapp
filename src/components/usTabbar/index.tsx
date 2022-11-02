@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 class UsTabbar extends Component<PropsWithChildren<PageProps> & ReturnType<typeof mapStateToProps>> {
 
   render (): ReactNode {
-    const { list, current, change }: PageProps = this.props
+    const { list, current, onChange }: PageProps = this.props
     const { safeAreaHeight } = this.props.global
     return (
       <React.Fragment>
@@ -27,7 +27,7 @@ class UsTabbar extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
             <View
               className={`${less.inline_box} ${(current || 0) === index && less.active}`}
               key={index}
-              onClick={() => typeof change === 'function' && change(index)}
+              onClick={() => typeof onChange === 'function' && onChange(index)}
             >
               <View className={`${less.icon} iconfont ${item.icon}`} />
               <View className={less.name}>{item.name}</View>

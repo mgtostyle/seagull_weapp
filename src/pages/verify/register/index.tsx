@@ -57,7 +57,7 @@ const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> =
   }
 
   return (
-    <UsContainer title="注册" back={1}>
+    <UsContainer title="注册" back={1} bcolor="transparent">
       {bubbleList.map((item, index: number) => (
         <Text
           className="inline_index_bubble"
