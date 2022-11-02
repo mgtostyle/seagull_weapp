@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useState } from 'react'
 import type { PageProps } from './interface'
 import './index.less'
+import Taro, { useLoad } from '@tarojs/taro'
 import { Text } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
@@ -10,11 +11,10 @@ import Wechat from './wechat'
 
 const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({ $apis }) => {
 
-  console.log($apis)
-
   const storeGlobal = useSelector(state => (state as any).global)
 
   const [loginStatus, setLoginStatus] = useState<boolean>(false)
+  const [userInfo, setUserInfo] = useState<any>(null)
 
   const bubbleList: Array<any> = new Array(20).fill(1).map(() => {
     let diam = Math.floor(Math.random() * 150 + 50)
@@ -25,6 +25,31 @@ const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({
       y: `calc(${100 - Math.random() * 100}vh - ${diam/2}rpx)`,
       color: storeGlobal.themeList[rand]
     }
+  })
+
+  useLoad(() => {
+    getCheckLogin()
+  })
+
+  const getCheckLogin = async () => {
+    const jscode = await new Promise((resolve) => Taro.login({
+      success: result => resolve(result?.code || ''),
+      fail: () => resolve('')
+    }))
+    const result = await $apis.composite.verify.checkLogin.post({
+      jscode
+    })
+    if (result.data.loginInit) {
+      Taro.reLaunch({
+        url: result.data.path
+      })
+    } else {
+      setUserInfo(result.data?.userInfo || null)
+    }
+  }
+
+  const onRegister = () => Taro.navigateTo({
+    url: '/pages/verify/register/index'
   })
 
   return (
@@ -44,9 +69,16 @@ const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({
         />
       ))}
       {loginStatus ? (
-        <Wechat setLoginStatus={setLoginStatus} />
+        <Wechat
+          userInfo={userInfo}
+          setLoginStatus={setLoginStatus}
+          onRegister={onRegister}
+        />
       ) : (
-        <Password setLoginStatus={setLoginStatus} />
+        <Password
+          setLoginStatus={setLoginStatus}
+          onRegister={onRegister}
+        />
       )}
     </UsContainer>
   )

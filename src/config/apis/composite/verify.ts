@@ -1,11 +1,12 @@
 import Request from "@/config/network/request"
 import type {
+  CompositeVerifyCheckLogin,
   CompositeVerifyRegister,
   CompositeVerifyUpLogin,
   CompositeVerifyWxLogin
 } from '@/config/apis/index/interface'
 
-export const checkLogin = new Request<string>('GET', '/composite/terminal/verify/checkLogin')
+export const checkLogin = new Request<CompositeVerifyCheckLogin>('POST', '/composite/terminal/verify/checkLogin')
 
 export const register = new Request<CompositeVerifyRegister>('POST', '/composite/terminal/verify/register')
 

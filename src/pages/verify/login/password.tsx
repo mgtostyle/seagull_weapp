@@ -7,6 +7,7 @@ import { UsButton } from '@/components/usIndex'
 export default class Password extends Component<PropsWithChildren<PagePasswordProps>> {
 
   render (): ReactNode {
+    const { setLoginStatus, onRegister }: PagePasswordProps = this.props
     return (
       <Form
         className="block_form_container"
@@ -28,8 +29,14 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
         </View>
         <View className="inline_form_button">
           <View className="inline_mode">
-            <Text className="mode" onClick={() => this.props.setLoginStatus(true)}>切换授权模式</Text>
-            <Text className="mode">尚未授权注册？</Text>
+            <Text
+              className="mode"
+              onClick={() => setLoginStatus(true)}
+            >切换授权模式</Text>
+            <Text
+              className="mode"
+              onClick={() => onRegister()}
+            >尚未授权注册？</Text>
           </View>
           <UsButton
             className="inline_button"

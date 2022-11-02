@@ -1,3 +1,7 @@
+export interface CompositeVerifyCheckLogin {
+  jscode: string;
+}
+
 export interface CompositeVerifyRegister {
   jscode: string;
   encryptedData: string;

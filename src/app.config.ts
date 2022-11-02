@@ -1,7 +1,8 @@
 export default defineAppConfig({
   entryPagePath: 'pages/verify/login/index',
   pages: [
-    'pages/verify/login/index'
+    'pages/verify/login/index',
+    'pages/verify/register/index'
   ],
   window: {
     backgroundTextStyle: 'light',

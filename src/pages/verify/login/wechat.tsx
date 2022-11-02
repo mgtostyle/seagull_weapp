@@ -1,19 +1,13 @@
 import { Component, PropsWithChildren, ReactNode } from 'react'
 import type { PageWechatProps } from './interface'
 import './index.less'
-import Taro from '@tarojs/taro'
 import { Form, View, Text } from '@tarojs/components'
 import { UsButton, UsImage } from '@/components/usIndex'
 
 export default class Wechat extends Component<PropsWithChildren<PageWechatProps>> {
 
-  componentDidMount () {
-    Taro.login({
-      success: (code) => console.log(code)
-    })
-  }
-
   render (): ReactNode {
+    const { userInfo, setLoginStatus, onRegister }: PageWechatProps = this.props
     return (
       <Form
         className="block_form_container"
@@ -23,14 +17,20 @@ export default class Wechat extends Component<PropsWithChildren<PageWechatProps>
           <UsImage
             className="avatarUrl"
             shape="circle"
-            src="dadasdadasda"
+            src={userInfo?.avatarUrl || ''}
           />
-          <Text className="nickName">{'微信用户'}</Text>
+          <Text className="nickName">{userInfo?.nickName || '微信用户'}</Text>
         </View>
         <View className="inline_form_button">
           <View className="inline_mode">
-            <Text className="mode" onClick={() => this.props.setLoginStatus(false)}>切换账号模式</Text>
-            <Text className="mode">尚未授权注册？</Text>
+            <Text
+              className="mode"
+              onClick={() => setLoginStatus(false)}
+            >切换账号模式</Text>
+            <Text
+              className="mode"
+              onClick={() => onRegister()}
+            >尚未授权注册？</Text>
           </View>
           <UsButton
             className="inline_button"
