@@ -1,7 +1,8 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useState } from 'react'
 import type { PageProps } from './interface'
 import './index.less'
-import { Form, View, Input, Text } from '@tarojs/components'
+import Taro from '@tarojs/taro'
+import { Form, View, Input, Text, Button } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
 import { UsContainer, UsButton, UsImage } from '@components/usIndex'
@@ -9,6 +10,8 @@ import { UsContainer, UsButton, UsImage } from '@components/usIndex'
 const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({ $apis }) => {
 
   const storeGlobal = useSelector(state => (state as any).global)
+
+  const [avatarUrl, setAvatarUrl] = useState<string>()
 
   const bubbleList: Array<any> = new Array(20).fill(1).map(() => {
     let diam = Math.floor(Math.random() * 150 + 50)
@@ -20,6 +23,38 @@ const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> =
       color: storeGlobal.themeList[rand]
     }
   })
+
+  const onSubmit = (e) => {
+    Promise.all([
+      new Promise(resolve => Taro.login({
+        success: res => resolve(res?.code || ''),
+        fail: () => resolve('')
+      })),
+      new Promise(resolve => Taro.getUserInfo({
+        success: res => resolve({
+          encryptedData: res?.encryptedData || '',
+          iv: res?.iv || ''
+        }),
+        fail: () => resolve({ encryptedData: '', iv: '' })
+      }))
+    ]).then(async (spread) => {
+      const [jscode, { encryptedData, iv }] = (spread as any)
+      const result = await $apis.composite.verify.register.post({
+        ...e.detail.value,
+        avatarUrl,
+        jscode,
+        encryptedData,
+        iv
+      })
+      result.data.status === 1 && Taro.showModal({
+        title: '注册成功',
+        content: '完成注册，联系管理员审核并开通平台权限方可登录使用',
+        showCancel: false,
+        confirmText: '我知道了',
+        success: res_modal => res_modal.confirm && Taro.navigateBack()
+      })
+    })
+  }
 
   return (
     <UsContainer title="登录" back={1}>
@@ -39,23 +74,31 @@ const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> =
       ))}
       <Form
         className="block_form_container"
-        onSubmit={(values) => console.log(values)}
+        onSubmit={onSubmit}
       >
         <View className="inline_wechat_box">
-          <UsImage
-            className="avatarUrl"
-            shape="circle"
-            src={''}
-          />
+          <Button
+            className="inline_wrapper"
+            openType="chooseAvatar"
+            onChooseAvatar={(e) => setAvatarUrl(e.detail.avatarUrl)}
+          >
+            <UsImage
+              className="avatarUrl"
+              shape="circle"
+              src={avatarUrl || ''}
+            />
+            <Text className="iconfont icon-fill-batchmodification" />
+          </Button>
         </View>
         <View className="inline_password_box">
           <View className="inline_input">
             <View className="iconfont icon-line-userset" />
-            <Input className="input" placeholderClass="placeholder" placeholder="Username" />
-          </View>
-          <View className="inline_input">
-            <View className="iconfont icon-line-safe1" />
-            <Input className="input" placeholderClass="placeholder" placeholder="Password" />
+            <Input
+              className="input"
+              placeholderClass="placeholder"
+              placeholder="用户昵称"
+              name="nickName"
+            />
           </View>
         </View>
         <View className="inline_form_button">

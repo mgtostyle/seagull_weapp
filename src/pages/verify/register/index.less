@@ -81,10 +81,37 @@ page{
     align-items: center;
     justify-content: flex-start;
     height: 300rpx;
-    .avatarUrl{
-      width: 200rpx;
-      height: 200rpx;
-      object-fit: cover;
+    .inline_wrapper{
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      background-color: transparent;
+      &::after{
+        border: 0;
+      }
+      .avatarUrl{
+        width: 200rpx;
+        height: 200rpx;
+        object-fit: cover;
+      }
+      .iconfont{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48rpx;
+        color: @placeholderColor;
+        background-color: #ffffff;
+        border: 1rpx solid @splitColor;
+        width: 70rpx;
+        height: 70rpx;
+        border-radius: 50%;
+      }
     }
   }
   .inline_form_button{

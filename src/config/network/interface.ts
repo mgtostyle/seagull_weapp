@@ -19,7 +19,7 @@ export type RequestHandler<T> = [T, DataType];
 export type DataType = 'Object' | 'Suffix';
 
 export interface Response {
-  code: 200 | 101 | 102 | 403;
+  code: 200 | 101 | 102 | 403 | 500;
   data: any;
   message: string;
 }

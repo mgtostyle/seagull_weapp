@@ -36,9 +36,22 @@ export default class Https<T> extends Environment {
         switch (res.code) {
           case 200:
             return resolve(res)
+          case 403:
+            console.log('退出重新登录')
+            Taro.reLaunch({
+              url: '/pages/verify/login/index'
+            })
+            break;
+          case 500:
+            return Taro.showModal({
+              title: '请求异常',
+              content: `出现该状况及时联系管理员处理 -> ${res.data.content}`,
+              showCancel: false,
+              confirmText: '我知道了'
+            })
           default:
             return Taro.showToast({
-              title: '出错',
+              title: res.data.content,
               icon: 'none',
               duration: 1500
             })
