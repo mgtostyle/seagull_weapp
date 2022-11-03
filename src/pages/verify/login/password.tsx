@@ -19,11 +19,10 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
       Taro.setStorage({
         key: 'token',
         data: res.data.token,
-        encrypt: true,
         success: () => Taro.reLaunch({
           url: res.data.path
         })
-      } as any)
+      })
     })
   }
 

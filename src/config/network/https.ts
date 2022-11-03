@@ -21,13 +21,17 @@ export default class Https<T> extends Environment {
   setPromise (joggle: string, params?: T) {
     const { DOMAIN_NAME }: EnvironmentParams = this.#environment
     const { method, timeout, clientInfo }: HttpsDefaultProps = this.#defaultProps
+    const token = Taro.getStorageSync('token')
     const requestHandler = (resolve, reject) => {
       let handler: RequestParams = {
         method,
         url: `${DOMAIN_NAME}${joggle}`,
         timeout,
         header: Object.assign({
-          'client-info': JSON.stringify(clientInfo)
+          'client-info': JSON.stringify(clientInfo),
+        },
+        token && {
+          authorization: `Bearer ${token}`
         })
       }
       if (Object.prototype.toString.call(params) === '[object Object]') handler.data = params
@@ -37,9 +41,15 @@ export default class Https<T> extends Environment {
           case 200:
             return resolve(res)
           case 403:
-            console.log('退出重新登录')
-            Taro.reLaunch({
-              url: '/pages/verify/login/index'
+            Taro.removeStorageSync('token')
+            Taro.showModal({
+              title: '访问过期',
+              content: '抱歉！访问时间已过期，需要重新登录验证管理员信息，点击确认退出并返回登录界面。',
+              showCancel: false,
+              confirmText: '我知道了',
+              success: res_modal => res_modal.confirm && Taro.reLaunch({
+                url: '/pages/verify/login/index'
+              })
             })
             break;
           case 500:

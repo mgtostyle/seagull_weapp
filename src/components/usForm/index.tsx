@@ -20,6 +20,7 @@ export class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<t
   }
 
   private setFieldValue (params: FieldValue) {
+    console.log(params)
     this.setState((state: PageState) => {
       state.initialValues = {
         ...state.initialValues,
@@ -37,7 +38,10 @@ export class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<t
       <Form
         className={less.block_form_container}
         {...params}
-        onSubmit={() => typeof onSubmit === 'function' && onSubmit(initialValues)}
+        onSubmit={(e) => typeof onSubmit === 'function' && onSubmit({
+          ...e.detail.value,
+          ...initialValues
+        })}
       >
         {React.Children.map(this.props.children, (childrenNode: any) => React.cloneElement(childrenNode, {
           initialValue: initialValues?.[childrenNode.props.name] || '',
