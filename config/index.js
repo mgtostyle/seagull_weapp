@@ -11,7 +11,15 @@ const config = {
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
-  plugins: [],
+  plugins: [
+    ['tarojs-plugin-generator', {
+      css: 'less',
+      cssModules: 'component'
+    }]
+  ],
+  env: {
+    LOCAL_ENV: '"test"'
+  },
   defineConstants: {
   },
   copy: {

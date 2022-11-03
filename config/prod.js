@@ -1,7 +1,6 @@
 module.exports = {
   env: {
-    NODE_ENV: '"production"',
-    LOCAL_ENV: '"prod"'
+    NODE_ENV: '"production"'
   },
   defineConstants: {
   },
