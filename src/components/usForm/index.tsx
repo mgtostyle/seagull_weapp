@@ -22,10 +22,7 @@ export class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<t
   private setFieldValue (params: FieldValue) {
     console.log(params)
     this.setState((state: PageState) => {
-      state.initialValues = {
-        ...state.initialValues,
-        [params.name]: params.value
-      }
+      state.initialValues[params.name] = params.value
       return state;
     })
   }

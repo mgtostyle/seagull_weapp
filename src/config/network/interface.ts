@@ -23,3 +23,9 @@ export interface Response {
   data: any;
   message: string;
 }
+
+export interface UploadFileParams {
+  filePath: string;
+  name?: 'singleImage';
+  task?: () => void;
+}

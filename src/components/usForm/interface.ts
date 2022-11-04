@@ -20,7 +20,7 @@ export interface PageItemProps {
   label: string;
   name: string;
   direction: 'horizontal' | 'vertical';
-  initialValue: string;
+  initialValue?: string;
   setFieldValue?: (fieldValue: FieldValue) => void;
 }
 

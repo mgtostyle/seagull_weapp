@@ -1,5 +1,5 @@
 import Environment from "./environment"
-import type { EnvironmentParams, HttpsDefaultProps, Method, Response } from "./interface"
+import type { EnvironmentParams, HttpsDefaultProps, Method, Response, UploadFileParams } from "./interface"
 import Taro, { RequestParams } from "@tarojs/taro"
 
 export default class Https<T> extends Environment {
@@ -73,6 +73,10 @@ export default class Https<T> extends Environment {
       return Taro.request(handler)
     }
     return new Promise((resolve, reject) => requestHandler(resolve, reject))
+  }
+
+  setUpload (joggle: string, params: UploadFileParams) {
+    console.log(joggle, params)
   }
 
 }

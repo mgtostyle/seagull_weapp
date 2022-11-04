@@ -9,7 +9,6 @@ class UsFormItem extends PureComponent<PropsWithChildren<PageItemProps>> {
     label: '',
     name: '',
     direction: 'vertical',
-    initialValue: ''
   }
 
   render (): ReactNode {
@@ -19,15 +18,18 @@ class UsFormItem extends PureComponent<PropsWithChildren<PageItemProps>> {
       <View className={`${less.block_item_container} ${less[direction]} ${less[nodeClass]}`}>
         {label && (<Text>{label}</Text>)}
         <Label for={name}>
-          {React.Children.map(this.props.children, (childrenNode: any) => React.cloneElement(childrenNode, {
-            nodeKey: 'Item',
-            name,
-            initialValue,
-            onChange: (fieldValue: FieldValue) => typeof setFieldValue === 'function' && setFieldValue({
-              ...fieldValue,
+          {React.Children.map(this.props.children, (childrenNode: any) => {
+            let childrenProps: any = {
+              nodeKey: 'Item',
               name,
-            })
-          }))}
+              onChange: (fieldValue: FieldValue) => typeof setFieldValue === 'function' && setFieldValue({
+                ...fieldValue,
+                name,
+              })
+            }
+            if (initialValue) childrenProps.initialValue = initialValue
+            return React.cloneElement(childrenNode, childrenProps)
+          })}
         </Label>
       </View>
     )
