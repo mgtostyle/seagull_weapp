@@ -13,5 +13,3 @@ export const register = new Request<CompositeVerifyRegister>('POST', '/composite
 export const upLogin = new Request<CompositeVerifyUpLogin>('POST', '/composite/terminal/verify/upLogin')
 
 export const wxLogin = new Request<CompositeVerifyWxLogin>('POST', '/composite/terminal/verify/wxLogin')
-
-console.log(new Request('POST', 'dsadad').upload({filePath: ''}))

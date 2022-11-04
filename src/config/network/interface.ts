@@ -25,7 +25,7 @@ export interface Response {
 }
 
 export interface UploadFileParams {
-  filePath: string;
-  name?: 'singleImage';
+  file: string;
+  name: 'singleImage';
   task?: () => void;
 }

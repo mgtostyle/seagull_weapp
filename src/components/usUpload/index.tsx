@@ -21,17 +21,31 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
       sourceType: ['album', 'camera'],
       sizeType: ['compressed'],
       success: res => {
-        let imageList = res.tempFiles.map((item, index: number) => {
+        let imageList = initialValue.concat(res.tempFiles.map((item, index: number) => {
           return {
             uid: Date.now() + index,
-            url: item.tempFilePath
-          }
-        })
+            url: item.tempFilePath,
+            status: 'loading',
+            percent: 0
+          } as ImageItem
+        }))
         typeof onChange === 'function' && onChange({
-          value: initialValue.concat(imageList)
+          value: imageList
+        })
+        imageList.forEach((item: ImageItem, index: number) => {
+          this.getUploadSubmit(item, index)
         })
       }
     })
+  }
+
+  private getUploadSubmit (detail, index: number) {
+    this.$apis.composite.common.uploadSingleImage.upload({
+      file: detail.tempFilePath,
+      name: 'singleImage'
+    }).then((res) => {
+      console.log(res)
+    }).catch((err) => console.log(err))
   }
 
   private onDelete (e, current: number) {

@@ -7,6 +7,6 @@ export interface PageProps {
 export interface ImageItem {
   uid?: number;
   url: string;
-  status?: 'done' | 'error' | 'loading',
+  status: 'done' | 'error' | 'loading';
   percent?: number;
 }

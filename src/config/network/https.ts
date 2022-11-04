@@ -76,7 +76,36 @@ export default class Https<T> extends Environment {
   }
 
   setUpload (joggle: string, params: UploadFileParams) {
-    console.log(joggle, params)
+    const { DOMAIN_NAME }: EnvironmentParams = this.#environment
+    const { clientInfo }: HttpsDefaultProps = this.#defaultProps
+    const token = Taro.getStorageSync('token')
+    const uploadHandler = (resolve, reject) => {
+      let uploadTask = Taro.uploadFile({
+        url: `${DOMAIN_NAME}${joggle}`,
+        filePath: params.file,
+        name: params.name,
+        header: Object.assign({
+          'client-info': JSON.stringify(clientInfo),
+        },
+        token && {
+          authorization: `Bearer ${token}`
+        }),
+        success: (result) => result.statusCode === 200 ? resolve(JSON.parse(result.data)) : Taro.showToast({
+          title: '请求失败，请重新试试吧',
+          icon: 'none',
+          duration: 3000,
+          success: () => reject('error')
+        }),
+        fail: () => Taro.showToast({
+          title: '请求失败，请重新试试吧',
+          icon: 'none',
+          duration: 3000,
+          success: () => reject('error')
+        })
+      })
+      return uploadTask;
+    }
+    return new Promise((resolve, reject) => uploadHandler(resolve, reject))
   }
 
 }

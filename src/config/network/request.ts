@@ -31,7 +31,7 @@ export default class Request<T> extends Https<T> {
   patch: (...args: RequestHandler<T>) => any;
 
   upload (params: UploadFileParams) {
-    return this.upload(this.#joggle, { ...params, task: () => {} })
+    return this.setUpload(this.#joggle, params)
   }
 
 }
