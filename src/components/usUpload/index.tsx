@@ -4,7 +4,7 @@ import less from './index.module.less'
 import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
-import { UsImage } from '@components/usIndex'
+import { UsImage, UsArcProgressBar } from '@components/usIndex'
 
 class UsUpload extends Component<PropsWithChildren<PageProps>> {
 
@@ -95,6 +95,25 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
               mode="aspectFill"
               onClick={() => console.log('预览图片')}
             />
+            {item.status !== 'loading' && (
+              <View className={less.inline_progress} onClick={() => {
+                initialValue[index] = Object.assign(initialValue[index], {
+                  percent: 50
+                })
+                typeof this.props.onChange === 'function' && this.props.onChange({
+                  value: initialValue
+                })
+              }}>
+                <UsArcProgressBar
+                  textValue={(item?.percent || 100) + '%'}
+                  textColor="#ffffff"
+                  lineColor="#ffffff"
+                  lineBack="transparent"
+                  boxSize={80}
+                  percent={item.percent}
+                />
+              </View>
+            )}
             <View
               className={`${less.inline_delete} iconfont icon-line-delete1`}
               onClick={(e) => this.onDelete(e, index)}

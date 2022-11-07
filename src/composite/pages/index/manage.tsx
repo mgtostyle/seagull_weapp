@@ -31,13 +31,13 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = (
 
   const toMiniAppEdit = (id?: number) => {
     Taro.navigateTo({
-      url: `/composite/pages/miniApp/update?id=${id}`
+      url: `/composite/pages/miniApp/update${id ? '?id=' + id : ''}`
     })
   }
 
   return (
     <React.Fragment>
-      <UsButton onClick={toMiniAppEdit}>新增</UsButton>
+      <UsButton onClick={() => toMiniAppEdit()}>新增</UsButton>
       <View className="block_index_list">
         {list.map((element: any, index: number) => (
           <View key={index} onClick={() => toMiniAppEdit(element.id)}>{element.title}</View>
