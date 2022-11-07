@@ -9,13 +9,14 @@ import { UsButton } from '../usIndex'
 export class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof mapStateToProps>>, PageState> {
 
   static defaultProps: PageProps = {
-    initialValues: {}
+    initialValues: {},
+    request: false
   }
 
   constructor (props) {
     super (props)
     this.state = {
-      initialValues: props.initialValues
+      initialValues: props.request ? props.request : props.initialValues
     }
   }
 

@@ -111,13 +111,13 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
                         <View
                           className={less.text}
                           style={{
-                            color: current === index ? theme : '#15161a'
+                            color: current === index ? theme : less.usTextColor
                           }}
                         >{item}</View>
                         <View
                           className={`${less.icon} iconfont icon-line-edit`}
                           style={{
-                            color: current === index ? theme : '#15161a'
+                            color: current === index ? theme : less.usTextColor
                           }}
                         />
                       </View>

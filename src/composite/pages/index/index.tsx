@@ -6,7 +6,7 @@ import Charts from './charts'
 import Manage from './manage'
 import Users from './users'
 
-const Index: React.FC<PropsWithChildren<{ props: PageProps }>> = () => {
+const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
 
   const [tabbarIndex, setTabbarIndex] = useState<TabbarIndex>(1)
 
@@ -32,7 +32,7 @@ const Index: React.FC<PropsWithChildren<{ props: PageProps }>> = () => {
           case 0:
             return <Charts />
           case 1:
-            return <Manage />
+            return <Manage {...(props as any)} />
           case 2:
             return <Users />
         }

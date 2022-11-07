@@ -1,9 +1,12 @@
 import Https from './https'
-import type { Method, RequestHandler, DataType, UploadFileParams } from './interface'
+import type { Method, RequestHandler, DataType, UploadFileParams, OperateParams } from './interface'
 
 export default class Request<T> extends Https<T> {
 
   #joggle: string;
+  #operate: OperateParams = {
+    toast: false,
+  }
 
   constructor (method: Method, joggle: string) {
     super (method)
@@ -11,7 +14,14 @@ export default class Request<T> extends Https<T> {
     this[method.toLocaleLowerCase()] = (...args: RequestHandler<T>) => this.#method(joggle, ...args)
   }
 
-  operate () {
+  operate (args = this.#operate) {
+    const { callback, taskCb, ...params } = args as {
+      params: OperateParams,
+      callback?: (values) => void,
+      taskCb?: (values) => void
+    }
+    typeof callback === 'function' && callback(this)
+    this.taskCb = typeof taskCb === 'function' && taskCb
     return this
   }
 

@@ -1,24 +1,54 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useState } from 'react'
 import type { PageUpdateProps } from './interface'
+import Taro, { getCurrentInstance, useLoad } from '@tarojs/taro'
 
 import { UsContainer, UsForm, UsInput, UsTextArea, UsUpload } from '@components/usIndex'
 
 const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis }>> = ({ $apis }) => {
 
-  const onSubmit = (values) => {
-    $apis.composite.setting.miniAppUpdate.post(values).then(res => {
-      console.log(res)
+  const { id } = (getCurrentInstance as any)().router.params
+  const [detail, setMiniAppDetail] = useState(null)
+
+  useLoad(() => {
+    // id && getMiniAppDetail()
+  })
+
+  const getMiniAppDetail = () => {
+    $apis.composite.setting.miniAppDetail.get(`/id/${id}`, 'Suffix').then(res => {
+      setMiniAppDetail(res.data.detail)
     })
   }
 
+  const onSubmit = (values) => {
+    const { logo, ...params } = values
+    if (logo?.[0]?.status !== 'done') return Taro.showToast({
+      title: `图片${logo?.[0]?.status === 'uploading' ? '未加载完成' : '异常'}，请检查清楚再试`,
+      icon: 'none',
+      duration: 1500
+    })
+    const dataValues = {
+      ...params,
+      logo: logo[0].url
+    }
+    if (id) dataValues.id = id
+    $apis.composite.setting.miniAppUpdate.post(dataValues).then(res => res.data.status === 1 && Taro.navigateBack({
+      delta: 1,
+      success: () => Taro.showToast({
+        title: '创建成功',
+        icon: 'success',
+        duration: 1500
+      })
+    }))
+  }
+
   return (
-    <UsContainer title="创建小程序平台">
+    <UsContainer title="创建小程序平台" back={1}>
       <UsForm
-        // initialValues={{
-        //   logo: [
-        //     {uid: 1667547417118, url: "http://tmp/XrLkGswAqDZIa27afb9cd571c504a49dd1433d13494d.jpeg"}
-        //   ]
-        // }}
+        // initialValues={detail}
+        request={async () => {
+          let result = await $apis.composite.setting.miniAppDetail.get(`/id/${id}`, 'Suffix')
+          return result.data.detail
+        }}
         onReset={() => console.log('重置呀')}
         onSubmit={onSubmit}
       >
@@ -27,7 +57,7 @@ const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis 
         </UsForm.Item>
         <UsForm.Item label="Logo" name="logo">
           <UsUpload
-            limit={9}
+            limit={1}
           />
         </UsForm.Item>
         <UsForm.Item label="AppId" name="appId">

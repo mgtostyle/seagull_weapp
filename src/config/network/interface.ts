@@ -29,3 +29,7 @@ export interface UploadFileParams {
   name: 'singleImage';
   task?: () => void;
 }
+
+export interface OperateParams {
+  toast?: boolean;
+}

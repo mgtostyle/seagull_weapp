@@ -14,6 +14,7 @@ import * as UsPickerComponent from '../usPicker'
 import * as UsButtonComponent from '../usButton'
 import UsButtonGroup from '../usButton/group'
 import UsImage from '../usImage/index'
+import UsArcProgressBar from '../UsArcProgressBar/index'
 
 const UsForm = (UsFormComponent as any).default
 const UsFormItem = (UsFormItemComponent as any).default
@@ -43,4 +44,5 @@ export {
   UsPicker,
   UsButton,
   UsImage,
+  UsArcProgressBar,
 }

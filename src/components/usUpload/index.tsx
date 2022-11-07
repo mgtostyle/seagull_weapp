@@ -15,37 +15,53 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
 
   private onUpload () {
     const { limit, initialValue, onChange }: PageProps = this.props
-    Boolean(limit - (initialValue?.length || 0)) && Taro.chooseMedia({
-      count: limit - (initialValue?.length || 0),
+    const initLength = initialValue.length
+    Boolean(limit - initLength) && Taro.chooseMedia({
+      count: limit - initLength,
       mediaType: ['image'],
       sourceType: ['album', 'camera'],
       sizeType: ['compressed'],
       success: res => {
-        let imageList = initialValue.concat(res.tempFiles.map((item, index: number) => {
+        let imageList = res.tempFiles.map((item, index: number) => {
           return {
             uid: Date.now() + index,
             url: item.tempFilePath,
             status: 'loading',
             percent: 0
           } as ImageItem
-        }))
+        })
+        let initialValueList = initialValue.concat(imageList)
         typeof onChange === 'function' && onChange({
-          value: imageList
+          value: initialValueList
         })
         imageList.forEach((item: ImageItem, index: number) => {
-          this.getUploadSubmit(item, index)
+          this.getUploadSubmit(initialValueList, item, index + initLength)
         })
       }
     })
   }
 
-  private getUploadSubmit (detail, index: number) {
-    this.$apis.composite.common.uploadSingleImage.upload({
-      file: detail.tempFilePath,
+  private getUploadSubmit (initialValue, detail, index: number) {
+    const { onChange }: PageProps = this.props
+    const setCurrentImage = (params) => {
+      initialValue[index] = Object.assign(initialValue[index], params)
+      typeof onChange === 'function' && onChange({
+        value: initialValue
+      })
+    }
+    this.$apis.composite.common.uploadSingleImage.operate({
+      taskCb: task => task.onProgressUpdate(res => setCurrentImage({
+        percent: res.progress
+      }))
+    }).upload({
+      file: detail.url,
       name: 'singleImage'
-    }).then((res) => {
-      console.log(res)
-    }).catch((err) => console.log(err))
+    }).then(res => setCurrentImage({
+      status: 'done',
+      url: res.data.imageUrl
+    })).catch((err) => setCurrentImage({
+      status: err
+    }))
   }
 
   private onDelete (e, current: number) {
@@ -54,7 +70,7 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
     Taro.showModal({
       title: '提示',
       content: `是否确认移除第 ${current + 1} 张图片，请谨慎操作该选项～`,
-      confirmColor: '#f24142',
+      confirmColor: less.usDangerColor,
       confirmText: '移除',
       success: res_modal => res_modal.confirm && typeof onChange === 'function' && onChange({
         value: initialValue.filter((_, index: number) => index !== current)

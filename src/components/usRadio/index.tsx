@@ -17,7 +17,7 @@ class UsRadio extends Component<PropsWithChildren<PageProps & ReturnType<typeof 
         <View
           className={less.text}
           style={{
-            color: value === initialValue ? theme : '#15161a'
+            color: value === initialValue ? theme : less.usTextColor
           }}
         >{this.props.children}</View>
         {value === initialValue && (
