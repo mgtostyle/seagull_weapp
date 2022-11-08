@@ -15,9 +15,9 @@ export default defineAppConfig({
   ],
   window: {
     backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'Composite Manage',
+    navigationBarBackgroundColor: '#ffffff',
     navigationBarTextStyle: 'black',
-    navigationStyle: 'custom'
+    navigationStyle: 'custom',
+    backgroundColor: '#f4f4f4'
   }
 })

@@ -16,9 +16,9 @@ export default class Request<T> extends Https<T> {
 
   operate (args = this.#operate) {
     const { callback, taskCb, ...params } = args as {
-      params: OperateParams,
-      callback?: (values) => void,
-      taskCb?: (values) => void
+      params: OperateParams;
+      callback?: (values) => void;
+      taskCb?: (values) => void;
     }
     typeof callback === 'function' && callback(this)
     this.taskCb = typeof taskCb === 'function' && taskCb
