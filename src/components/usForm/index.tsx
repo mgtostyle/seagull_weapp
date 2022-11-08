@@ -10,7 +10,7 @@ export class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<t
 
   static defaultProps: PageProps = {
     initialValues: {},
-    // request: false
+    request: false
   }
 
   constructor (props) {
@@ -27,10 +27,6 @@ export class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<t
         initialValues: values
       })
     })
-  }
-
-  private isPromise (object) {
-    return !!object && (typeof object === 'object' || typeof object === 'function') && typeof object.then === 'function'
   }
 
   private setFieldValue (params: FieldValue) {
