@@ -1,99 +1,82 @@
-import { Component, PropsWithChildren, ReactNode } from 'react'
-import type { PageProps, PageState } from './interface'
+import React, { PropsWithChildren, useEffect } from "react"
+import type { PageProps } from './interface'
 import less from './index.module.less'
-import { createCanvasContext } from '@tarojs/taro'
+import { createCanvasContext } from "@tarojs/taro"
 import { View, Canvas } from '@tarojs/components'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-class UsArcProgressBar extends Component<PropsWithChildren<PageProps & ReturnType<typeof mapStateToProps>>, PageState> {
+const UsArcProgressBar: React.FC<PropsWithChildren<PageProps>> = (props) => {
 
-  static defaultProps: PageProps = {
+  const storeGlobal = useSelector(state => (state as any).global)
+
+  const defaultProps = Object.assign({
+    canvasId: '',
     textValue: '',
     textColor: less.usTextColor,
     textSize: 28,
     boxSize: 200,
     percent: 50,
     lineWidth: 5,
-    lineColor: '',
+    lineColor: storeGlobal.theme,
     lineBack: less.usBackGColor
-  }
+  }, props)
 
-  constructor (props) {
-    super (props)
-    this.state = {
-      percent: props.percent,
-      lineColor: props.lineColor || props.global.theme
-    }
-  }
+  useEffect(() => setArcProgressBar(), [props.percent])
 
-  componentDidMount () {
-    this.setArcProgressBack()
-  }
+  useEffect(() => setArcProgressBack(), [])
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.percent !== state.percent) {
-      console.log(props,state)
-      const { percent, size, lineWidth } = props
-      const query = createCanvasContext('arc_progress_bar')
-      query.clearRect(0, 0, size, size)
-      query.setLineWidth(lineWidth)
-      query.setStrokeStyle('#999999')
-      query.setLineCap('round')
-      query.beginPath()
-      query.arc(size / 2, size / 2, (size - lineWidth) / 2, 1.5 * Math.PI, percent / 100 * 2 * Math.PI + 1.5 * Math.PI, false)
-      query.stroke()
-      query.draw()
-    }
-    return null
-  }
-
-  private setArcProgressBack () {
-    const { boxSize, lineWidth, lineBack } = this.props
-    const query = createCanvasContext('arc_progress_back')
-    query.setLineWidth(lineWidth)
-    query.setStrokeStyle(lineBack)
-    query.setLineCap('round')
+  const setArcProgressBar = () => {
+    console.log('bar')
+    const query = createCanvasContext('arc_progress_bar' + props.canvasId)
     query.beginPath()
-    query.arc(boxSize / 2, boxSize / 2, (boxSize - lineWidth) / 2, 1.5 * Math.PI,  3.5 * Math.PI, false)
+    query.clearRect(0, 0, defaultProps.boxSize, defaultProps.boxSize)
+    query.setLineWidth(defaultProps.lineWidth)
+    query.setStrokeStyle(defaultProps.lineColor)
+    query.beginPath()
+    query.arc(defaultProps.boxSize / 2, defaultProps.boxSize / 2, (defaultProps.boxSize - defaultProps.lineWidth) / 2, 1.5 * Math.PI, defaultProps.percent / 100 * 2 * Math.PI + 1.5 * Math.PI, false)
     query.stroke()
     query.draw()
   }
 
-  render (): ReactNode {
-    const { textValue, textColor, textSize, boxSize }: PageProps = this.props
-    return (
-      <View className={less.block_index_container}>
-        <View
-          className={less.inline_text}
-          style={{
-            color: textColor,
-            fontSize: `${textSize}rpx`
-          }}
-        >{textValue}</View>
-        <Canvas
-          className={less.inline_canvas}
-          style={{
-            width: boxSize,
-            height: boxSize
-          }}
-          canvasId="arc_progress_bar"
-        />
-        <Canvas
-          className={less.inline_canvas_back}
-          style={{
-            width: boxSize,
-            height: boxSize
-          }}
-          canvasId="arc_progress_back"
-        />
-      </View>
-    )
+  const setArcProgressBack = () => {
+    console.log('back')
+    const query = createCanvasContext('arc_progress_back' + props.canvasId)
+    query.beginPath()
+    query.setLineWidth(defaultProps.lineWidth)
+    query.setStrokeStyle(defaultProps.lineBack)
+    query.arc(defaultProps.boxSize / 2, defaultProps.boxSize / 2, (defaultProps.boxSize - defaultProps.lineWidth) / 2, 1.5 * Math.PI,  3.5 * Math.PI, false)
+    query.stroke()
+    query.draw()
   }
+
+  return (
+    <View className={less.block_index_container}>
+      <View
+        className={less.inline_text}
+        style={{
+          color: defaultProps.textColor,
+          fontSize: `${defaultProps.textSize}rpx`
+        }}
+      >{defaultProps.textValue}</View>
+      <Canvas
+        className={less.inline_canvas}
+        style={{
+          width: defaultProps.boxSize,
+          height: defaultProps.boxSize
+        }}
+        canvasId={'arc_progress_bar' + props.canvasId}
+      />
+      <Canvas
+        className={less.inline_canvas_back}
+        style={{
+          width: defaultProps.boxSize,
+          height: defaultProps.boxSize
+        }}
+        canvasId={'arc_progress_back' + props.canvasId}
+      />
+    </View>
+  )
 
 }
 
-const mapStateToProps = (state) => ({
-  global: state.global
-})
-
-export default connect(mapStateToProps)(UsArcProgressBar);
+export default UsArcProgressBar;

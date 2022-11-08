@@ -18,6 +18,12 @@ export default class UsImage extends Component<PropsWithChildren<PageProps>, Pag
     }
   }
 
+  private getError () {
+    const { onError }: PageProps = this.props
+    this.setState({ visible: false })
+    typeof onError === 'function' && onError()
+  }
+
   render (): ReactNode {
     const { className, shape, onError, onLoad, ...params }: PageProps = this.props
     return (
@@ -26,7 +32,7 @@ export default class UsImage extends Component<PropsWithChildren<PageProps>, Pag
           className={`${less.block_image_container} ${className} ${less[shape]} ${!this.state?.visible && less.hidden}`}
           {...params}
           onLoad={() => this.setState({ visible: true })}
-          onError={() => this.setState({ visible: false })}
+          onError={() => this.getError()}
         />
       </React.Fragment>
     )

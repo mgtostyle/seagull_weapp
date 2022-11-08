@@ -7,19 +7,24 @@ import { UsContainer, UsForm, UsInput, UsTextArea, UsUpload, UsArcProgressBar } 
 const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis }>> = ({ $apis }) => {
 
   const { id } = (getCurrentInstance as any)().router.params
-  const [detail, setMiniAppDetail] = useState(null)
+  // const [detail, setMiniAppDetail] = useState(null)
 
-  useLoad(() => {
-    id && getMiniAppDetail()
-  })
+  // useLoad(() => {
+  //   id && getMiniAppDetail()
+  // })
 
-  const getMiniAppDetail = () => {
-    $apis.composite.setting.miniAppDetail.get(`/id/${id}`, 'Suffix').then(res => {
-      setMiniAppDetail(res.data.detail)
-    })
+  const getMiniAppDetail = async () => {
+    try {
+      let result = await $apis.composite.setting.miniAppDetail.get(`/id/${id}`, 'Suffix')
+      let { logo, ...params } = result.data.detail
+      return {
+        ...params,
+        logo: [{ url: logo }]
+      }
+    } catch (error) {
+      return {}
+    }
   }
-
-  const [indexValue, setIndexValue] = useState(0)
 
   const onSubmit = (values) => {
     // const { logo, ...params } = values
@@ -41,21 +46,12 @@ const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis 
     //     duration: 1500
     //   })
     // }))
-    setIndexValue(indexValue + 1)
   }
 
   return (
-    <UsContainer title="创建小程序平台" back={1}>
+    <UsContainer title={`小程序平台 - ${id ? '编辑' : '创建'}`} back={1}>
       <UsForm
-        initialValues={{
-          logo: [{
-            url: 'http://127.0.0.1:3031/composite/images/20221007/ccdfc86e1bd7ab3cdbf0db2dc05d31f5.png'
-          }]
-        }}
-        // request={async () => {
-        //   let result = await $apis.composite.setting.miniAppDetail.get(`/id/${id}`, 'Suffix')
-        //   return result.data.detail
-        // }}
+        request={id ? getMiniAppDetail : false}
         onReset={() => console.log('重置呀')}
         onSubmit={onSubmit}
       >
@@ -63,9 +59,7 @@ const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis 
           <UsInput placeholder="请输入..." />
         </UsForm.Item>
         <UsForm.Item label="Logo" name="logo">
-          <UsUpload
-            limit={1}
-          />
+          <UsUpload limit={1} />
         </UsForm.Item>
         <UsForm.Item label="AppId" name="appId">
           <UsInput placeholder="请输入..." />

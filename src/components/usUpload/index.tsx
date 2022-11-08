@@ -66,15 +66,37 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
 
   private onDelete (e, current: number) {
     e.stopPropagation()
-    const { initialValue, onChange }: PageProps = this.props
+    const { limit, initialValue, onChange }: PageProps = this.props
     Taro.showModal({
       title: '提示',
-      content: `是否确认移除第 ${current + 1} 张图片，请谨慎操作该选项～`,
+      content: `是否确认移除${limit === 1 ? '当前' : `第 ${current + 1} 张`}图片，请谨慎操作该选项～`,
       confirmColor: less.usDangerColor,
       confirmText: '移除',
       success: res_modal => res_modal.confirm && typeof onChange === 'function' && onChange({
         value: initialValue.filter((_, index: number) => index !== current)
       })
+    })
+  }
+
+  private onImageError (index: number) {
+    const { initialValue, onChange }: PageProps = this.props
+    initialValue[index] = Object.assign(initialValue[index], {
+      status: 'error'
+    })
+    typeof onChange === 'function' && onChange({
+      value: initialValue
+    })
+  }
+
+  private onImagePreview (index: number) {
+    Taro.previewMedia({
+      sources: this.props.initialValue.map((element: ImageItem) => {
+        return {
+          url: element.url,
+          type: 'image'
+        }
+      }),
+      current: index
     })
   }
 
@@ -93,25 +115,25 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
               className={less.inline_image}
               src={item.url}
               mode="aspectFill"
-              onClick={() => console.log('预览图片')}
+              onError={() => this.onImageError(index)}
+              onClick={() => this.onImagePreview(index)}
             />
-            {item.status !== 'loading' && (
-              <View className={less.inline_progress} onClick={() => {
-                initialValue[index] = Object.assign(initialValue[index], {
-                  percent: 50
-                })
-                typeof this.props.onChange === 'function' && this.props.onChange({
-                  value: initialValue
-                })
-              }}>
+            {item.status === 'loading' ? (
+              <View className={less.inline_progress}>
                 <UsArcProgressBar
-                  textValue={(item?.percent || 100) + '%'}
+                  canvasId={index.toString()}
+                  textValue={(item?.percent || 0) + '%'}
                   textColor="#ffffff"
                   lineColor="#ffffff"
                   lineBack="transparent"
                   boxSize={80}
-                  percent={item.percent}
+                  percent={item?.percent || 0}
                 />
+              </View>
+            ) : item.status === 'error' && (
+              <View className={less.inline_error}>
+                <View className={`${less.icon} iconfont icon-line-doubt1`} />
+                <View className={less.text}>加载失败</View>
               </View>
             )}
             <View

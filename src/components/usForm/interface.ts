@@ -7,7 +7,7 @@ export interface FieldValue {
 
 export interface PageProps extends FormProps {
   initialValues: {[propsName: string]: any};
-  request?: boolean | (() => {[propsName: string]: any});
+  request?: (() => Promise<{[propsName: string]: any}>);
   setFieldValue?: (fieldValue: FieldValue) => void;
   onSubmit?: (values: any) => void;
 }
