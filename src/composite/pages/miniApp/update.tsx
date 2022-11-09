@@ -1,17 +1,13 @@
 import React, { PropsWithChildren, useState } from 'react'
 import type { PageUpdateProps } from './interface'
-import Taro, { getCurrentInstance, useLoad } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 
-import { UsContainer, UsForm, UsInput, UsTextArea, UsUpload, UsArcProgressBar } from '@components/usIndex'
+import { UsContainer, UsForm, UsInput, UsTextArea, UsUpload } from '@components/usIndex'
 
 const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis }>> = ({ $apis }) => {
 
   const { id } = (getCurrentInstance as any)().router.params
-  // const [detail, setMiniAppDetail] = useState(null)
-
-  // useLoad(() => {
-  //   id && getMiniAppDetail()
-  // })
+  const [formRef, setFormRef]= useState<any>(null)
 
   const getMiniAppDetail = async () => {
     try {
@@ -19,7 +15,12 @@ const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis 
       let { logo, ...params } = result.data.detail
       return {
         ...params,
-        logo: [{ url: logo }]
+        logo: [{
+          uid: Date.now() + 1,
+          status: 'done',
+          url: logo,
+          percent: 100
+        }]
       }
     } catch (error) {
       return {}
@@ -27,32 +28,36 @@ const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis 
   }
 
   const onSubmit = (values) => {
-    // const { logo, ...params } = values
-    // if (logo?.[0]?.status !== 'done') return Taro.showToast({
-    //   title: `图片${logo?.[0]?.status === 'uploading' ? '未加载完成' : '异常'}，请检查清楚再试`,
-    //   icon: 'none',
-    //   duration: 1500
-    // })
-    // const dataValues = {
-    //   ...params,
-    //   logo: logo[0].url
-    // }
-    // if (id) dataValues.id = id
-    // $apis.composite.setting.miniAppUpdate.post(dataValues).then(res => res.data.status === 1 && Taro.navigateBack({
-    //   delta: 1,
-    //   success: () => Taro.showToast({
-    //     title: '创建成功',
-    //     icon: 'success',
-    //     duration: 1500
-    //   })
-    // }))
+    $apis.composite.setting.miniAppUpdate.refuse([
+      {
+        where: values?.logo?.findIndex(item => item?.status !== 'done') !== -1,
+        result: () => Taro.showToast({
+          title: '无法提交数据，存在异常或者未加载完成的图片，请检查清楚后重试～',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    ]).post(Object.assign(values, id && { id }, {
+      logo: values?.logo?.[0]?.url || ''
+    })).then(res => res.data.status === 1 && Taro.navigateBack({
+      delta: 1,
+      success: () => Taro.showToast({
+        title: id ? '编辑' : '创建成功',
+        icon: 'success',
+        duration: 1500
+      })
+    }))
   }
 
   return (
     <UsContainer title={`小程序平台 - ${id ? '编辑' : '创建'}`} back={1}>
       <UsForm
+        formRef={node => setFormRef(node)}
         request={id ? getMiniAppDetail : false}
-        onReset={() => console.log('重置呀')}
+        buttonConfig={{
+          submitText: id ? '更新' : '创建'
+        }}
+        onReset={() => formRef?.resetFields()}
         onSubmit={onSubmit}
       >
         <UsForm.Item label="平台名称" name="title">

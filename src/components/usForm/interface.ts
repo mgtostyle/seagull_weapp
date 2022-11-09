@@ -1,4 +1,5 @@
 import type { FormProps } from '@tarojs/components'
+import type { PageProps as FormButtonProps } from '@components/usButton/interface'
 
 export interface FieldValue {
   name: string;
@@ -6,10 +7,12 @@ export interface FieldValue {
 }
 
 export interface PageProps extends FormProps {
+  formRef?: any;
   initialValues: {[propsName: string]: any};
   request: boolean | (() => Promise<{[propsName: string]: any}>);
+  buttonConfig?: ButtonConfig;
   setFieldValue?: (fieldValue: FieldValue) => void;
-  onSubmit?: (values: any) => void;
+  onReset?: () => void;
 }
 
 export interface PageState {
@@ -27,4 +30,11 @@ export interface PageItemProps {
 
 export interface PageFieldState {
   value: string;
+}
+
+export interface ButtonConfig {
+  resetText?: string;
+  submitText?: string;
+  resetButtonProps?: FormButtonProps;
+  submitButtonProps?: FormButtonProps;
 }

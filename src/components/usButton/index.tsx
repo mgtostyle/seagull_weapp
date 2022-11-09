@@ -13,7 +13,7 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
     width: 'auto'
   }
 
-  get style () {
+  get style (): {[propsName: string]: any} {
     const { block, theme, ghost, size, width }: PageProps = this.props
     const style = Object.assign(
       {
@@ -44,14 +44,15 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
   }
 
   render (): ReactNode {
-    const { block, theme, ghost, children, nodeKey, className, ...params }: PageProps = this.props
+    const { block, theme, ghost, children, nodeKey, className, style, hoverClass, ...params } = (this.props as PageProps)
     const nodeClass = `inline${(nodeKey || '').replace(/[A-Z]/g, value => `_${value.toLocaleLowerCase()}`)}`
     const value = typeof children === 'string' && children?.length == 2 ? children.split('').join(' ') : children
     return (
       <Button
         className={`${less.block_container} ${less[nodeClass]} ${ghost && less.ghost} ${className}`}
         {...params}
-        style={this.style}
+        style={{ ...this.style, ...(style as any) }}
+        hoverClass={`${less.inline_hover_class} ${hoverClass}`}
       >&nbsp;{value}&nbsp;</Button>
     )
   }

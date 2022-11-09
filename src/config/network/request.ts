@@ -1,5 +1,5 @@
 import Https from './https'
-import type { Method, RequestHandler, DataType, UploadFileParams, OperateParams } from './interface'
+import type { Method, RequestHandler, DataType, UploadFileParams, OperateParams, RefuseItem } from './interface'
 
 export default class Request<T> extends Https<T> {
 
@@ -12,6 +12,17 @@ export default class Request<T> extends Https<T> {
     super (method)
     this.#joggle = joggle
     this[method.toLocaleLowerCase()] = (...args: RequestHandler<T>) => this.#method(joggle, ...args)
+  }
+
+  refuse (conditions: Array<RefuseItem>) {
+    const index = conditions.findIndex(item => Boolean(item.where))
+    if (index !== -1) {
+      conditions[index].result()
+      this.useRefuse = true
+    } else {
+      this.useRefuse = false
+    }
+    return this
   }
 
   operate (args = this.#operate) {

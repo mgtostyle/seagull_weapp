@@ -33,3 +33,8 @@ export interface UploadFileParams {
 export interface OperateParams {
   toast?: boolean;
 }
+
+export interface RefuseItem {
+  where: boolean;
+  result: (values?) => Promise<any>;
+}

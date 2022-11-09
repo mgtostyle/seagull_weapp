@@ -6,6 +6,7 @@ export default class Https<T> extends Environment {
 
   #environment: EnvironmentParams = super.env()
   #defaultProps: HttpsDefaultProps
+  useRefuse: boolean = false
   taskCb: boolean | ((values?) => void)
 
   constructor (method: Method) {
@@ -20,6 +21,7 @@ export default class Https<T> extends Environment {
   }
 
   setPromise (joggle: string, params?: T) {
+    const _this = this
     const { DOMAIN_NAME }: EnvironmentParams = this.#environment
     const { method, timeout, clientInfo }: HttpsDefaultProps = this.#defaultProps
     const token = Taro.getStorageSync('token')
@@ -43,7 +45,7 @@ export default class Https<T> extends Environment {
       handler.fail = (error) => {
         reject(error)
       }
-      return Taro.request(handler)
+      return !_this.useRefuse && Taro.request(handler)
     }
     return new Promise((resolve, reject) => requestHandler(resolve, reject))
   }
