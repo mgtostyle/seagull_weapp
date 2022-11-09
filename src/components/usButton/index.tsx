@@ -21,6 +21,7 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
         width: typeof width === 'number' ? `${width}rpx` : width
       },
       size === 'mini' && {
+        height: '70rpx',
         lineHeight: '70rpx'
       },
       theme === 'primary' ? this.ghost(ghost, this.props.global.theme)

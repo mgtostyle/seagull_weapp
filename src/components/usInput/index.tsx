@@ -10,12 +10,12 @@ class UsInput extends Component<PropsWithChildren<PageProps>> {
   }
 
   render (): ReactNode {
-    const { placeholderClass, initialValue, value, ...params }: PageProps = this.props
+    const { placeholderClass, initialValue, ...params }: PageProps = this.props
+    if (initialValue) params.value = initialValue
     return (
       <Input
         className={less.inline_input}
         {...params}
-        value={initialValue}
         placeholderClass={`${less.inline_input_placeholder} ${placeholderClass}`}
       />
     )

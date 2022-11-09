@@ -38,7 +38,32 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = (
 
   return (
     <React.Fragment>
-      <QuerySelect />
+      <QuerySelect
+        select
+        valueEnum={[
+          {
+            title: '测试1',
+            dataIndex: 'test1',
+            request: async () => []
+          },
+          {
+            title: '测试2',
+            dataIndex: 'test2',
+            request: async () => []
+          },
+          {
+            title: '测试3',
+            dataIndex: 'test3',
+            request: async () => []
+          },
+          {
+            title: '测试4',
+            dataIndex: 'test4',
+            request: async () => []
+          }
+        ]}
+        onSubmit={e => console.log(e)}
+      />
       <View className="block_index_list">
         {list.map((element: any, index: number) => (
           <View key={index} onClick={() => toMiniAppEdit(element.id)}>{element.title}</View>
