@@ -11,7 +11,7 @@ const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis 
 
   const getMiniAppDetail = async () => {
     try {
-      let result = await $apis.composite.setting.miniAppDetail.get(`/id/${id}`, 'Suffix')
+      let result = await $apis.composite.setting.miniAppDetail.get(`/id/${id}`)
       let { logo, ...params } = result.data.detail
       return {
         ...params,

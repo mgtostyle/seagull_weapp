@@ -4,13 +4,15 @@ import type { Method, RequestHandler, DataType, UploadFileParams, OperateParams,
 export default class Request<T> extends Https<T> {
 
   #joggle: string;
+  #dataType: DataType;
   #operate: OperateParams = {
     toast: false,
   }
 
-  constructor (method: Method, joggle: string) {
+  constructor (method: Method, joggle: string, type: DataType = 'Object') {
     super (method)
     this.#joggle = joggle
+    this.#dataType = type
     this[method.toLocaleLowerCase()] = (...args: RequestHandler<T>) => this.#method(joggle, ...args)
   }
 
@@ -36,7 +38,7 @@ export default class Request<T> extends Https<T> {
     return this
   }
 
-  #method (joggle: string, params: T, type: DataType = 'Object') {
+  #method (joggle: string, params: T, type: DataType = this.#dataType) {
     switch (type) {
       case 'Suffix':
         return this.setPromise(joggle + params)

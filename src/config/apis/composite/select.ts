@@ -4,6 +4,6 @@ import type {
   CompositeSelectAdministratorList
 } from '@/config/apis/index/interface'
 
-export const registerList = new Request<CompositeSelectRegisterList>('POST', '/composite/terminal/select/registerList')
+export const registerList = new Request<CompositeSelectRegisterList>('POST', '/composite/terminal/select/registerList', 'Object')
 
-export const administratorList = new Request<CompositeSelectAdministratorList>('POST', '/composite/terminal/select/administratorList')
+export const administratorList = new Request<CompositeSelectAdministratorList>('POST', '/composite/terminal/select/administratorList', 'Object')

@@ -1,0 +1,25 @@
+@import url('@assets/less/common.less');
+
+.block_index_container{
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background-color: #ffffff;
+  .inline_search{
+    display: flex;
+    align-items: center;
+    grid-gap: 20rpx;
+    height: 100rpx;
+    .input{
+      flex: 1;
+      border-radius: 100rpx;
+      background-color: @backGColor;
+      overflow: hidden;
+      height: 76rpx;
+      padding: 0 30rpx;
+    }
+    .button{
+      height: 76rpx;
+    }
+  }
+}

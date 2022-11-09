@@ -5,6 +5,7 @@ import Taro, { useLoad } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
 import { UsButton } from '@components/usIndex'
+import { QuerySelect } from '@/assembles/moduleIndex'
 
 const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = ({ $apis }) => {
 
@@ -37,7 +38,7 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = (
 
   return (
     <React.Fragment>
-      <UsButton onClick={() => toMiniAppEdit()}>新增</UsButton>
+      <QuerySelect />
       <View className="block_index_list">
         {list.map((element: any, index: number) => (
           <View key={index} onClick={() => toMiniAppEdit(element.id)}>{element.title}</View>
