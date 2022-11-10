@@ -3,16 +3,19 @@ export interface PageProps {
   search?: boolean;
   onSubmit?: (values: {[propsName: string]: any}) => void;
   select?: boolean;
-  valueEnum?: Array<EnumItem>;
+  columns?: Array<ColumnItem>;
 }
 
-export interface EnumItem {
+export interface ColumnItem {
   title: string;
   dataIndex: string;
-  request: () => Promise<Array<ValueItem>>;
+  request?: () => Promise<Array<OptionItem>>;
+  valueEnum?: Array<OptionItem>;
 }
 
-export interface ValueItem {
+export interface OptionItem {
   label: string;
   value: string | number;
 }
+
+export type QuerySelectColumns = Array<ColumnItem>

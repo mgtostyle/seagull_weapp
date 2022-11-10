@@ -15,3 +15,8 @@ export interface PageManageProps {
 export interface PageUsersProps {
 
 }
+
+export interface AppQuerySelect {
+  page: number;
+  limit: number;
+}

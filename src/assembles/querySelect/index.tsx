@@ -1,10 +1,11 @@
 import React, { PropsWithChildren, useState } from 'react'
-import type { PageProps, EnumItem } from './interface'
+import type { PageProps, QuerySelectColumns, ColumnItem, OptionItem } from './interface'
 import less from './index.module.less'
+import Taro from '@tarojs/taro'
 import { View, Form, Text, ScrollView } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
-import { UsInput, UsButton } from '@components/usIndex'
+import { UsInput, UsRadio, UsButton, UsDataNone } from '@components/usIndex'
 
 const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
 
@@ -14,12 +15,14 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
     placeholder: '请输入关键词...',
     search: true,
     select: false,
-    valueEnum: []
+    columns: []
   }, props)
-
-  const [cursor, setCursor] = useState<number>(0)
-
+  
   const [initialValues, setInitialValues] = useState({})
+  const [cursor, setCursor] = useState<number>(0)
+  const [columns, setColumns] = useState<QuerySelectColumns>(defaultProps.columns || [])
+  const [visible, setVisible] = useState<boolean>(false)
+  const [selects, setSelects] = useState<ColumnItem | null>(null)
 
   const setFieldValues = (values) => {
     const params = Object.assign(initialValues, values)
@@ -27,9 +30,39 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
     typeof props.onSubmit === 'function' && props.onSubmit(params)
   }
 
+  const onSelectChange = async (detail: ColumnItem, index: number) => {
+    const { request, valueEnum, ...params } = detail
+    if (visible && detail.dataIndex === selects?.dataIndex) {
+      return setVisible(false)
+    }
+    else if (typeof request === 'function') {
+      (params as ColumnItem).valueEnum = await request()
+    } else {
+      (params as ColumnItem).valueEnum = valueEnum || []
+    }
+    columns[index] = params
+    setVisible(true)
+    setColumns(columns)
+    setSelects(params)
+  }
+
+  const onRadioChange = (key: string, value: string) => {
+    setVisible(false)
+    key ? setFieldValues({ [key]: value }) : Taro.showToast({
+      title: '未定义key值，该条件无法支持查询',
+      icon: 'none',
+      duration: 2000
+    })
+  }
+
   return (
     <React.Fragment>
-      <View className={less.block_index_container}>
+      <View
+        className={less.block_index_container}
+        style={{
+          top: `${storeGlobal.navigateHeight}px`
+        }}
+      >
         <Form
           onSubmit={e => setFieldValues(e.detail.value)}
         >
@@ -55,18 +88,54 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
               >搜索</UsButton>
             )}
           </View>
-          {defaultProps.select && Boolean(defaultProps.valueEnum?.length) && (
-            <ScrollView className={less.inline_select}>
-              {defaultProps.valueEnum?.map((element: EnumItem) => (
-                <View
-                  className={less.inline_select_title}
-                  key={element.dataIndex}
-                >
-                  <Text className={less.title}>{element.title}</Text>
-                  <Text className={`${less.icon} iconfont icon-fill-down1`} />
-                </View>
-              ))}
-            </ScrollView>
+          {defaultProps.select && Boolean(columns?.length) && (
+            <View className={less.inline_select_inner}>
+              <ScrollView
+                className={less.select_scroll}
+                scrollX
+              >
+                {columns?.map((element: ColumnItem, index: number) => {
+                  let initialValue = initialValues?.[element?.dataIndex] && element?.valueEnum?.find(item => item.value === initialValues?.[element?.dataIndex])?.label
+                  return (
+                    <View
+                      className={less.select_title}
+                      key={element.dataIndex}
+                      onClick={() => onSelectChange(element, index)}
+                    >
+                      <Text className={less.title}>{element.title}{initialValue && ` - ${initialValue}`}</Text>
+                      <Text className={`${less.icon} iconfont ${visible && element.dataIndex===selects?.dataIndex?'icon-fill-up1':'icon-fill-down1'}`} />
+                    </View>
+                  )
+                })}
+              </ScrollView>
+              {visible && (
+                <React.Fragment>
+                  <View className={less.select_back} />
+                  {Boolean(selects?.valueEnum?.length) ? (
+                    <ScrollView
+                      className={less.select_column}
+                      scrollY
+                    >
+                      <UsRadio.Group
+                        initialValue={selects?.valueEnum?.[0].value}
+                        onChange={(e) => onRadioChange(selects?.dataIndex || '', e.value)}
+                      >
+                        {selects?.valueEnum?.map((item: OptionItem, index: number) => (
+                          <UsRadio
+                            value={item.value}
+                            key={index}
+                          >{item.label}</UsRadio>
+                        ))}
+                      </UsRadio.Group>
+                    </ScrollView>
+                  ) : (
+                    <View className={less.select_none}>
+                      <UsDataNone>暂无筛选条件{selects?.dataIndex}</UsDataNone>
+                    </View>
+                  )}
+                </React.Fragment>
+              )}
+            </View>
           )}
         </Form>
       </View>

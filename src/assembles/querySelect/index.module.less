@@ -10,6 +10,7 @@
     align-items: center;
     grid-gap: 20rpx;
     height: 100rpx;
+    background-color: #ffffff;
     .input{
       flex: 1;
       border-radius: 100rpx;
@@ -24,10 +25,15 @@
       padding: 0 30rpx;
     }
   }
-  .inline_select{
-    display: block;
-    overflow: hidden;
-    .inline_select_title{
+  .inline_select_inner{
+    position: relative;
+    background-color: #ffffff;
+    .select_scroll{
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .select_title{
       display: inline-block;
       vertical-align: middle;
       height: 90rpx;
@@ -41,6 +47,31 @@
         margin-left: 6rpx;
         color: @labelColor;
       }
+    }
+    .select_back{
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    .select_column{
+      position: absolute;
+      top: 90rpx;
+      left: 0;
+      right: 0;
+      max-height: 450rpx;
+      overflow: hidden;
+      background-color: #ffffff;
+    }
+    .select_none{
+      position: absolute;
+      top: 90rpx;
+      left: 0;
+      right: 0;
+      background-color: #ffffff;
     }
   }
 }

@@ -22,9 +22,11 @@ class UsRadio extends Component<PropsWithChildren<PageProps & ReturnType<typeof 
         >{this.props.children}</View>
         {value === initialValue && (
           <View
-            className={`${less.icon} iconfont icon-line-accurate1`}
-            style={{ color: theme }}
-          />
+            className={less.icon}
+            style={{
+              color: theme
+            }}
+          >√</View>
         )}
       </View>
     )

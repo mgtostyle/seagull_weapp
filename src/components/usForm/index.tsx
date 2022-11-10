@@ -11,7 +11,7 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
 
   static defaultProps: PageProps = {
     initialValues: {},
-    request: false
+    request: async () => ({})
   }
 
   constructor (props) {

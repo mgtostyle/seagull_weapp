@@ -1,8 +1,8 @@
 import UsContainer from '../usContainer'
 import UsTabbar from '../usTabbar'
 import * as UsFormComponent from '../usForm'
-import * as UsFormItemComponent from '../usForm/Item'
-import UsFormItemGroup from '../usForm/ItemGroup'
+import * as UsFormItemComponent from '../usForm/item'
+import UsFormItemGroup from '../usForm/itemGroup'
 import UsInput from '../usInput'
 import UsTextArea from '../usTextArea'
 import * as UsRadioComponent from '../usRadio'
@@ -13,8 +13,9 @@ import UsUpload from '../usUpload'
 import * as UsPickerComponent from '../usPicker'
 import * as UsButtonComponent from '../usButton'
 import UsButtonGroup from '../usButton/group'
-import UsImage from '../usImage/index'
-import UsArcProgressBar from '../UsArcProgressBar/index'
+import UsImage from '../usImage'
+import UsArcProgressBar from '../UsArcProgressBar'
+import UsDataNone from '../usDataNone'
 
 const UsForm = (UsFormComponent as any).default
 const UsFormItem = (UsFormItemComponent as any).default
@@ -45,4 +46,5 @@ export {
   UsButton,
   UsImage,
   UsArcProgressBar,
+  UsDataNone
 }
