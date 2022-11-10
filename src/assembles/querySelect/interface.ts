@@ -1,4 +1,5 @@
 export interface PageProps {
+  ref: any;
   placeholder?: string;
   search?: boolean;
   onSubmit?: (values: {[propsName: string]: any}) => void;

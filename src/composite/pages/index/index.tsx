@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react'
+import React, { PropsWithChildren, useState, useRef } from 'react'
 import type { PageProps, TabbarIndex } from './interface'
 
 import { UsContainer, UsTabbar } from '@components/usIndex'
@@ -8,7 +8,19 @@ import Users from './users'
 
 const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
 
+  const mangeRef = useRef<any>()
   const [tabbarIndex, setTabbarIndex] = useState<TabbarIndex>(1)
+
+  const menuList = [
+    {
+      name: '新建平台',
+      result: () => mangeRef.current?.toMiniAppEdit()
+    },
+    {
+      name: '重置查询条件',
+      result: () => mangeRef.current?.resetFields({})
+    }
+  ]
 
   const tabbarList = [
     {
@@ -26,13 +38,13 @@ const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
   ]
 
   return (
-    <UsContainer title={tabbarList[tabbarIndex].name}>
+    <UsContainer title={tabbarList[tabbarIndex].name} back={2} isHead tabbar menus={menuList}>
       {((index) => {
         switch (index) {
           case 0:
             return <Charts />
           case 1:
-            return <Manage {...(props as any)} />
+            return <Manage ref={mangeRef} {...(props as any)} />
           case 2:
             return <Users />
         }

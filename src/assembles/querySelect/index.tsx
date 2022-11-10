@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react'
+import React, { PropsWithChildren, useState, forwardRef, useImperativeHandle } from 'react'
 import type { PageProps, QuerySelectColumns, ColumnItem, OptionItem } from './interface'
 import less from './index.module.less'
 import Taro from '@tarojs/taro'
@@ -7,7 +7,11 @@ import { useSelector } from 'react-redux'
 
 import { UsInput, UsRadio, UsButton, UsDataNone } from '@components/usIndex'
 
-const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
+const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, ref) => {
+
+  useImperativeHandle(ref, () => ({
+    resetFields
+  }))
 
   const storeGlobal = useSelector(state => (state as any).global)
 
@@ -17,12 +21,17 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
     select: false,
     columns: []
   }, props)
-  
-  const [initialValues, setInitialValues] = useState({})
+
+  const [initialValues, setInitialValues] = useState<any>({})
   const [cursor, setCursor] = useState<number>(0)
   const [columns, setColumns] = useState<QuerySelectColumns>(defaultProps.columns || [])
   const [visible, setVisible] = useState<boolean>(false)
   const [selects, setSelects] = useState<ColumnItem | null>(null)
+
+  const onInput = (e) => {
+    setCursor(e.detail.cursor)
+    setInitialValues({ keyword: e.detail.value })
+  }
 
   const setFieldValues = (values) => {
     const params = Object.assign(initialValues, values)
@@ -55,6 +64,11 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
     })
   }
 
+  const resetFields = () => {
+    setCursor(0)
+    setInitialValues({})
+  }
+
   return (
     <React.Fragment>
       <View
@@ -76,8 +90,9 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
               className={less.input}
               name="keyword"
               placeholder={defaultProps.placeholder}
+              value={initialValues.keyword}
               confirmType="search"
-              onInput={(e) => setCursor(e.detail.cursor)}
+              onInput={(e) => onInput(e)}
               onConfirm={(e) => setFieldValues({ keyword: e.detail.value })}
             />
             {Boolean(cursor) && (
@@ -117,7 +132,7 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
                       scrollY
                     >
                       <UsRadio.Group
-                        initialValue={selects?.valueEnum?.[0].value}
+                        initialValue={selects?.valueEnum?.find(item => item.value === initialValues?.[selects.dataIndex])?.value || ''}
                         onChange={(e) => onRadioChange(selects?.dataIndex || '', e.value)}
                       >
                         {selects?.valueEnum?.map((item: OptionItem, index: number) => (
@@ -142,6 +157,6 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = (props) => {
     </React.Fragment>
   )
 
-}
+})
 
 export default QuerySelect;
