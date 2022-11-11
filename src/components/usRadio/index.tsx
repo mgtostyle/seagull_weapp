@@ -12,7 +12,7 @@ class UsRadio extends Component<PropsWithChildren<PageProps & ReturnType<typeof 
     return (
       <View
         className={less.block_container}
-        onClick={() => typeof onChange === 'function' && onChange(value)}
+        onClick={() => typeof onChange === 'function' && onChange(isNaN(Number(value)) ? value.toString() : Number(value))}
       >
         <View
           className={less.text}

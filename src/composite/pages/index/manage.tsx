@@ -1,11 +1,11 @@
 import React, { PropsWithChildren, useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import type { PageManageProps, AppQuerySelect } from './interface'
 import './manage.less'
-import Taro, { useLoad } from '@tarojs/taro'
+import Taro, { useLoad, useReachBottom } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
 import { UsDataNone } from '@components/usIndex'
-import { QuerySelect } from '@/assembles/moduleIndex'
+import { QuerySelect, TreeTable } from '@/assembles/moduleIndex'
 
 const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = forwardRef(({ $apis }, ref) => {
 
@@ -51,7 +51,7 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
         search
         onSubmit={onSubmit}
       />
-      {Boolean(list.length) ? (
+      {/* {Boolean(list.length) ? (
         <View className="block_index_list">
           {list.map((element: any, index: number) => (
             <View key={index} onClick={() => toMiniAppEdit(element.id)}>{element.title}</View>
@@ -61,7 +61,9 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
         <View className="block_index_none">
           <UsDataNone>暂无平台数据，请前往创建</UsDataNone>
         </View>
-      )}
+      )} */}
+      <TreeTable></TreeTable>
+      <View style={{ height: 3000 }}></View>
     </React.Fragment>
   )
 

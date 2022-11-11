@@ -1,17 +1,18 @@
 export interface PageProps {
-  ref: any;
+  ref?;
   placeholder?: string;
   search?: boolean;
-  onSubmit?: (values: {[propsName: string]: any}) => void;
+  onSubmit?: <T>(values: T) => void;
   select?: boolean;
-  columns?: Array<ColumnItem>;
+  columns?: QuerySelectColumns;
 }
 
 export interface ColumnItem {
   title: string;
   dataIndex: string;
+  typeof?: 'string' | 'number';
   request?: () => Promise<Array<OptionItem>>;
-  valueEnum?: Array<OptionItem>;
+  valueEnum?: {[propsName: string]: any};
 }
 
 export interface OptionItem {

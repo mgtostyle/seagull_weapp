@@ -38,7 +38,13 @@ const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
   ]
 
   return (
-    <UsContainer title={tabbarList[tabbarIndex].name} back={2} isHead tabbar menus={menuList}>
+    <UsContainer
+      title={tabbarList[tabbarIndex].name}
+      back={tabbarIndex !== 1 ? 0 : 1}
+      setting
+      tabbar
+      menus={menuList}
+    >
       {((index) => {
         switch (index) {
           case 0:

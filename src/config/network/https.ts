@@ -7,7 +7,7 @@ export default class Https<T> extends Environment {
   #environment: EnvironmentParams = super.env()
   #defaultProps: HttpsDefaultProps
   useRefuse: boolean = false
-  taskCb: boolean | ((values?) => void)
+  taskCb: boolean | (<Task>(values?: Task) => void)
 
   constructor (method: Method) {
     super ()

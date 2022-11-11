@@ -11,7 +11,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
 
   static defaultProps: PageProps = {
     back: 0,
-    isHead: false,
+    setting: false,
     title: '',
     menus: [],
     isfull: true,
@@ -22,20 +22,26 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
   constructor (props) {
     super (props)
     this.state = {
+      isHead: false,
       visible: false
     }
   }
 
-  private onDropBack (e?) {
-    e && e.stopPropagation()
+  private onDropBack () {
     this.setState((state: PageState) => {
       state.visible = !state.visible
       return state;
     })
   }
 
+  private onMenuResult (e, item: MenuItem) {
+    e.stopPropagation()
+    typeof item.result === 'function' && item.result()
+  }
+
   render (): ReactNode {
-    const { back, icon, isHead, title, menus, isfull, bcolor, tcolor, tabbar }: PageProps = this.props
+    const { back, setting, title, menus, isfull, bcolor, tcolor, tabbar }: PageProps = this.props
+    const { isHead, visible }: PageState = this.state
     const { navigate, navigateHeight, safeAreaHeight } = this.props.global
     return (
       <React.Fragment>
@@ -54,20 +60,21 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                   className={`${less.inline_single_icon} iconfont icon-line-home`}
                   style={{
                     left: `${navigate.xBetween}px`,
-                    width: `${navigate.bHeight}px`,
-                    height: `${navigate.bHeight}px`
+                    width: `${navigate.bHeight - 1}px`,
+                    height: `${navigate.bHeight - 1}px`
                   }}
                   onClick={() => Taro.navigateBack()}
                 />
               ) : (
                 <View
-                  className={`${less.inline_single_icon} iconfont ${icon || 'icon-line-left'}`}
+                  className={`${less.inline_single_icon} iconfont ${setting ? 'icon-line-open2' : 'icon-line-left'}`}
                   style={{
                     left: `${navigate.xBetween}px`,
-                    width: `${navigate.bHeight}px`,
-                    height: `${navigate.bHeight}px`
+                    width: `${navigate.bHeight - 1}px`,
+                    height: `${navigate.bHeight - 1}px`,
+                    fontSize: setting ? '36rpx' : '30rpx'
                   }}
-                  onClick={() => Taro.navigateBack()}
+                  onClick={() => setting ? this.onDropBack() : Taro.navigateBack()}
                 />
               )}
             </React.Fragment>
@@ -84,13 +91,13 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                 <View
                   className={`${less.left_icon} iconfont ${isHead ? 'icon-line-home' : 'icon-line-left'}`}
                   style={{
-                    fontSize: isHead ? '36rpx' : '28rpx'
+                    fontSize: isHead ? '36rpx' : '30rpx'
                   }}
                   onClick={() => Taro.navigateBack()}
                 />
                 <View className={less.line} />
                 <View
-                  className={`${less.right_icon} iconfont icon-line-wisdom`}
+                  className={`${less.right_icon} iconfont icon-line-open2`}
                   onClick={() => this.onDropBack()}
                 />
               </View>
@@ -114,26 +121,26 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
             paddingBottom: `${safeAreaHeight}rpx`
           }}
         />
-        {this.state.visible && (
+        {visible && (
           <View
             className={less.block_menus_container}
             style={{
               paddingBottom: `calc(${safeAreaHeight}rpx ${tabbar ? '+ 110rpx' : ''})`
             }}
-            onClick={(e) => this.onDropBack(e)}
+            onClick={() => this.onDropBack()}
           >
-            {menus.map((item: MenuItem, index: number) => (
+            {menus?.map((item: MenuItem, index: number) => (
               <UsButton
                 className={less.inline_text}
                 theme="default"
                 key={index}
-                onClick={item.result}
+                onClick={(e) => this.onMenuResult(e, item)}
               >{item.name}</UsButton>
             ))}
             <UsButton
               className={less.inline_cancel}
               theme="default"
-              onClick={() => this.onDropBack}
+              onClick={() => this.onDropBack()}
             >取消</UsButton>
           </View>
         )}

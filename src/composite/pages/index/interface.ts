@@ -9,7 +9,7 @@ export interface PageChartsProps {
 }
 
 export interface PageManageProps {
-
+  
 }
 
 export interface PageUsersProps {

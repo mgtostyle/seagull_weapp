@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useState, forwardRef, useImperativeHandle } from 'react'
-import type { PageProps, QuerySelectColumns, ColumnItem, OptionItem } from './interface'
+import type { PageProps, QuerySelectColumns, ColumnItem } from './interface'
 import less from './index.module.less'
-import Taro from '@tarojs/taro'
+import Taro, { useReachBottom } from '@tarojs/taro'
 import { View, Form, Text, ScrollView } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
@@ -45,9 +45,12 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, r
       return setVisible(false)
     }
     else if (typeof request === 'function') {
-      (params as ColumnItem).valueEnum = await request()
+      (params as ColumnItem).valueEnum = (await request())?.reduce((obj, item): any => {
+        obj[item.value] = item.label
+        return obj
+      }, {})
     } else {
-      (params as ColumnItem).valueEnum = valueEnum || []
+      (params as ColumnItem).valueEnum = valueEnum || {}
     }
     columns[index] = params
     setVisible(true)
@@ -64,10 +67,14 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, r
     })
   }
 
-  const resetFields = () => {
+  const resetFields = (params?: {[propsName: string]: any}) => {
     setCursor(0)
-    setInitialValues({})
+    setInitialValues(params || {})
   }
+
+  useReachBottom(() => {
+    console.log('上推')
+  })
 
   return (
     <React.Fragment>
@@ -110,7 +117,7 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, r
                 scrollX
               >
                 {columns?.map((element: ColumnItem, index: number) => {
-                  let initialValue = initialValues?.[element?.dataIndex] && element?.valueEnum?.find(item => item.value === initialValues?.[element?.dataIndex])?.label
+                  let initialValue = initialValues?.[element?.dataIndex] && element?.valueEnum?.[initialValues?.[element?.dataIndex]]
                   return (
                     <View
                       className={less.select_title}
@@ -126,20 +133,20 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, r
               {visible && (
                 <React.Fragment>
                   <View className={less.select_back} />
-                  {Boolean(selects?.valueEnum?.length) ? (
+                  {Boolean(Object.keys(selects?.valueEnum || {}).length) ? (
                     <ScrollView
                       className={less.select_column}
                       scrollY
                     >
                       <UsRadio.Group
-                        initialValue={selects?.valueEnum?.find(item => item.value === initialValues?.[selects.dataIndex])?.value || ''}
-                        onChange={(e) => onRadioChange(selects?.dataIndex || '', e.value)}
+                        initialValue={initialValues?.[(selects as ColumnItem)?.dataIndex]}
+                        onChange={(e) => onRadioChange((selects as ColumnItem)?.dataIndex, e.value)}
                       >
-                        {selects?.valueEnum?.map((item: OptionItem, index: number) => (
+                        {Object.keys(selects?.valueEnum || {}).map((value: string, index: number) => (
                           <UsRadio
-                            value={item.value}
+                            value={value}
                             key={index}
-                          >{item.label}</UsRadio>
+                          >{selects?.valueEnum?.[value]}</UsRadio>
                         ))}
                       </UsRadio.Group>
                     </ScrollView>
@@ -154,6 +161,7 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, r
           )}
         </Form>
       </View>
+      {props.children}
     </React.Fragment>
   )
 
