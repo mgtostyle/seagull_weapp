@@ -1,27 +1,24 @@
-import { Component, PropsWithChildren, ReactNode, createContext, Children } from 'react'
+import React, { Component, PropsWithChildren, ReactNode, createContext, Children } from 'react'
 import type { PageProps } from './interface'
 
-const Context = createContext({
-  title: ''
-})
+const TableContext = createContext({ title: '来自context' })
 
 class TreeTable extends Component<PropsWithChildren<PageProps>> {
+
+  static contextType = TableContext
 
   static defaultProps: PageProps = {
     title: ''
   }
 
   render (): ReactNode {
-    const { title }: PageProps = this.props
     return (
-      <Context.Provider value={{ title }}>
-        {/* <Context.Consumer>{this.props.children}</Context.Consumer> */}
-      </Context.Provider>
+      <TableContext.Provider value={{ title: '来自context' }}>
+        <TableContext.Consumer>{this.props.children}</TableContext.Consumer>
+      </TableContext.Provider>
     )
   }
 
 }
-
-export const Consumer = Context.Consumer
 
 export default TreeTable;

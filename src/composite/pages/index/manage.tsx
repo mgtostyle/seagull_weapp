@@ -6,6 +6,7 @@ import { View } from '@tarojs/components'
 
 import { UsDataNone } from '@components/usIndex'
 import { QuerySelect, TreeTable } from '@/assembles/moduleIndex'
+// import { Consumer } from '@/assembles/treeTable/index'
 
 const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = forwardRef(({ $apis }, ref) => {
 
@@ -62,7 +63,11 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
           <UsDataNone>暂无平台数据，请前往创建</UsDataNone>
         </View>
       )} */}
-      <TreeTable></TreeTable>
+      <TreeTable>
+        {({title}) => (
+          <View>{title}</View>
+        )}
+      </TreeTable>
       <View style={{ height: 3000 }}></View>
     </React.Fragment>
   )
