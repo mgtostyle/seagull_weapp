@@ -24,8 +24,8 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
         paddingTop: '8PX',
         paddingBottom: '8PX'
       } : {
-        paddingTop: '10PX',
-        paddingBottom: '10PX'
+        paddingTop: '12PX',
+        paddingBottom: '12PX'
       },
       theme === 'primary' ? this.ghost(ghost, this.props.global.theme)
         : theme === 'authorize' ? this.ghost(ghost, less.usAuthorizeColor)
@@ -41,8 +41,8 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
       ['box-sizing']: 'border-box',
       border: `1PX solid ${rgba}`,
       backgroundColor: '#ffffff',
-      paddingTop: this.props.size === 'mini' ? '7PX' : '9PX',
-      paddingBottom: this.props.size === 'mini' ? '7PX' : '9PX'
+      paddingTop: this.props.size === 'mini' ? '7PX' : '11PX',
+      paddingBottom: this.props.size === 'mini' ? '7PX' : '11PX'
     } : {
       color: '#ffffff',
       background: `linear-gradient(45deg, ${rgba}, ${rgba}AA)`
