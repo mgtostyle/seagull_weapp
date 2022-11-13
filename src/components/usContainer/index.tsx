@@ -36,6 +36,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
 
   private onMenuResult (e, item: MenuItem) {
     e.stopPropagation()
+    this.onDropBack()
     typeof item.result === 'function' && item.result()
   }
 

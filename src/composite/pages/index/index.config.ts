@@ -1,3 +1,3 @@
 export default definePageConfig({
-  disableScroll: true
+  enablePullDownRefresh: true
 })

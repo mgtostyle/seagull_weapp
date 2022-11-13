@@ -20,14 +20,17 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
         display: block ? 'block' : 'inline',
         width: typeof width === 'number' ? `${width}rpx` : width
       },
-      size === 'mini' && {
-        height: '70rpx',
-        lineHeight: '70rpx'
+      size === 'mini' ? {
+        paddingTop: '8PX',
+        paddingBottom: '8PX'
+      } : {
+        paddingTop: '10PX',
+        paddingBottom: '10PX'
       },
       theme === 'primary' ? this.ghost(ghost, this.props.global.theme)
         : theme === 'authorize' ? this.ghost(ghost, less.usAuthorizeColor)
         : theme === 'danger' ? this.ghost(ghost, less.usDangerColor)
-        : theme === 'default' && this.ghost(true, less.textColor)
+        : theme === 'default' && this.ghost(true, less.usTextColor)
     )
     return style
   }
@@ -37,7 +40,9 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
       color: rgba,
       ['box-sizing']: 'border-box',
       border: `1PX solid ${rgba}`,
-      backgroundColor: '#ffffff'
+      backgroundColor: '#ffffff',
+      paddingTop: this.props.size === 'mini' ? '7PX' : '9PX',
+      paddingBottom: this.props.size === 'mini' ? '7PX' : '9PX'
     } : {
       color: '#ffffff',
       background: `linear-gradient(45deg, ${rgba}, ${rgba}AA)`

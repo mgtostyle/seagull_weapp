@@ -11,12 +11,7 @@ class UsTabbar extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
     const { safeAreaHeight } = this.props.global
     return (
       <React.Fragment>
-        <View
-          className={less.back_offset}
-          style={{
-            paddingBottom: `${safeAreaHeight}rpx`
-          }}
-        />
+        <View className={less.back_offset} />
         <View
           className={less.back_container}
           style={{

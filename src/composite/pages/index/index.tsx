@@ -18,7 +18,10 @@ const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
     },
     {
       name: '重置查询条件',
-      result: () => mangeRef.current?.resetFields({})
+      result: () => {
+        mangeRef.current?.resetFields({})
+        mangeRef.current?.setQuerySelect({})
+      }
     }
   ]
 

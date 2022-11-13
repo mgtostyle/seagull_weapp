@@ -1,8 +1,10 @@
 @import url('@assets/less/common.less');
 
 .block_index_container{
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 99;
   background-color: #ffffff;
   .inline_search{
@@ -74,4 +76,7 @@
       background-color: #ffffff;
     }
   }
+}
+.block_index_move{
+  display: block;
 }

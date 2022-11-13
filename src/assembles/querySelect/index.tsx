@@ -1,13 +1,13 @@
 import React, { PropsWithChildren, useState, forwardRef, useImperativeHandle } from 'react'
 import type { PageProps, QuerySelectColumns, ColumnItem } from './interface'
 import less from './index.module.less'
-import Taro, { useReachBottom } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View, Form, Text, ScrollView } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
 import { UsInput, UsRadio, UsButton, UsDataNone } from '@components/usIndex'
 
-const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, ref) => {
+const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef(({ children, ...props }, ref) => {
 
   useImperativeHandle(ref, () => ({
     resetFields
@@ -72,11 +72,7 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, r
     setInitialValues(params || {})
   }
 
-  useReachBottom(() => {
-    console.log('上推')
-  })
-
-  return (
+  return (defaultProps.search || defaultProps.select) ? (
     <React.Fragment>
       <View
         className={less.block_index_container}
@@ -84,32 +80,32 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, r
           top: `${storeGlobal.navigateHeight}px`
         }}
       >
-        <Form
-          onSubmit={e => setFieldValues(e.detail.value)}
-        >
-          <View
-            className={less.inline_search}
-            style={{
-              padding: `0 ${storeGlobal.navigate.xBetween}px`
-            }}
-          >
-            <UsInput
-              className={less.input}
-              name="keyword"
-              placeholder={defaultProps.placeholder}
-              value={initialValues.keyword}
-              confirmType="search"
-              onInput={(e) => onInput(e)}
-              onConfirm={(e) => setFieldValues({ keyword: e.detail.value })}
-            />
-            {Boolean(cursor) && (
-              <UsButton
-                className={less.button}
-                size="mini"
-                formType="submit"
-              >搜索</UsButton>
-            )}
-          </View>
+        <Form onSubmit={e => setFieldValues(e.detail.value)}>
+          {defaultProps.search && (
+            <View
+              className={less.inline_search}
+              style={{
+                padding: `0 ${storeGlobal.navigate.xBetween}px`
+              }}
+            >
+              <UsInput
+                className={less.input}
+                name="keyword"
+                placeholder={defaultProps.placeholder}
+                value={initialValues.keyword}
+                confirmType="search"
+                onInput={(e) => onInput(e)}
+                onConfirm={(e) => setFieldValues({ keyword: e.detail.value })}
+              />
+              {Boolean(cursor) && (
+                <UsButton
+                  className={less.button}
+                  size="mini"
+                  formType="submit"
+                >搜索</UsButton>
+              )}
+            </View>
+          )}
           {defaultProps.select && Boolean(columns?.length) && (
             <View className={less.inline_select_inner}>
               <ScrollView
@@ -161,9 +157,14 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef((props, r
           )}
         </Form>
       </View>
-      {props.children}
+      <View
+        className={less.block_index_move}
+        style={{
+          paddingBottom: `${(defaultProps.search ? 100 : 0) + (defaultProps.select ? 90 : 0)}rpx`
+        }}
+      />
     </React.Fragment>
-  )
+  ) : (<React.Fragment></React.Fragment>)
 
 })
 

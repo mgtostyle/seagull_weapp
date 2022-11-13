@@ -9,14 +9,17 @@ export interface PageChartsProps {
 }
 
 export interface PageManageProps {
-  
+
 }
 
 export interface PageUsersProps {
 
 }
 
-export interface AppQuerySelect {
-  page: number;
-  limit: number;
+export interface MiniAppItem {
+  id: string;
+  title: string;
+  logo: string;
+  path: string;
+  status: number;
 }
