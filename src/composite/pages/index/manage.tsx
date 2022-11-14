@@ -48,7 +48,6 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
         onSubmit={(values: any) => setQuerySelect(values)}
       />
       <ProTable<MiniAppItem>
-        className="block_index_list"
         refresh
         hitbottom
         initialValues={querySelect}
@@ -75,10 +74,14 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
               </View>
             </View>
             <View className="card_operate">
-              <UsButton className="button" theme="default">详情</UsButton>
-              <UsButton className="button" theme="default">{detail.status === 1 ? '冻结' : '启用'}</UsButton>
-              <UsButton className="button" onClick={() => toMiniAppEdit(detail.id)}>编辑</UsButton>
-              <UsButton className="button" theme="danger">删除</UsButton>
+              <UsButton size="mini" theme="default">主体配置</UsButton>
+              <UsButton
+                size="mini"
+                theme={detail.status === 1 ? 'forbid' : 'default'}
+                ghost
+              >{detail.status === 1 ? '冻结' : '启用'}</UsButton>
+              <UsButton size="mini" onClick={() => toMiniAppEdit(detail.id)}>编辑</UsButton>
+              <UsButton size="mini" theme="danger">删除</UsButton>
             </View>
           </View>
         )}

@@ -1,17 +1,17 @@
 import Environment from "./environment"
-import type { EnvironmentParams, HttpsDefaultProps, Method, Response, UploadFileParams } from "./interface"
+import type { HttpsProps, DomainValues, RequestDefaultParams, Method, ResponseParams, UploadFileParams, UploadFileOptions } from "./interface"
 import Taro, { RequestParams } from "@tarojs/taro"
 
-export default class Https<T> extends Environment {
+export default class Https<ReqOptions> extends Environment implements HttpsProps {
 
-  #environment: EnvironmentParams = super.env()
-  #defaultProps: HttpsDefaultProps
-  useRefuse: boolean = false
-  taskCb: boolean | (<Task>(values?: Task) => void)
+  #environment: DomainValues = super.env();
+  #requestDefaultParams: RequestDefaultParams;
+  useRefuse = false
+  taskCb: boolean | (<Task>(values?: Task) => void) = false
 
   constructor (method: Method) {
     super ()
-    this.#defaultProps = {
+    this.#requestDefaultParams = {
       method,
       timeout: 5000,
       clientInfo: {
@@ -20,10 +20,9 @@ export default class Https<T> extends Environment {
     }
   }
 
-  setPromise (joggle: string, params?: T) {
-    const _this = this
-    const { DOMAIN_NAME }: EnvironmentParams = this.#environment
-    const { method, timeout, clientInfo }: HttpsDefaultProps = this.#defaultProps
+  setPromise (joggle: string, params?: ReqOptions) {
+    const { DOMAIN_NAME } = this.#environment
+    const { method, timeout, clientInfo } = this.#requestDefaultParams
     const token = Taro.getStorageSync('token')
     const requestHandler = (resolve, reject) => {
       let handler: RequestParams = {
@@ -39,25 +38,25 @@ export default class Https<T> extends Environment {
       }
       if (Object.prototype.toString.call(params) === '[object Object]') handler.data = params
       handler.success = (result) => {
-        const res: Response = result.data
+        const res = result.data as ResponseParams
         this.#setSuccess(res, resolve)
       }
       handler.fail = (error) => {
         reject(error)
       }
-      return !_this.useRefuse && Taro.request(handler)
+      return !this.useRefuse && Taro.request(handler)
     }
     return new Promise((resolve, reject) => requestHandler(resolve, reject))
   }
 
-  setUpload (joggle: string, params: UploadFileParams) {
-    const { DOMAIN_NAME }: EnvironmentParams = this.#environment
-    const { clientInfo }: HttpsDefaultProps = this.#defaultProps
+  setUpload (joggle: string, params: UploadFileOptions) {
+    const { DOMAIN_NAME } = this.#environment
+    const { clientInfo } = this.#requestDefaultParams
     const token = Taro.getStorageSync('token')
     const uploadHandler = (resolve, reject) => {
-      let uploadTask = Taro.uploadFile({
+      let handler: UploadFileParams = {
         url: `${DOMAIN_NAME}${joggle}`,
-        filePath: params.file,
+        filePath: params.source,
         name: params.name,
         header: Object.assign({
           'client-info': JSON.stringify(clientInfo),
@@ -79,9 +78,10 @@ export default class Https<T> extends Environment {
           duration: 3000,
           success: () => reject('error')
         })
-      })
+      }
+      let uploadTask = Taro.uploadFile(handler)
       typeof this.taskCb === 'function' && this.taskCb(uploadTask)
-      return uploadTask;
+      return !this.useRefuse && uploadTask;
     }
     return new Promise((resolve, reject) => uploadHandler(resolve, reject))
   }

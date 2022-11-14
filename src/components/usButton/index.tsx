@@ -21,8 +21,8 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
         width: typeof width === 'number' ? `${width}rpx` : width
       },
       size === 'mini' ? {
-        paddingTop: '8PX',
-        paddingBottom: '8PX'
+        paddingTop: '6PX',
+        paddingBottom: '6PX'
       } : {
         paddingTop: '12PX',
         paddingBottom: '12PX'
@@ -30,6 +30,8 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
       theme === 'primary' ? this.ghost(ghost, this.props.global.theme)
         : theme === 'authorize' ? this.ghost(ghost, less.usAuthorizeColor)
         : theme === 'danger' ? this.ghost(ghost, less.usDangerColor)
+        : theme === 'forbid' ? this.ghost(ghost, less.usForbidColor)
+        : theme === 'warn' ? this.ghost(ghost, less.usWarnColor)
         : theme === 'default' && this.ghost(true, less.usTextColor)
     )
     return style
@@ -38,11 +40,10 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
   private ghost (status: boolean, rgba: string) {
     return status ? {
       color: rgba,
-      ['box-sizing']: 'border-box',
       border: `1PX solid ${rgba}`,
       backgroundColor: '#ffffff',
-      paddingTop: this.props.size === 'mini' ? '7PX' : '11PX',
-      paddingBottom: this.props.size === 'mini' ? '7PX' : '11PX'
+      paddingTop: this.props.size === 'mini' ? '5PX' : '11PX',
+      paddingBottom: this.props.size === 'mini' ? '5PX' : '11PX'
     } : {
       color: '#ffffff',
       background: `linear-gradient(45deg, ${rgba}, ${rgba}AA)`

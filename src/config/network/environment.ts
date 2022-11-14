@@ -1,12 +1,12 @@
 import localhost from '@/config/env/localhost.json'
 import development from '@/config/env/development.json'
 import production from '@/config/env/production.json'
+import type { EnvironmentProps, DomainValues } from './interface'
 import Taro from '@tarojs/taro'
-import type { EnvironmentParams } from './interface'
 
-export default class Environment {
+export default class Environment implements EnvironmentProps {
 
-  get #local (): EnvironmentParams {
+  get #local (): DomainValues {
     switch (process.env.LOCAL_ENV) {
       case 'test':
         return development;
@@ -17,7 +17,7 @@ export default class Environment {
     }
   }
 
-  env (): EnvironmentParams {
+  env () {
     switch (Taro.getAccountInfoSync().miniProgram.envVersion) {
       case 'develop':
         return this.#local;

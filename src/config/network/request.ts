@@ -1,44 +1,33 @@
 import Https from './https'
-import type { Method, RequestHandler, DataType, UploadFileParams, OperateParams, RefuseItem } from './interface'
+import type { Method, FormDataType, UploadFileOptions, OperateDefaultParams, RefuseItem } from './interface'
 
 export default class Request<T> extends Https<T> {
 
   #joggle: string;
-  #dataType: DataType;
-  #operate: OperateParams = {
-    toast: false,
+  #operateDefaultParams: OperateDefaultParams = {
+    toast: false
   }
 
-  constructor (method: Method, joggle: string, type: DataType = 'Object') {
+  constructor (method: Method, joggle: string, type: FormDataType = 'Object') {
     super (method)
-    this.#joggle = joggle
-    this.#dataType = type
-    this[method.toLocaleLowerCase()] = (...args: RequestHandler<T>) => this.#method(joggle, ...args)
+    this[method.toLocaleLowerCase()] = (...args: [T]) => this.#method(joggle, type, ...args)
   }
 
   refuse (conditions: Array<RefuseItem>) {
-    const index = conditions.findIndex(item => Boolean(item.where))
-    if (index !== -1) {
-      conditions[index].result()
-      this.useRefuse = true
-    } else {
-      this.useRefuse = false
-    }
+    const index = conditions.findIndex(item => item.source === item.target)
+    index !== -1 && conditions[index].result()
+    this.useRefuse = index !== -1 ? true : false
     return this
   }
 
-  operate (args = this.#operate) {
-    const { callback, taskCb, ...params } = args as {
-      params: OperateParams;
-      callback?: (values) => void;
-      taskCb?: (values) => void;
-    }
+  operate (args: OperateDefaultParams = this.#operateDefaultParams) {
+    const { callback, taskCb, ...params } = args
     typeof callback === 'function' && callback(this)
-    this.taskCb = typeof taskCb === 'function' && taskCb
+    this.taskCb = typeof taskCb === 'function' ? taskCb : false
     return this
   }
 
-  #method (joggle: string, params: T, type: DataType = this.#dataType) {
+  #method (joggle: string, type: FormDataType, params: T) {
     switch (type) {
       case 'Suffix':
         return this.setPromise(joggle + params)
@@ -47,13 +36,7 @@ export default class Request<T> extends Https<T> {
     }
   }
 
-  get: (...args: RequestHandler<T>) => any;
-  post: (...args: RequestHandler<T>) => any;
-  delete: (...args: RequestHandler<T>) => any;
-  put: (...args: RequestHandler<T>) => any;
-  patch: (...args: RequestHandler<T>) => any;
-
-  upload (params: UploadFileParams) {
+  upload (params: UploadFileOptions) {
     return this.setUpload(this.#joggle, params)
   }
 

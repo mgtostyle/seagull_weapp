@@ -4,6 +4,8 @@ import less from './index.module.less'
 import Taro, { usePullDownRefresh, useReachBottom } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
+import { UsDataNone } from '@components/usIndex'
+
 const ProTableItem = <T extends unknown>(props): ReactElement | null => {
 
   const TableContext = createContext<T>(props.detail)
@@ -21,7 +23,8 @@ const ProTable = <T extends unknown>(props: ProTableProps): ReactElement | null 
   const defaultProps: ProTableProps = Object.assign({
     refresh: false,
     hitbottom: false,
-    className: ''
+    className: '',
+    noneConfig: {}
   }, props)
 
   const [initialValues, setInitialValues] = useState(Object.assign({
@@ -94,19 +97,23 @@ const ProTable = <T extends unknown>(props: ProTableProps): ReactElement | null 
           })(refresh)}
         </View>
       )}
-      <View className={less[defaultProps.className]} style={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '20rpx'
-      }}>
-        {list.map((detail: T, index: number) => (
-          <React.Fragment key={index}>
-            <ProTableItem<T> detail={detail} children={props.children} />
-          </React.Fragment>
-        ))}
-      </View>
-      {hitbottom !== 'hidden' && (
-        <View className={less.block_index_hitbottom}>{hitbottom === 'loading' ? '加载中...' : hitbottom === 'finish' && '已加载完全部数据'}</View>
+      {Boolean(list?.length === 0) ? (
+        <React.Fragment>
+          <View className={defaultProps?.className ? defaultProps?.className : less.block_index_list}>
+            {list.map((detail: T, index: number) => (
+              <React.Fragment key={index}>
+                <ProTableItem<T> detail={detail} children={props.children} />
+              </React.Fragment>
+            ))}
+          </View>
+          {hitbottom !== 'hidden' && (
+            <View
+              className={less.block_index_hitbottom}
+            >{hitbottom === 'loading' ? '加载中...' : hitbottom === 'finish' && '已加载完全部数据'}</View>
+          )}
+        </React.Fragment>
+      ) : (
+        <UsDataNone {...defaultProps.noneConfig} />
       )}
     </React.Fragment>
   )

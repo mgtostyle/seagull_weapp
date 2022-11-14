@@ -30,7 +30,8 @@ const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis 
   const onSubmit = (values) => {
     $apis.composite.setting.miniAppUpdate.refuse([
       {
-        where: values?.logo?.findIndex(item => item?.status !== 'done') !== -1,
+        source: values?.logo?.findIndex(item => item?.status !== 'done') !== -1,
+        target: true,
         result: () => Taro.showToast({
           title: '无法提交数据，存在异常或者未加载完成的图片，请检查清楚后重试～',
           icon: 'none',
