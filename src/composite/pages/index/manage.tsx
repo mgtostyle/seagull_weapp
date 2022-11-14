@@ -40,6 +40,12 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
     })
   }
 
+  const toMiniAppDetail = (detail: MiniAppItem) => {
+    Taro.navigateTo({
+      url: `/composite/pages/miniApp/detail?id=${detail.id}&title=${detail.title}`
+    })
+  }
+
   return (
     <React.Fragment>
       <QuerySelect
@@ -74,13 +80,20 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
               </View>
             </View>
             <View className="card_operate">
-              <UsButton size="mini" theme="default">主体配置</UsButton>
+              <UsButton
+                size="mini"
+                theme="default"
+                onClick={() => toMiniAppDetail(detail)}
+              >主体详情</UsButton>
               <UsButton
                 size="mini"
                 theme={detail.status === 1 ? 'forbid' : 'default'}
                 ghost
               >{detail.status === 1 ? '冻结' : '启用'}</UsButton>
-              <UsButton size="mini" onClick={() => toMiniAppEdit(detail.id)}>编辑</UsButton>
+              <UsButton
+                size="mini"
+                onClick={() => toMiniAppEdit(detail.id)}
+              >编辑</UsButton>
               <UsButton size="mini" theme="danger">删除</UsButton>
             </View>
           </View>

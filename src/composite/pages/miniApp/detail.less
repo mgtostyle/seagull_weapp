@@ -1,0 +1,95 @@
+@import url('@assets/less/common.less');
+
+.block_index_detail{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 150rpx auto 0;
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  width: 710rpx;
+  .detail_logo{
+    width: 200rpx;
+    height: 200rpx;
+    object-fit: cover;
+    margin-top: -100rpx;
+  }
+  .detail_title{
+    font-size: 28rpx;
+    color: @textColor;
+    font-weight: bolder;
+    padding: 20rpx 0;
+  }
+  .detail_desc{
+    font-size: 24rpx;
+    color: @placeholderColor;
+    text-indent: 2em;
+    width: 100%;
+    padding-bottom: 50rpx;
+  }
+}
+.block_index_administator{
+  display: flex;
+  flex-direction: column;
+  margin: 20rpx auto;
+  width: 710rpx;
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  .inline_admin_list{
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20rpx;
+    grid-auto-flow: row;
+    padding: 40rpx 20rpx;
+    .admin_item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .image{
+        position: relative;
+        width: 100rpx;
+        height: 100rpx;
+        &::after{
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border: 1PX dashed @placeholderColor;
+          border-radius: 100rpx;
+        }
+      }
+      &.adds .iconfont{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36rpx;
+        color: @labelColor;
+      }
+      .name{
+        font-size: 24rpx;
+        color: @textColor;
+        padding-top: 12rpx;
+      }
+    }
+  }
+}
+.common_header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20rpx;
+  padding: 20rpx 0;
+  border-bottom: 1PX solid @splitColor;
+  .title{
+    font-size: 28rpx;
+    color: @textColor;
+    font-weight: bolder;
+  }
+  .desc{
+    font-size: 24rpx;
+    color: @placeholderColor;
+  }
+}

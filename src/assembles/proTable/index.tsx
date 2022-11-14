@@ -97,7 +97,7 @@ const ProTable = <T extends unknown>(props: ProTableProps): ReactElement | null 
           })(refresh)}
         </View>
       )}
-      {Boolean(list?.length === 0) ? (
+      {Boolean(list?.length > 0) ? (
         <React.Fragment>
           <View className={defaultProps?.className ? defaultProps?.className : less.block_index_list}>
             {list.map((detail: T, index: number) => (

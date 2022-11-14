@@ -17,7 +17,7 @@ export default class Wechat extends Component<PropsWithChildren<PageWechatProps>
           <UsImage
             className="avatarUrl"
             shape="circle"
-            src={userInfo?.avatarUrl || ''}
+            src={userInfo?.avatarUrl}
           />
           <Text className="nickName">{userInfo?.nickName || '微信用户'}</Text>
         </View>

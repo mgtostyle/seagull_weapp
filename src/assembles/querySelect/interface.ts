@@ -1,5 +1,6 @@
 export interface PageProps {
   ref?;
+  position?: 'relative' | 'fixed' | 'absolute' | 'sticky';
   placeholder?: string;
   search?: boolean;
   onSubmit?: <T>(values: T) => void;

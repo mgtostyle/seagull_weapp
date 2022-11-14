@@ -9,7 +9,8 @@ export default defineAppConfig({
       root: 'composite',
       pages: [
         'pages/index/index',
-        'pages/miniApp/update'
+        'pages/miniApp/update',
+        'pages/miniApp/detail'
       ]
     }
   ],

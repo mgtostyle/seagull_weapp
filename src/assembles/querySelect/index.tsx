@@ -16,6 +16,7 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef(({ childr
   const storeGlobal = useSelector(state => (state as any).global)
 
   const defaultProps: PageProps = Object.assign({
+    position: 'fixed',
     placeholder: '请输入关键词...',
     search: true,
     select: false,
@@ -77,7 +78,8 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef(({ childr
       <View
         className={less.block_index_container}
         style={{
-          top: `${storeGlobal.navigateHeight}px`
+          position: defaultProps.position,
+          top: defaultProps.position === ('relative' || 'sticky') ? 'none' : `${storeGlobal.navigateHeight}px`
         }}
       >
         <Form onSubmit={e => setFieldValues(e.detail.value)}>
@@ -157,12 +159,14 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef(({ childr
           )}
         </Form>
       </View>
-      <View
-        className={less.block_index_move}
-        style={{
-          paddingBottom: `${(defaultProps.search ? 100 : 0) + (defaultProps.select ? 90 : 0)}rpx`
-        }}
-      />
+      {defaultProps.position !== ('relative' || 'sticky') && (
+        <View
+          className={less.block_index_move}
+          style={{
+            paddingBottom: `${(defaultProps.search ? 100 : 0) + (defaultProps.select ? 90 : 0)}rpx`
+          }}
+        />
+      )}
     </React.Fragment>
   ) : (<React.Fragment></React.Fragment>)
 
