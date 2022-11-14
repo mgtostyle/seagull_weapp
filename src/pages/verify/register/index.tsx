@@ -24,6 +24,13 @@ const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> =
     }
   })
 
+  const getAvatarUrl = (avatarUrl: string) => {
+    $apis.composite.common.uploadSingleImage.upload({
+      source: avatarUrl,
+      name: 'singleImage'
+    }).then(res => setAvatarUrl(res.data.imageUrl))
+  }
+
   const onSubmit = (e) => {
     Promise.all([
       new Promise(resolve => Taro.login({
@@ -80,7 +87,7 @@ const VerifyRegister: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> =
           <Button
             className="inline_wrapper"
             openType="chooseAvatar"
-            onChooseAvatar={(e) => setAvatarUrl(e.detail.avatarUrl)}
+            onChooseAvatar={(e) => getAvatarUrl(e.detail.avatarUrl)}
           >
             <UsImage
               className="avatarUrl"

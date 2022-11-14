@@ -12,6 +12,8 @@ export const miniAppDetail = new Request<string>('GET', '/composite/terminal/set
 
 export const miniAppUpdate = new Request<CompositeSettingMiniAppUpdate>('POST', '/composite/terminal/setting/miniAppUpdate', 'Object')
 
+export const miniAppStatus = new Request<string>('GET', '/composite/terminal/setting/miniAppStatus', 'Suffix')
+
 export const miniAppDelete = new Request<string>('DELETE', '/composite/terminal/setting/miniAppDelete', 'Suffix')
 
 export const administratorList = new Request<CompositeSettingAdministratorList>('POST', '/composite/terminal/setting/administratorList', 'Object')

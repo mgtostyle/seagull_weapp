@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import type { PageManageProps, MiniAppItem } from './interface'
+import commonLess from '@assets/less/common.module.less'
 import './manage.less'
 import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -11,6 +12,7 @@ import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
 const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = forwardRef(({ $apis }, ref) => {
 
   const querySelectRef = useRef<any>()
+  const proTableRef = useRef<any>()
   const [querySelect, setQuerySelect] = useState({})
 
   useImperativeHandle(ref, () => ({
@@ -34,7 +36,7 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
     }
   }
 
-  const toMiniAppEdit = (id?: number) => {
+  const toMiniAppEdit = (id?: string) => {
     Taro.navigateTo({
       url: `/composite/pages/miniApp/update${id ? '?id=' + id : ''}`
     })
@@ -46,6 +48,40 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
     })
   }
 
+  const toMiniAppStatus = (detail: MiniAppItem) => {
+    const status = detail.status == 1 ? 2 : detail.status == 2 ? 1 : 0
+    $apis.composite.setting.miniAppStatus.get(`/${detail.id}/${status}`).then(res => {
+      res.data.status === 1 && Taro.showToast({
+        title: '更新成功',
+        icon: 'success',
+        duration: 3000,
+        success: () => proTableRef.current.setList(list => list.map(item => {
+          if (item.id === detail.id) {
+            item.status = status
+          }
+          return item
+        }))
+      })
+    })
+  }
+
+  const toMiniAppDelete = (id: string) => {
+    Taro.showModal({
+      title: '提醒',
+      content: '您正在进行一项删除操作，是否需要删除该记录，将无法恢复，请谨慎操作此项！！！',
+      confirmColor: commonLess.usDangerColor,
+      confirmText: '删除',
+      success: res => res.confirm && $apis.composite.setting.miniAppDelete.delete(`/id/${id}`).then(res => {
+        res.data.status === 1 && Taro.showToast({
+          title: '移除成功',
+          icon: 'success',
+          duration: 3000,
+          success: () => proTableRef.current.setList(list => list.filter(item => item.id !== id))
+        })
+      })
+    })
+  }
+
   return (
     <React.Fragment>
       <QuerySelect
@@ -53,7 +89,8 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
         search
         onSubmit={(values: any) => setQuerySelect(values)}
       />
-      <ProTable<MiniAppItem>
+      <ProTable
+        ref={proTableRef}
         refresh
         hitbottom
         initialValues={querySelect}
@@ -89,12 +126,17 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
                 size="mini"
                 theme={detail.status === 1 ? 'forbid' : 'default'}
                 ghost
+                onClick={() => toMiniAppStatus(detail)}
               >{detail.status === 1 ? '冻结' : '启用'}</UsButton>
               <UsButton
                 size="mini"
                 onClick={() => toMiniAppEdit(detail.id)}
               >编辑</UsButton>
-              <UsButton size="mini" theme="danger">删除</UsButton>
+              <UsButton
+                size="mini"
+                theme="danger"
+                onClick={() => toMiniAppDelete(detail.id)}
+              >删除</UsButton>
             </View>
           </View>
         )}

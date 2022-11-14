@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useState } from 'react'
 import type { PageProps } from './interface'
 import './index.less'
-import Taro, { useLoad } from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { Text } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
@@ -27,7 +27,7 @@ const VerifyLogin: React.FC<PropsWithChildren<{ props: PageProps, $apis }>> = ({
     }
   })
 
-  useLoad(() => {
+  useDidShow(() => {
     getCheckLogin()
   })
 

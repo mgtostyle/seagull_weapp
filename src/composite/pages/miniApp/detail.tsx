@@ -11,6 +11,7 @@ const MiniAppDetail: React.FC<PropsWithChildren<{ props: PageDetailProps, $apis 
   const { id, title } = (getCurrentInstance as any)().router.params
 
   const [detail, setMiniAppDetail] = useState<any>({})
+  const [visible, setVisible] = useState<boolean>(false)
 
   useLoad(() => {
     id && getMiniAppDetail()
@@ -42,7 +43,10 @@ const MiniAppDetail: React.FC<PropsWithChildren<{ props: PageDetailProps, $apis 
           <View className="desc">共计 {0} 成员</View>
         </View>
         <View className="inline_admin_list">
-          <View className="admin_item adds">
+          <View
+            className="admin_item adds"
+            onClick={() => setVisible(true)}
+          >
             <View className="image iconfont icon-line-subtraction1" />
             <View className="name">添加成员</View>
           </View>

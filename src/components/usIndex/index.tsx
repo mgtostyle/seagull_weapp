@@ -16,6 +16,7 @@ import UsButtonGroup from '../usButton/group'
 import UsImage from '../usImage'
 import UsArcProgressBar from '../UsArcProgressBar'
 import UsDataNone from '../usDataNone'
+import UsPopup from '../usPopup'
 
 const UsForm = (UsFormComponent as any).default
 const UsFormItem = (UsFormItemComponent as any).default
@@ -46,5 +47,6 @@ export {
   UsButton,
   UsImage,
   UsArcProgressBar,
-  UsDataNone
+  UsDataNone,
+  UsPopup
 }

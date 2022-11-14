@@ -10,7 +10,8 @@ export default class Request<T> extends Https<T> {
 
   constructor (method: Method, joggle: string, type: FormDataType = 'Object') {
     super (method)
-    this[method.toLocaleLowerCase()] = (...args: [T]) => this.#method(joggle, type, ...args)
+    this.#joggle = joggle
+    this[method.toLocaleLowerCase()] = (...args: [T]) => this.#method(type, ...args)
   }
 
   refuse (conditions: Array<RefuseItem>) {
@@ -27,12 +28,12 @@ export default class Request<T> extends Https<T> {
     return this
   }
 
-  #method (joggle: string, type: FormDataType, params: T) {
+  #method (type: FormDataType, params: T) {
     switch (type) {
       case 'Suffix':
-        return this.setPromise(joggle + params)
+        return this.setPromise(this.#joggle + params)
       default:
-        return this.setPromise(joggle, params)
+        return this.setPromise(this.#joggle, params)
     }
   }
 

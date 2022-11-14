@@ -42,6 +42,7 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
   }
 
   private getUploadSubmit (initialValue, detail, index: number) {
+    console.log(detail.url)
     const { onChange }: PageProps = this.props
     const setCurrentImage = (params) => {
       initialValue[index] = Object.assign(initialValue[index], params)
@@ -54,7 +55,7 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
         percent: res.progress
       }))
     }).upload({
-      file: detail.url,
+      source: detail.url,
       name: 'singleImage'
     }).then(res => setCurrentImage({
       status: 'done',

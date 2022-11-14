@@ -1,4 +1,4 @@
-import React, { ReactElement, createContext, useState, useEffect } from 'react'
+import React, { ReactElement, createContext, useState, useEffect, forwardRef, useImperativeHandle } from 'react'
 import type { ProTableProps } from './interface'
 import less from './index.module.less'
 import Taro, { usePullDownRefresh, useReachBottom } from '@tarojs/taro'
@@ -18,7 +18,11 @@ const ProTableItem = <T extends unknown>(props): ReactElement | null => {
 
 }
 
-const ProTable = <T extends unknown>(props: ProTableProps): ReactElement | null => {
+const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): ReactElement | null => {
+
+  useImperativeHandle(ref, () => ({
+    setList
+  }))
 
   const defaultProps: ProTableProps = Object.assign({
     refresh: false,
@@ -118,6 +122,6 @@ const ProTable = <T extends unknown>(props: ProTableProps): ReactElement | null 
     </React.Fragment>
   )
 
-}
+})
 
 export default ProTable;
