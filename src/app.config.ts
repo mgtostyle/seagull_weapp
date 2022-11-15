@@ -10,7 +10,8 @@ export default defineAppConfig({
       pages: [
         'pages/index/index',
         'pages/miniApp/update',
-        'pages/miniApp/detail'
+        'pages/miniApp/detail',
+        'pages/miniApp/adminAdds'
       ]
     }
   ],

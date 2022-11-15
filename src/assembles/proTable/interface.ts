@@ -5,8 +5,12 @@ export interface ProTableProps {
   initialValues?: {[propsName: string]: any};
   refresh?: boolean;
   hitbottom?: boolean;
-  // request: (values?) => Promise<Array<any>>;
-  request: any;
+  request: <T>(values?) => Promise<ResponseProps<T>>;
   children?;
   noneConfig?: DataNoneConfig;
+}
+
+export interface ResponseProps<T> {
+  list: Array<T>;
+  count: number;
 }

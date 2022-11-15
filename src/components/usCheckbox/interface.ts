@@ -1,9 +1,12 @@
-import type { CheckboxProps, CheckboxGroupProps } from '@tarojs/components'
-
-export interface PageProps extends CheckboxProps {
-
+export interface CheckProps {
+  className: string;
+  value: number | string;
+  color: string;
+  checked: boolean;
+  direction: 'left' | 'right';
+  onChange?: (value: number | string, status: boolean) => void;
 }
 
-export interface PageGroupProps extends CheckboxGroupProps {
+export interface CheckGroupProps {
 
 }

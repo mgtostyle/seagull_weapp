@@ -87,7 +87,7 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
       <QuerySelect
         ref={querySelectRef}
         search
-        onSubmit={(values: any) => setQuerySelect(values)}
+        onSubmit={setQuerySelect}
       />
       <ProTable
         ref={proTableRef}

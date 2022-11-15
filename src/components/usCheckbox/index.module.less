@@ -1,0 +1,50 @@
+@import url('@assets/less/common.less');
+
+.block_container{
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+  width: calc(100% - 40rpx);
+  &.left{
+    flex-direction: row;
+    .icon{
+      margin-right: 20rpx;
+    }
+  }
+  &.right{
+    flex-direction: row-reverse;
+    .icon{
+      margin-left: 20rpx;
+    }
+  }
+  .icon{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42rpx;
+    height: 42rpx;
+    font-size: 42rpx;
+    border-radius: 42rpx;
+    overflow: hidden;
+    border-width: 2PX;
+    border-style: solid;
+    &.true{
+      color: #ffffff;
+      font-weight: bolder;
+      &::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 42rpx;
+        border: 2PX solid #ffffff;
+      }
+    }
+  }
+  .content{
+    flex: 1;
+  }
+}

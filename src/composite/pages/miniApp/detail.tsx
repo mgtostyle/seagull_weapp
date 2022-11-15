@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useState } from 'react'
 import type { PageDetailProps } from './interface'
 import './detail.less'
-import { getCurrentInstance, useLoad } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useLoad } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
 import { UsContainer, UsImage } from '@/components/usIndex'
@@ -11,7 +11,6 @@ const MiniAppDetail: React.FC<PropsWithChildren<{ props: PageDetailProps, $apis 
   const { id, title } = (getCurrentInstance as any)().router.params
 
   const [detail, setMiniAppDetail] = useState<any>({})
-  const [visible, setVisible] = useState<boolean>(false)
 
   useLoad(() => {
     id && getMiniAppDetail()
@@ -20,6 +19,16 @@ const MiniAppDetail: React.FC<PropsWithChildren<{ props: PageDetailProps, $apis 
   const getMiniAppDetail = () => {
     $apis.composite.setting.miniAppDetail.get(`/id/${id}`).then(res => {
       setMiniAppDetail(res.data.detail)
+    })
+  }
+
+  const getAdministratorList = async () => {
+    $apis.composite.setting.administratorList.post()
+  }
+
+  const toMiniAppAdminAdds = () => {
+    Taro.navigateTo({
+      url: `/composite/pages/miniApp/adminAdds?id=${id}`
     })
   }
 
@@ -45,7 +54,7 @@ const MiniAppDetail: React.FC<PropsWithChildren<{ props: PageDetailProps, $apis 
         <View className="inline_admin_list">
           <View
             className="admin_item adds"
-            onClick={() => setVisible(true)}
+            onClick={toMiniAppAdminAdds}
           >
             <View className="image iconfont icon-line-subtraction1" />
             <View className="name">添加成员</View>

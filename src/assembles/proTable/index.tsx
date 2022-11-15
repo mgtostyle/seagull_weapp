@@ -45,7 +45,7 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
   }, [props.initialValues])
 
   const useRequest = async (formValues = initialValues, isRefresh: boolean = false) => {
-    let result = await props.request(formValues)
+    let result = await props.request<T>(formValues)
     let currentList = formValues.page > 1 ? list.concat(result.list) : result.list
     formValues.page === 1 && Taro.pageScrollTo({
       scrollTop: 0
