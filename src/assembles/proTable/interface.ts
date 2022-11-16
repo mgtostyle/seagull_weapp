@@ -2,6 +2,7 @@ import type { PageProps as DataNoneConfig } from '@components/usDataNone/interfa
 
 export interface ProTableProps {
   className?: string;
+  limit?: number;
   initialValues?: {[propsName: string]: any};
   refresh?: boolean;
   hitbottom?: boolean;

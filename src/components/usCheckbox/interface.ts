@@ -3,6 +3,7 @@ export interface CheckProps {
   value: number | string;
   color: string;
   checked: boolean;
+  disabled: boolean;
   direction: 'left' | 'right';
   onChange?: (value: number | string, status: boolean) => void;
 }

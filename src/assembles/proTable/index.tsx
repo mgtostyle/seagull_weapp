@@ -28,12 +28,13 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
     refresh: false,
     hitbottom: false,
     className: '',
-    noneConfig: {}
+    noneConfig: {},
+    limit: 10
   }, props)
 
   const [initialValues, setInitialValues] = useState(Object.assign({
     page: 1,
-    limit: 10
+    limit: props?.limit || 10
   }, props?.initialValues))
   const [list, setList] = useState<Array<T>>([])
   const [count, setCount] = useState<number>(0)
@@ -41,7 +42,7 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
   const [hitbottom, setHitbottom] = useState<'hidden' | 'loading' | 'finish'>('hidden')
 
   useEffect(() => {
-    useRequest({ ...props?.initialValues, page: 1, limit: 10 })
+    useRequest({ ...props?.initialValues, page: 1, limit: props?.limit || 10 })
   }, [props.initialValues])
 
   const useRequest = async (formValues = initialValues, isRefresh: boolean = false) => {

@@ -29,7 +29,7 @@
     overflow: hidden;
     border-width: 2PX;
     border-style: solid;
-    &.true{
+    &.check{
       color: #ffffff;
       font-weight: bolder;
       &::before{
@@ -42,6 +42,10 @@
         border-radius: 42rpx;
         border: 2PX solid #ffffff;
       }
+    }
+    &.disable{
+      background-color: @splitColor!important;
+      border-color: @splitColor!important;
     }
   }
   .content{

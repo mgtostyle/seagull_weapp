@@ -10,18 +10,19 @@ class UsCheckbox extends Component<PropsWithChildren<CheckProps>> {
     value: '',
     color: less.usTextColor,
     checked: false,
+    disabled: false,
     direction: 'left'
   }
 
   render (): ReactNode {
-    const { className, value, color, checked, direction, onChange }: CheckProps = this.props
+    const { className, value, color, checked, disabled, direction, onChange }: CheckProps = this.props
     return (
       <View
         className={`${less.block_container} ${less[direction]} ${className}`}
-        onClick={() => typeof onChange === 'function' && onChange(isNaN(Number(value)) ? value.toString() : Number(value), !checked)}
+        onClick={() => !disabled && typeof onChange === 'function' && onChange(isNaN(Number(value)) ? value.toString() : Number(value), !checked)}
       >
         <View
-          className={`${less.icon} ${less[checked.toString()]}`}
+          className={`${less.icon} ${less[checked ? 'check' : '']} ${less[disabled ? 'disable' : '']}`}
           style={{
             backgroundColor: checked ? color : 'transparent',
             borderColor: checked ? color : less.usSplitColor

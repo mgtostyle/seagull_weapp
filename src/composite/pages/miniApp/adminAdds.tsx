@@ -6,6 +6,7 @@ import { View } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
 import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
+import type { QuerySelectColumns } from '@/assembles/moduleIndex'
 import { UsContainer, UsCheckbox, UsImage, UsButton } from '@/components/usIndex'
 
 const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps, $apis }>> = ({ $apis }) => {
@@ -17,7 +18,7 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
   const [querySelect, setQuerySelect] = useState({})
   const [adminIds, setAdminCheckbox] = useState<Array<string>>([])
 
-  const columns = [
+  const columns: QuerySelectColumns = [
     {
       title: '性别',
       dataIndex: 'gender',
@@ -36,7 +37,10 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
 
   const getRegisterUserList = async (formValues: {[propsName: string]: any}) => {
     try {
-      let result = await $apis.composite.select.registerList.post(formValues)
+      let result = await $apis.composite.select.registerList.post({
+        ...formValues,
+        platformId: id
+      })
       return {
         list: result.data.list,
         count: result.data.count
@@ -53,9 +57,8 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
     if (status) {
       setAdminCheckbox(ids => ids.concat([id]))
     } else {
-      setAdminCheckbox(ids => ids.filter((item: any) => item.id !== id))
+      setAdminCheckbox(ids => ids.filter((value: string) => value !== id))
     }
-    console.log(adminIds)
   }
 
   return (
@@ -69,16 +72,18 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
       <ProTable
         hitbottom
         initialValues={querySelect}
+        limit={20}
         request={getRegisterUserList}
       >
         {detail => (
           <UsCheckbox
             className="inline_checkbox_card"
             value={detail.id}
-            checked={adminIds.includes(detail.id)}
+            checked={!detail.settled_in || adminIds.includes(detail.id)}
+            disabled={!detail.settled_in}
             onChange={getAdminCheckbox}
           >
-            <View className="inline_checkbox_admin">
+            <View className={`inline_checkbox_admin ${detail.status && 'active'}`}>
               <View className="admin_info">
                 <UsImage
                   className="image"
@@ -87,7 +92,9 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
                 />
                 <View className="name">{detail.nickName}</View>
               </View>
-              <View className="admin_status">{detail.status}</View>
+              {detail.settled_in && (
+                <View className="admin_status">已添加</View>
+              )}
             </View>
           </UsCheckbox>
         )}
