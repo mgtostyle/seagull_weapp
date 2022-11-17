@@ -25,7 +25,7 @@ export default class UsImage extends Component<PropsWithChildren<PageProps>, Pag
   }
 
   render (): ReactNode {
-    const { className, shape, onError, onLoad, ...params }: PageProps = this.props
+    const { className, shape, onError, onLoad, onChange, ...params }: PageProps = this.props
     return (
       <React.Fragment>
         <Image
@@ -33,6 +33,7 @@ export default class UsImage extends Component<PropsWithChildren<PageProps>, Pag
           {...params}
           onLoad={() => this.setState({ visible: true })}
           onError={() => this.getError()}
+          onTap={(e) => typeof onChange === 'function' && onChange(e)}
         />
       </React.Fragment>
     )

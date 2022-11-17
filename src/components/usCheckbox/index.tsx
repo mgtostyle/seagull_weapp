@@ -1,7 +1,7 @@
 import { Component, ReactNode, PropsWithChildren } from 'react'
 import type { CheckProps } from './interface'
 import less from './index.module.less'
-import { View } from '@tarojs/components'
+import { Icon, View } from '@tarojs/components'
 
 class UsCheckbox extends Component<PropsWithChildren<CheckProps>> {
 
@@ -22,7 +22,7 @@ class UsCheckbox extends Component<PropsWithChildren<CheckProps>> {
         onClick={() => !disabled && typeof onChange === 'function' && onChange(isNaN(Number(value)) ? value.toString() : Number(value), !checked)}
       >
         <View
-          className={`${less.icon} ${less[checked ? 'check' : '']} ${less[disabled ? 'disable' : '']}`}
+          className={[less.icon, checked && less.check, disabled && less.disable].filter(css => Boolean(css)).join(' ')}
           style={{
             backgroundColor: checked ? color : 'transparent',
             borderColor: checked ? color : less.usSplitColor

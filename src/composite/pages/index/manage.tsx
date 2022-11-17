@@ -1,6 +1,5 @@
 import React, { PropsWithChildren, useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import type { PageManageProps, MiniAppItem } from './interface'
-import commonLess from '@assets/less/common.module.less'
 import './manage.less'
 import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -9,7 +8,7 @@ import moment from 'moment'
 import { UsImage, UsButton } from '@components/usIndex'
 import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
 
-const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = forwardRef(({ $apis }, ref) => {
+const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis, $commonLess }>> = forwardRef(({ $apis, $commonLess }, ref) => {
 
   const querySelectRef = useRef<any>()
   const proTableRef = useRef<any>()
@@ -69,7 +68,7 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis }>> = f
     Taro.showModal({
       title: '提醒',
       content: '您正在进行一项删除操作，是否需要删除该记录，将无法恢复，请谨慎操作此项！！！',
-      confirmColor: commonLess.usDangerColor,
+      confirmColor: $commonLess.usDangerColor,
       confirmText: '删除',
       success: res => res.confirm && $apis.composite.setting.miniAppDelete.delete(`/id/${id}`).then(res => {
         res.data.status === 1 && Taro.showToast({

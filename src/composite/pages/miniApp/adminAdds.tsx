@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useState } from 'react'
-import type { PageAdminAddsProps } from './interface'
+import type { PageAdminAddsProps, AdminItem } from './interface'
 import './adminAdds.less'
-import { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
@@ -9,14 +9,14 @@ import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
 import type { QuerySelectColumns } from '@/assembles/moduleIndex'
 import { UsContainer, UsCheckbox, UsImage, UsButton } from '@/components/usIndex'
 
-const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps, $apis }>> = ({ $apis }) => {
+const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps, $apis, $commonLess }>> = ({ $apis, $commonLess }) => {
 
   const { id } = (getCurrentInstance as any)().router.params
 
   const storeGlobal = useSelector(state => (state as any).global)
 
   const [querySelect, setQuerySelect] = useState({})
-  const [adminIds, setAdminCheckbox] = useState<Array<string>>([])
+  const [adminList, setAdminCheckbox] = useState<Array<AdminItem>>([])
 
   const columns: QuerySelectColumns = [
     {
@@ -30,8 +30,13 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
       }
     },
     {
-      title: '状态',
-      dataIndex: 'is_entry'
+      title: '是否入驻',
+      dataIndex: 'is_entry',
+      valueEnum: {
+        all: '全部',
+        0: '否',
+        1: '是'
+      }
     }
   ]
 
@@ -53,12 +58,38 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
     }
   }
 
-  const getAdminCheckbox = (id: string, status: boolean) => {
+  const getAdminCheckbox = (detail, status: boolean) => {
     if (status) {
-      setAdminCheckbox(ids => ids.concat([id]))
+      setAdminCheckbox(list => list.concat([{
+        id: detail.id,
+        avatarUrl: detail.avatarUrl
+      }]))
     } else {
-      setAdminCheckbox(ids => ids.filter((value: string) => value !== id))
+      setAdminCheckbox(list => list.filter((item: AdminItem) => item.id !== id))
     }
+  }
+
+  const getAdminIndex = (id: string) => {
+    Taro.showModal({
+      title: '提示',
+      content: '是否移除当前用户，请谨慎操作此选项！！！',
+      confirmText: '移除',
+      confirmColor: $commonLess.usDangerColor,
+      success: res => res.confirm && setAdminCheckbox(list => list.filter((item: AdminItem) => item.id !== id))
+    })
+  }
+
+  const getResetFields = () => {
+    Taro.showActionSheet({
+      alertText: 'dadas',
+      itemList: ['A', 'B', 'C'],
+      success (res) {
+        console.log(res.tapIndex)
+      },
+      fail (res) {
+        console.log(res.errMsg)
+      }
+    })
   }
 
   return (
@@ -69,6 +100,20 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
         select
         columns={columns}
       />
+      {Boolean(adminList?.length) && (
+        <View className="inline_admin_boxer">
+          {adminList.map((item: AdminItem, index: number) => (
+            <React.Fragment key={index}>
+              <UsImage
+                className="image"
+                src={item.avatarUrl}
+                mode="aspectFill"
+                onChange={() => getAdminIndex(item.id)}
+              />
+            </React.Fragment>
+          ))}
+        </View>
+      )}
       <ProTable
         hitbottom
         initialValues={querySelect}
@@ -79,9 +124,9 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
           <UsCheckbox
             className="inline_checkbox_card"
             value={detail.id}
-            checked={!detail.settled_in || adminIds.includes(detail.id)}
-            disabled={!detail.settled_in}
-            onChange={getAdminCheckbox}
+            checked={detail.settled_in || adminList.map((item: AdminItem) => item.id).includes(detail.id)}
+            disabled={detail.settled_in}
+            onChange={(_, status) => getAdminCheckbox(detail, status)}
           >
             <View className={`inline_checkbox_admin ${detail.status && 'active'}`}>
               <View className="admin_info">
@@ -92,8 +137,8 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
                 />
                 <View className="name">{detail.nickName}</View>
               </View>
-              {detail.settled_in && (
-                <View className="admin_status">已添加</View>
+              {!detail.settled_in && (
+                <View className="admin_status">已入驻</View>
               )}
             </View>
           </UsCheckbox>
@@ -109,7 +154,7 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
           <UsButton
             className="button"
             ghost
-            onClick={() => console.log(querySelect)}
+            onClick={() => getResetFields()}
           >重置</UsButton>
           <UsButton
             className="button"
