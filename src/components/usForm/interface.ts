@@ -7,7 +7,7 @@ export interface FieldValue {
 }
 
 export interface PageProps extends FormProps {
-  formRef?: any;
+  formRef?;
   initialValues: {[propsName: string]: any};
   request: (() => Promise<{[propsName: string]: any}>);
   buttonConfig?: ButtonConfig;

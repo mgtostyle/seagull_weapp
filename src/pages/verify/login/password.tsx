@@ -46,6 +46,7 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
               placeholderClass="placeholder"
               placeholder="Username"
               name="account"
+              value="composite@admin"
             />
           </View>
           <View className="inline_input">
@@ -58,6 +59,7 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
               placeholderClass="placeholder"
               placeholder="Password"
               name="password"
+              value="Steven@13670020308"
               password={!visible}
             />
           </View>

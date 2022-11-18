@@ -1,12 +1,18 @@
 export interface PageProps {
+  childRef?;
+}
+
+export interface PageState {
+  visible: boolean;
   zIndex?: number;
-  navigate?: boolean;
   tabbar?: boolean;
   request?: () => Promise<Array<ColumnItem>>;
   columns?: Array<ColumnItem>;
 }
 
 export interface ColumnItem {
-  content: string;
+  name: string;
+  color?: string;
+  disable?: boolean;
   result?: (values?) => void;
 }

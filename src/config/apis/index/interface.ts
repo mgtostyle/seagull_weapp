@@ -52,7 +52,7 @@ export interface CompositeSettingAdministratorList {
 }
 
 export interface CompositeSettingAdministratorAdds {
-  userId: string;
+  userIdsArray: Array<string>;
   platformId: string;
 }
 

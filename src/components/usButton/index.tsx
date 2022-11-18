@@ -10,15 +10,17 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
     block: true,
     theme: 'primary',
     ghost: false,
-    width: 'auto'
+    width: 'auto',
+    shape: 'round'
   }
 
   get style (): {[propsName: string]: any} {
-    const { block, theme, ghost, size, width }: PageProps = this.props
+    const { block, theme, ghost, size, width, shape }: PageProps = this.props
     const style = Object.assign(
       {
         display: block ? 'block' : 'inline',
-        width: typeof width === 'number' ? `${width}rpx` : width
+        width: typeof width === 'number' ? `${width}rpx` : width,
+        borderRadius: shape === 'round' ? '50PX' : '12rpx'
       },
       size === 'mini' ? {
         paddingTop: '6PX',
@@ -56,7 +58,7 @@ class UsButton extends Component<PropsWithChildren<PageProps> & ReturnType<typeo
     const value = typeof children === 'string' && children?.length == 2 ? children.split('').join(' ') : children
     return (
       <Button
-        className={`${less.block_container} ${less[nodeClass]} ${ghost && less.ghost} ${className}`}
+        className={`${less.block_container} ${less[nodeClass]} ${ghost ? less.ghost : less.full} ${className} ${params.disabled && less.disabled}`}
         {...params}
         style={{ ...this.style, ...(style as any) }}
         hoverClass={`${less.inline_hover_class} ${hoverClass}`}

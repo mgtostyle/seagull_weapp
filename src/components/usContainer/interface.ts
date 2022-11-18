@@ -16,5 +16,4 @@ export interface MenuItem {
 
 export interface PageState {
   isHead: boolean;
-  visible: boolean;
 }

@@ -6,6 +6,7 @@ export interface PageProps extends ButtonProps {
   theme: 'default' | 'primary' | 'authorize' | 'danger' | 'forbid' | 'warn';
   ghost: boolean;
   width: string | number;
+  shape?: 'round' | 'square';
 }
 
 export interface PageGroupProps {

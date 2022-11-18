@@ -1,14 +1,15 @@
 import React, { Component, PropsWithChildren, ReactNode } from 'react'
-import type { PageProps, PageState, MenuItem } from './interface'
+import type { PageProps, PageState } from './interface'
 import less from './index.module.less'
 import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { connect } from 'react-redux'
 
-import { UsButton } from '../usIndex'
+import { UsActionSheet } from '../usIndex'
 
 class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<typeof mapStateToProps>, PageState> {
 
+  private actionSheet
   static defaultProps: PageProps = {
     back: 0,
     setting: false,
@@ -22,27 +23,13 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
   constructor (props) {
     super (props)
     this.state = {
-      isHead: false,
-      visible: false
+      isHead: false
     }
-  }
-
-  private onDropBack () {
-    this.setState((state: PageState) => {
-      state.visible = !state.visible
-      return state;
-    })
-  }
-
-  private onMenuResult (e, item: MenuItem) {
-    e.stopPropagation()
-    this.onDropBack()
-    typeof item.result === 'function' && item.result()
   }
 
   render (): ReactNode {
     const { back, setting, title, menus, isfull, bcolor, tcolor, tabbar }: PageProps = this.props
-    const { isHead, visible }: PageState = this.state
+    const { isHead }: PageState = this.state
     const { navigate, navigateHeight, safeAreaHeight } = this.props.global
     return (
       <React.Fragment>
@@ -75,7 +62,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                     height: `${navigate.bHeight - 1}px`,
                     fontSize: setting ? '36rpx' : '30rpx'
                   }}
-                  onClick={() => setting ? this.onDropBack() : Taro.navigateBack()}
+                  onClick={() => setting ? this.actionSheet.message({ tabbar, columns: menus }) : Taro.navigateBack()}
                 />
               )}
             </React.Fragment>
@@ -99,7 +86,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                 <View className={less.line} />
                 <View
                   className={`${less.right_icon} iconfont icon-line-open2`}
-                  onClick={() => this.onDropBack()}
+                  onClick={() => this.actionSheet.message({ tabbar, columns: menus })}
                 />
               </View>
             </React.Fragment>
@@ -122,29 +109,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
             paddingBottom: `${safeAreaHeight}rpx`
           }}
         />
-        {visible && (
-          <View
-            className={less.block_menus_container}
-            style={{
-              paddingBottom: `calc(${safeAreaHeight}rpx ${tabbar ? '+ 110rpx' : ''})`
-            }}
-            onClick={() => this.onDropBack()}
-          >
-            {menus?.map((item: MenuItem, index: number) => (
-              <UsButton
-                className={less.inline_text}
-                theme="default"
-                key={index}
-                onClick={(e) => this.onMenuResult(e, item)}
-              >{item.name}</UsButton>
-            ))}
-            <UsButton
-              className={less.inline_cancel}
-              theme="default"
-              onClick={() => this.onDropBack()}
-            >取消</UsButton>
-          </View>
-        )}
+        <UsActionSheet childRef={ref => this.actionSheet = ref} />
       </React.Fragment>
     )
   }

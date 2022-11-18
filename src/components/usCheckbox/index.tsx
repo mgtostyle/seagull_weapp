@@ -1,7 +1,7 @@
 import { Component, ReactNode, PropsWithChildren } from 'react'
 import type { CheckProps } from './interface'
 import less from './index.module.less'
-import { Icon, View } from '@tarojs/components'
+import { View } from '@tarojs/components'
 
 class UsCheckbox extends Component<PropsWithChildren<CheckProps>> {
 

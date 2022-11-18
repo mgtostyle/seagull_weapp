@@ -18,7 +18,6 @@
   background-color: transparent;
   border-radius: 8rpx;
   font-weight: normal;
-  border-radius: 50PX;
   &::after{
     position: absolute;
     border: 0;
@@ -39,6 +38,19 @@
     &:last-child{
       border-right: 0!important;
       border-radius: 0 50PX 50PX 0;
+    }
+  }
+  &.disabled{
+    color: @placeholderColor!important;
+  }
+  &.ghost{
+    &.disabled{
+      border-color: @disabledColor!important;
+    }
+  }
+  &.full{
+    &.disabled{
+      background: @disabledColor!important;
     }
   }
 }

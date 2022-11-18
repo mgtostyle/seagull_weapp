@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react'
+import React, { PropsWithChildren, useState, useRef } from 'react'
 import type { PageAdminAddsProps, AdminItem } from './interface'
 import './adminAdds.less'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
@@ -7,16 +7,17 @@ import { useSelector } from 'react-redux'
 
 import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
 import type { QuerySelectColumns } from '@/assembles/moduleIndex'
-import { UsContainer, UsCheckbox, UsImage, UsButton } from '@/components/usIndex'
+import { UsContainer, UsCheckbox, UsImage, UsButton, UsActionSheet } from '@/components/usIndex'
 
 const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps, $apis, $commonLess }>> = ({ $apis, $commonLess }) => {
 
   const { id } = (getCurrentInstance as any)().router.params
-
   const storeGlobal = useSelector(state => (state as any).global)
-
+  
+  const querySelectRef = useRef<any>()
   const [querySelect, setQuerySelect] = useState({})
   const [adminList, setAdminCheckbox] = useState<Array<AdminItem>>([])
+  const [actionSheet, setActionSheet] = useState<any>()
 
   const columns: QuerySelectColumns = [
     {
@@ -80,21 +81,35 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
   }
 
   const getResetFields = () => {
-    Taro.showActionSheet({
-      alertText: 'dadas',
-      itemList: ['A', 'B', 'C'],
-      success (res) {
-        console.log(res.tapIndex)
-      },
-      fail (res) {
-        console.log(res.errMsg)
-      }
+    actionSheet.message({
+      columns: [
+        {
+          name: '重置查询条件及内容',
+          result: () => {
+            querySelectRef.current?.resetFields({})
+            querySelectRef.current?.setQuerySelect({})
+          }
+        },
+        {
+          name: '清空选中的所有成员',
+          result: () => setAdminCheckbox([])
+        }
+      ]
     })
+  }
+
+  const getSubmit = async () => {
+    let result = await $apis.composite.setting.administratorAdds.post({
+      userIdsArray: adminList.map(item => item.id),
+      platformId: id
+    })
+    console.log(result)
   }
 
   return (
     <UsContainer title="添加成员" back={1}>
       <QuerySelect
+        ref={querySelectRef}
         search
         onSubmit={setQuerySelect}
         select
@@ -154,14 +169,16 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
           <UsButton
             className="button"
             ghost
-            onClick={() => getResetFields()}
+            onClick={getResetFields}
           >重置</UsButton>
           <UsButton
             className="button"
-            onClick={() => console.log('提交')}
-          >提交</UsButton>
+            disabled={!Boolean(adminList?.length)}
+            onClick={getSubmit}
+          >{Boolean(adminList?.length) ? `添加 ${adminList.length} 位用户` : '请选择'}</UsButton>
         </View>
       </View>
+      <UsActionSheet childRef={node => setActionSheet(node)} />
     </UsContainer>
   )
 

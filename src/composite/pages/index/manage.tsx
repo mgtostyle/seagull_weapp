@@ -109,7 +109,11 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis, $commo
               })(detail.status)}
             </View>
             <View className="card_index_message">
-              <UsImage className="message_image" src={detail.logo} />
+              <UsImage
+                className="message_image"
+                src={detail.logo}
+                mode="aspectFill"
+              />
               <View className="message_info">
                 <View className="title">{detail.title}</View>
                 <View className="desc">{detail.introduction}</View>
