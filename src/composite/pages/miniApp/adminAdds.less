@@ -1,23 +1,5 @@
 @import url('@assets/less/common.less');
 
-.inline_admin_boxer{
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  margin: 20rpx 20rpx 0;
-  padding: 20rpx;
-  grid-gap: 20rpx;
-  border-radius: 12rpx;
-  background-color: #ffffff;
-  .image{
-    width: 66rpx;
-    height: 66rpx;
-    object-fit: cover;
-    border-radius: 12rpx;
-    overflow: hidden;
-  }
-}
 .inline_checkbox_card{
   background-color: #ffffff;
   border-radius: 12rpx;
@@ -53,23 +35,56 @@
 }
 .inline_item_submit{
   position: fixed;
-  z-index: 100;
+  z-index: 98;
   bottom: 0;
   left: 20rpx;
   right: 20rpx;
   background-color: @pageBackgroundColor;
-  .submit_box{
+  .inline_submit_inner{
     display: flex;
-    align-items: center;
+    flex-direction: column;
     background-color: #ffffff;
-    padding: 20rpx;
     border-radius: 12rpx;
     overflow: hidden;
-    .button{
-      flex: 1;
-      margin-right: 20rpx;
-      &:last-child{
-        margin-right: 0;
+    .submit_scroll{
+      display: flex;
+      align-items: center;
+      margin: 20rpx 30rpx 0 20rpx;
+      .submit_admin{
+        flex: 1;
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        .image{
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 20rpx;
+          width: 66rpx;
+          height: 66rpx;
+          object-fit: cover;
+          border-radius: 12rpx;
+          overflow: hidden;
+          &:last-child{
+            margin-right: 0;
+          }
+        }
+      }
+      .submit_nums{
+        font-size: 24rpx;
+        color: @placeholderColor;
+        margin-left: 20rpx;
+      }
+    }
+    .submit_box{
+      display: flex;
+      align-items: center;
+      padding: 20rpx;
+      .button{
+        flex: 1;
+        margin-right: 20rpx;
+        &:last-child{
+          margin-right: 0;
+        }
       }
     }
   }

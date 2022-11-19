@@ -2,22 +2,35 @@ import React, { PropsWithChildren, useState, useRef } from 'react'
 import type { PageAdminAddsProps, AdminItem } from './interface'
 import './adminAdds.less'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, ScrollView } from '@tarojs/components'
 import { useSelector } from 'react-redux'
 
 import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
 import type { QuerySelectColumns } from '@/assembles/moduleIndex'
-import { UsContainer, UsCheckbox, UsImage, UsButton, UsActionSheet } from '@/components/usIndex'
+import { UsContainer, UsCheckbox, UsImage, UsButton } from '@/components/usIndex'
 
 const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps, $apis, $commonLess }>> = ({ $apis, $commonLess }) => {
 
   const { id } = (getCurrentInstance as any)().router.params
   const storeGlobal = useSelector(state => (state as any).global)
-  
+
   const querySelectRef = useRef<any>()
-  const [querySelect, setQuerySelect] = useState({})
+  const [querySelect, setQuerySelect] = useState<any>({})
   const [adminList, setAdminCheckbox] = useState<Array<AdminItem>>([])
-  const [actionSheet, setActionSheet] = useState<any>()
+
+  const containerColumns = [
+    {
+      name: '重置查询条件及内容',
+      result: () => {
+        querySelectRef.current?.resetFields({})
+        querySelectRef.current?.setQuerySelect({})
+      }
+    },
+    {
+      name: '清空选中的所有成员',
+      result: () => setAdminCheckbox([])
+    }
+  ]
 
   const columns: QuerySelectColumns = [
     {
@@ -66,7 +79,7 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
         avatarUrl: detail.avatarUrl
       }]))
     } else {
-      setAdminCheckbox(list => list.filter((item: AdminItem) => item.id !== id))
+      setAdminCheckbox(list => list.filter((item: AdminItem) => item.id !== detail.id))
     }
   }
 
@@ -80,34 +93,36 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
     })
   }
 
-  const getResetFields = () => {
-    actionSheet.message({
-      columns: [
-        {
-          name: '重置查询条件及内容',
-          result: () => {
-            querySelectRef.current?.resetFields({})
-            querySelectRef.current?.setQuerySelect({})
-          }
-        },
-        {
-          name: '清空选中的所有成员',
-          result: () => setAdminCheckbox([])
-        }
-      ]
-    })
-  }
-
   const getSubmit = async () => {
-    let result = await $apis.composite.setting.administratorAdds.post({
-      userIdsArray: adminList.map(item => item.id),
-      platformId: id
+    Taro.showModal({
+      title: '提示',
+      content: `是否绑定该 ${adminList.length} 位成员使用平台操作及管理内容，请确认您的入驻选择`,
+      success: async res => {
+        if (res.confirm) {
+          let result = await $apis.composite.setting.administratorAdds.post({
+            userIdsArray: adminList.map(item => item.id),
+            platformId: id
+          })
+          result.data.status === 1 && Taro.navigateBack({
+            delta: 1,
+            success: () => Taro.showToast({
+              title: '入驻成功',
+              icon: 'success',
+              duration: 2000
+            })
+          })
+        }
+      }
     })
-    console.log(result)
   }
 
   return (
-    <UsContainer title="添加成员" back={1}>
+    <UsContainer
+      title="添加成员"
+      back={2}
+      setting
+      columns={containerColumns}
+    >
       <QuerySelect
         ref={querySelectRef}
         search
@@ -115,20 +130,6 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
         select
         columns={columns}
       />
-      {Boolean(adminList?.length) && (
-        <View className="inline_admin_boxer">
-          {adminList.map((item: AdminItem, index: number) => (
-            <React.Fragment key={index}>
-              <UsImage
-                className="image"
-                src={item.avatarUrl}
-                mode="aspectFill"
-                onChange={() => getAdminIndex(item.id)}
-              />
-            </React.Fragment>
-          ))}
-        </View>
-      )}
       <ProTable
         hitbottom
         initialValues={querySelect}
@@ -161,24 +162,37 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
       </ProTable>
       <View className="inline_item_submit">
         <View
-          className="submit_box"
+          className="inline_submit_inner"
           style={{
             marginBottom: `${storeGlobal.safeAreaHeight}rpx`
           }}
         >
-          <UsButton
-            className="button"
-            ghost
-            onClick={getResetFields}
-          >重置</UsButton>
-          <UsButton
-            className="button"
-            disabled={!Boolean(adminList?.length)}
-            onClick={getSubmit}
-          >{Boolean(adminList?.length) ? `添加 ${adminList.length} 位用户` : '请选择'}</UsButton>
+          {Boolean(adminList?.length) && (
+            <View className="submit_scroll">
+              <ScrollView className="submit_admin" scrollX>
+                {adminList.map((item: AdminItem, index: number) => (
+                  <React.Fragment key={index}>
+                    <UsImage
+                      className="image"
+                      src={item.avatarUrl}
+                      mode="aspectFill"
+                      onChange={() => getAdminIndex(item.id)}
+                    />
+                  </React.Fragment>
+                ))}
+              </ScrollView>
+              <View className="submit_nums">已选中 {adminList.length} 位成员</View>
+            </View>
+          )}
+          <View className="submit_box">
+            <UsButton
+              className="button"
+              disabled={!Boolean(adminList?.length)}
+              onClick={getSubmit}
+            >{Boolean(adminList?.length) ? '添加入驻' : '请选择'}</UsButton>
+          </View>
         </View>
       </View>
-      <UsActionSheet childRef={node => setActionSheet(node)} />
     </UsContainer>
   )
 

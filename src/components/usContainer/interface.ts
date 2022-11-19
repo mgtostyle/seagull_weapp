@@ -1,7 +1,9 @@
 export interface PageProps {
+  childRef?;
+  actionSheet?;
   back: 0 | 1 | 2;
   setting?: boolean;
-  menus?: Array<MenuItem>;
+  columns?: Array<MenuItem>;
   title: string;
   isfull: boolean;
   bcolor: string;

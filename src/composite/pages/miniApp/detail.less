@@ -49,8 +49,8 @@
       align-items: center;
       .image{
         position: relative;
-        width: 100rpx;
-        height: 100rpx;
+        width: 120rpx;
+        height: 120rpx;
         &::after{
           content: '';
           position: absolute;
@@ -59,7 +59,7 @@
           right: 0;
           bottom: 0;
           border: 1PX dashed @placeholderColor;
-          border-radius: 100rpx;
+          border-radius: 120rpx;
         }
       }
       &.adds .iconfont{
@@ -69,11 +69,52 @@
         font-size: 36rpx;
         color: @labelColor;
       }
+      &.user .image{
+        position: relative;
+        border-radius: 120rpx;
+        overflow: hidden;
+        &::after{
+          border: none;
+        }
+        .img{
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 120rpx;
+          overflow: hidden;
+        }
+      }
+      &.user .iconfont{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 36rpx;
+      }
       .name{
         font-size: 24rpx;
         color: @textColor;
         padding-top: 12rpx;
       }
+    }
+  }
+  .inline_admin_reach{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20rpx 0;
+    border-top: 1PX solid @splitColor;
+    margin: 0 20rpx;
+    text{
+      font-size: 24rpx;
+      color: @placeholderColor;
     }
   }
 }
@@ -89,8 +130,13 @@
     color: @textColor;
     font-weight: bolder;
   }
-  .desc{
-    font-size: 24rpx;
-    color: @placeholderColor;
+  .operate{
+    display: flex;
+    align-items: center;
+    grid-gap: 30rpx;
+    color: @labelColor;
+    .iconfont{
+      font-size: 36rpx;
+    }
   }
 }

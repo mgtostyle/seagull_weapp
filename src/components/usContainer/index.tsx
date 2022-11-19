@@ -9,12 +9,12 @@ import { UsActionSheet } from '../usIndex'
 
 class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<typeof mapStateToProps>, PageState> {
 
-  private actionSheet
+  private actionSheet;
   static defaultProps: PageProps = {
     back: 0,
     setting: false,
     title: '',
-    menus: [],
+    columns: [],
     isfull: true,
     bcolor: '#ffffff',
     tabbar: false
@@ -27,8 +27,12 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
     }
   }
 
+  componentDidMount(): void {
+    this.props.childRef && this.props.childRef(this)
+  }
+
   render (): ReactNode {
-    const { back, setting, title, menus, isfull, bcolor, tcolor, tabbar }: PageProps = this.props
+    const { back, setting, title, columns, isfull, bcolor, tcolor, tabbar }: PageProps = this.props
     const { isHead }: PageState = this.state
     const { navigate, navigateHeight, safeAreaHeight } = this.props.global
     return (
@@ -62,7 +66,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                     height: `${navigate.bHeight - 1}px`,
                     fontSize: setting ? '36rpx' : '30rpx'
                   }}
-                  onClick={() => setting ? this.actionSheet.message({ tabbar, columns: menus }) : Taro.navigateBack()}
+                  onClick={() => setting ? this.actionSheet.message({ tabbar, columns }) : Taro.navigateBack()}
                 />
               )}
             </React.Fragment>
@@ -86,7 +90,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                 <View className={less.line} />
                 <View
                   className={`${less.right_icon} iconfont icon-line-open2`}
-                  onClick={() => this.actionSheet.message({ tabbar, columns: menus })}
+                  onClick={() => this.actionSheet.message({ tabbar, columns })}
                 />
               </View>
             </React.Fragment>

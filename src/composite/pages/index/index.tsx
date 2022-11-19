@@ -11,7 +11,7 @@ const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
   const mangeRef = useRef<any>()
   const [tabbarIndex, setTabbarIndex] = useState<TabbarIndex>(1)
 
-  const menuList = [
+  const containerColumns = [
     {
       name: '新建平台',
       result: () => mangeRef.current?.toMiniAppEdit()
@@ -46,7 +46,7 @@ const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
       back={tabbarIndex !== 1 ? 0 : 1}
       setting
       tabbar
-      menus={menuList}
+      columns={containerColumns}
     >
       {((index) => {
         switch (index) {

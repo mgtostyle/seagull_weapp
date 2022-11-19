@@ -12,7 +12,7 @@ const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis, $commo
 
   const querySelectRef = useRef<any>()
   const proTableRef = useRef<any>()
-  const [querySelect, setQuerySelect] = useState({})
+  const [querySelect, setQuerySelect] = useState<any>({})
 
   useImperativeHandle(ref, () => ({
     setQuerySelect,
