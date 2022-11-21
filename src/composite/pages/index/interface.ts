@@ -1,20 +1,4 @@
-export interface PageProps {
-
-}
-
 export type TabbarIndex = 0 | 1 | 2 | 3 | 4;
-
-export interface PageChartsProps {
-
-}
-
-export interface PageManageProps {
-
-}
-
-export interface PageUsersProps {
-
-}
 
 export interface MiniAppItem {
   id: string;
@@ -22,4 +6,11 @@ export interface MiniAppItem {
   logo: string;
   path: string;
   status: number;
+}
+
+export interface SettingItem {
+  icon: string;
+  name: string;
+  value: string;
+  result?: () => void;
 }

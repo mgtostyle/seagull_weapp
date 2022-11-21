@@ -1,15 +1,21 @@
 import React, { PropsWithChildren, useState, useRef } from 'react'
-import type { PageProps, TabbarIndex } from './interface'
+import type { TabbarIndex } from './interface'
+import { useLoad } from '@tarojs/taro'
+import moment from 'moment'
+import { useDispatch } from 'react-redux'
+import { compositeActions } from '@/store/composite'
 
 import { UsContainer, UsTabbar } from '@components/usIndex'
 import Charts from './charts'
 import Manage from './manage'
 import Users from './users'
+import Setting from './setting'
 
-const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
+const Index: React.FC<PropsWithChildren<{ $apis, $commonLess }>> = ({ $apis, $commonLess }) => {
 
+  const dispatch = useDispatch()
   const mangeRef = useRef<any>()
-  const [tabbarIndex, setTabbarIndex] = useState<TabbarIndex>(1)
+  const [tabbarIndex, setTabbarIndex] = useState<TabbarIndex>(2)
 
   const containerColumns = [
     {
@@ -27,12 +33,16 @@ const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
 
   const tabbarList = [
     {
-      icon: 'icon-line-ranking1',
-      name: '数据面板'
+      icon: 'icon-line-ranking',
+      name: '统计分析'
     },
     {
-      icon: 'icon-line-organizational',
-      name: '平台管理'
+      icon: 'icon-line-assembly',
+      name: 'APP平台'
+    },
+    {
+      icon: 'icon-line-usermanagement',
+      name: '通讯录'
     },
     {
       icon: 'icon-line-set',
@@ -40,12 +50,21 @@ const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
     }
   ]
 
+  useLoad(() => {
+    dispatch(compositeActions.setLogin({
+      status: true,
+      setime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    }))
+  })
+
   return (
     <UsContainer
       title={tabbarList[tabbarIndex].name}
       back={tabbarIndex !== 1 ? 0 : 1}
       setting
       tabbar
+      tcolor={tabbarIndex === 3 ? '#ffffff' : $commonLess.usTextColor }
+      isfull={tabbarIndex !== 3}
       columns={containerColumns}
     >
       {((index) => {
@@ -53,14 +72,16 @@ const Index: React.FC<PropsWithChildren<PageProps>> = (props) => {
           case 0:
             return <Charts />
           case 1:
-            return <Manage ref={mangeRef} {...(props as any)} />
+            return <Manage ref={mangeRef} {...{ $apis, $commonLess } as any} />
           case 2:
-            return <Users />
+            return <Users $apis={$apis} />
+          case 3:
+            return <Setting $apis={$apis} />
         }
       })(tabbarIndex)}
       <UsTabbar
         current={tabbarIndex}
-        list={tabbarList as any}
+        list={tabbarList}
         onChange={setTabbarIndex}
       />
     </UsContainer>

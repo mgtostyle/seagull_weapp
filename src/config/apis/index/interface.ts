@@ -68,3 +68,8 @@ export interface CompositeSelectAdministratorList {
   page?: number;
   limit?: number;
 }
+
+export interface CompositeAdministratorApplyList {
+  page?: number;
+  limit?: number;
+}

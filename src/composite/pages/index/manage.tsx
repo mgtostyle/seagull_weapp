@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useState, useRef, forwardRef, useImperativeHandle } from 'react'
-import type { PageManageProps, MiniAppItem } from './interface'
+import type { MiniAppItem } from './interface'
 import './manage.less'
 import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
@@ -8,7 +8,7 @@ import moment from 'moment'
 import { UsImage, UsButton } from '@components/usIndex'
 import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
 
-const Manage: React.FC<PropsWithChildren<{ props: PageManageProps, $apis, $commonLess }>> = forwardRef(({ $apis, $commonLess }, ref) => {
+const Manage: React.FC<PropsWithChildren<{ $apis, $commonLess }>> = forwardRef(({ $apis, $commonLess }, ref) => {
 
   const querySelectRef = useRef<any>()
   const proTableRef = useRef<any>()
