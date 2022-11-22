@@ -20,7 +20,13 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
         key: 'token',
         data: res.data.token,
         success: () => Taro.reLaunch({
-          url: res.data.path
+          url: res.data.path,
+          fail: () => Taro.showModal({
+            title: '访问异常',
+            content: '进入系统出错，请及时联系管理员处理',
+            showCancel: false,
+            confirmText: '我知道了'
+          })
         })
       })
     })
@@ -46,7 +52,6 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
               placeholderClass="placeholder"
               placeholder="Username"
               name="account"
-              value="composite@admin"
             />
           </View>
           <View className="inline_input">
@@ -59,7 +64,6 @@ export default class Password extends Component<PropsWithChildren<PagePasswordPr
               placeholderClass="placeholder"
               placeholder="Password"
               name="password"
-              value="Steven@13670020308"
               password={!visible}
             />
           </View>

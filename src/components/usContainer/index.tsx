@@ -1,7 +1,7 @@
 import React, { Component, PropsWithChildren, ReactNode } from 'react'
 import type { PageProps, PageState } from './interface'
 import less from './index.module.less'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentPages } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { connect } from 'react-redux'
 
@@ -23,7 +23,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
   constructor (props) {
     super (props)
     this.state = {
-      isHead: false
+      isHead: getCurrentPages().length <= 1 ? true : false
     }
   }
 
@@ -55,7 +55,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                     width: `${navigate.bHeight - 1}px`,
                     height: `${navigate.bHeight - 1}px`
                   }}
-                  onClick={() => Taro.navigateBack()}
+                  onClick={() => Taro.reLaunch({ url: '/pages/verify/login/index' })}
                 />
               ) : (
                 <View
@@ -85,7 +85,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                   style={{
                     fontSize: isHead ? '36rpx' : '30rpx'
                   }}
-                  onClick={() => Taro.navigateBack()}
+                  onClick={() => isHead ? Taro.reLaunch({ url: '/pages/verify/login/index' }) : Taro.navigateBack()}
                 />
                 <View className={less.line} />
                 <View
