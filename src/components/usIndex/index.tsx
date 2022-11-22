@@ -18,6 +18,7 @@ import UsArcProgressBar from '../UsArcProgressBar'
 import UsDataNone from '../usDataNone'
 import UsPopup from '../usPopup'
 import UsActionSheet from '../usActionSheet'
+import UsBadge from '../usBadge'
 
 const UsForm = (UsFormComponent as any).default
 const UsFormItem = (UsFormItemComponent as any).default
@@ -50,5 +51,6 @@ export {
   UsArcProgressBar,
   UsDataNone,
   UsPopup,
-  UsActionSheet
+  UsActionSheet,
+  UsBadge
 }

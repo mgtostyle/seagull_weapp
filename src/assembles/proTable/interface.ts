@@ -2,7 +2,7 @@ import type { PageProps as DataNoneConfig } from '@components/usDataNone/interfa
 
 export interface ProTableProps {
   className?: string;
-  limit?: number;
+  limit?: boolean | number;
   initialValues?: {[propsName: string]: any};
   refresh?: boolean;
   hitbottom?: boolean;
@@ -13,5 +13,5 @@ export interface ProTableProps {
 
 export interface ResponseProps<T> {
   list: Array<T>;
-  count: number;
+  count?: number;
 }

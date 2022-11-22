@@ -1,0 +1,64 @@
+@import url('@assets/less/common.less');
+
+.block_user_other{
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  margin: 20rpx 20rpx 0;
+  .other_item{
+    display: flex;
+    align-items: center;
+    height: 120rpx;
+    padding: 0 30rpx;
+    .iconfont{
+      font-size: 42rpx;
+      color: @textColor;
+    }
+    .title{
+      font-size: 28rpx;
+      color: @textColor;
+      padding-left: 20rpx;
+    }
+  }
+}
+
+.block_user_detail{
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  overflow: hidden;
+  width: auto;
+  &:first-child{
+    border-radius: 12rpx 12rpx 0 0;
+  }
+  &:last-child{
+    border-radius: 0 0 12rpx 12rpx;
+    .name{
+      border-bottom: 0;
+    }
+  }
+  .image{
+    width: 80rpx;
+    height: 80rpx;
+    object-fit: cover;
+    border-radius: 12rpx;
+    margin: 20rpx;
+  }
+  .name{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    font-size: 28rpx;
+    color: @textColor;
+    margin-right: 20rpx;
+    height: 100%;
+    box-sizing: content-box;
+    border-bottom: 1PX solid @splitColor;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

@@ -32,9 +32,9 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
     limit: 10
   }, props)
 
-  const [initialValues, setInitialValues] = useState(Object.assign({
+  const [initialValues, setInitialValues] = useState<any>(Object.assign(typeof props?.limit === 'number' && {
     page: 1,
-    limit: props?.limit || 10
+    limit: props.limit
   }, props?.initialValues))
   const [list, setList] = useState<Array<T>>([])
   const [count, setCount] = useState<number>(0)
@@ -42,31 +42,40 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
   const [hitbottom, setHitbottom] = useState<'hidden' | 'loading' | 'finish'>('hidden')
 
   useEffect(() => {
-    useRequest({ ...props?.initialValues, page: 1, limit: props?.limit || 10 })
+    const currentValues: any = props.initialValues
+    if (typeof props.limit === 'number') {
+      currentValues.page = 1
+      currentValues.limit = props.limit
+    }
+    useRequest(currentValues)
   }, [props.initialValues])
 
   const useRequest = async (formValues = initialValues, isRefresh: boolean = false) => {
     let result = await props.request<T>(formValues)
-    let currentList = formValues.page > 1 ? list.concat(result.list) : result.list
-    formValues.page === 1 && Taro.pageScrollTo({
+    let currentList = typeof props.limit === 'number' && formValues.page > 1 ? list.concat(result.list) : result.list
+    typeof props.limit === 'number' && formValues.page === 1 && Taro.pageScrollTo({
       scrollTop: 0
     });
     setInitialValues(formValues)
     setList(currentList)
-    setCount(result.count)
+    typeof props.limit === 'number' && setCount(result?.count || 0)
     isRefresh && setRefresh('end');
     isRefresh && setTimeout(() => {
       Taro.stopPullDownRefresh()
       setRefresh('start')
     }, 2000)
-    setHitbottom(currentList.length < result.count ? 'hidden' : 'finish')
+    typeof props.limit === 'number' && setHitbottom(currentList.length < (result?.count || 0) ? 'hidden' : 'finish')
   }
 
   usePullDownRefresh(() => {
     console.log('下拉')
     if (defaultProps.refresh) {
       setRefresh('loading')
-      useRequest({ ...initialValues, page: 1 }, true)
+      const currentValues: any = initialValues
+      if (typeof props.limit === 'number') {
+        currentValues.page = 1
+      }
+      useRequest(currentValues, true)
     } else {
       Taro.stopPullDownRefresh()
     }
@@ -74,7 +83,7 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
 
   useReachBottom(() => {
     console.log('上推')
-    if (hitbottom === 'finish') {
+    if (hitbottom === 'finish' || props.limit === false) {
       return false;
     } else if (!defaultProps.hitbottom) {
       setHitbottom('hidden')

@@ -50,13 +50,13 @@ const Setting: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
   return (
     <React.Fragment>
       <View
-        className="block_user_back"
+        className="block_sett_back"
         style={{
           height: `calc(320rpx + ${storeGlobal.navigateHeight}px)`
         }}
       />
-      <View className="block_user_card">
-        <View className="card_user">
+      <View className="block_sett_card">
+        <View className="card_sett">
           <UsImage className="image" shape="circle" />
           <Text className="name">style@@</Text>
         </View>
@@ -65,7 +65,7 @@ const Setting: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
           <View className="text">{storeComposite.loginDetail.setime}</View>
         </View>
       </View>
-      <View className="block_user_list">
+      <View className="block_sett_list">
         {columns.map((element: SettingItem, index: number) => (
           <View
             className="inline_list_item"

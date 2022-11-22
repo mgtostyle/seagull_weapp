@@ -69,6 +69,10 @@ export interface CompositeSelectAdministratorList {
   limit?: number;
 }
 
+export interface CompositeAdministratorAccountList {
+  keyword: string;
+}
+
 export interface CompositeAdministratorApplyList {
   page?: number;
   limit?: number;

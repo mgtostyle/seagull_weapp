@@ -1,0 +1,32 @@
+@import url('@assets/less/common.less');
+
+.block_index_detail{
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  &:last-child{
+    margin-bottom: 0;
+  }
+  .image{
+    width: 80rpx;
+    height: 80rpx;
+    object-fit: cover;
+    border-radius: 12rpx;
+    overflow: hidden;
+  }
+  .name{
+    flex: 1;
+    padding-left: 20rpx;
+    font-size: 28rpx;
+    color: @textColor;
+  }
+  .status{
+    font-size: 28rpx;
+    color: @placeholderColor;
+    padding: 0 6PX;
+  }
+}

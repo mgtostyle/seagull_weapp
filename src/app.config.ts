@@ -11,7 +11,9 @@ export default defineAppConfig({
         'pages/index/index',
         'pages/miniApp/update',
         'pages/miniApp/detail',
-        'pages/miniApp/adminAdds'
+        'pages/miniApp/adminAdds',
+        'pages/accounts/detail',
+        'pages/accounts/apply'
       ]
     }
   ],

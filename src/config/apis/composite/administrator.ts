@@ -1,7 +1,7 @@
 import Request from "@/config/network/request"
-import type { CompositeAdministratorApplyList } from '@/config/apis/index/interface'
+import type { CompositeAdministratorAccountList, CompositeAdministratorApplyList } from '@/config/apis/index/interface'
 
-export const accountList = new Request<unknown>('GET', '/composite/terminal/administrator/accountList', 'Object')
+export const accountList = new Request<CompositeAdministratorAccountList>('POST', '/composite/terminal/administrator/accountList', 'Object')
 
 export const applyList = new Request<CompositeAdministratorApplyList>('POST', '/composite/terminal/administrator/applyList', 'Object')
 

@@ -14,3 +14,9 @@ export interface SettingItem {
   value: string;
   result?: () => void;
 }
+
+export interface UsersOperateItem {
+  icon: string;
+  name: string;
+  result?: () => void;
+}
