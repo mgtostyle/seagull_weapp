@@ -8,12 +8,12 @@ import { UsImage } from '@components/usIndex'
 import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
 
 const Users: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
-
+  
   const [querySelect, setQuerySelect] = useState<any>({})
 
   const columns: Array<UsersOperateItem> = [
     {
-      icon: '',
+      icon: 'icon-line-adduser',
       name: '待审核用户',
       result: () => Taro.navigateTo({
         url: '/composite/pages/accounts/apply'
@@ -25,11 +25,13 @@ const Users: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     try {
       let result = await $apis.composite.administrator.accountList.post(formValues)
       return {
-        list: result.data.list.sort((a, b) => a.nickName.localeCompare(b.nickName, 'zh-CN'))
+        list: result.data.list.sort((a, b) => a.nickName.localeCompare(b.nickName, 'zh-CN')),
+        count: result.data.list?.length || 0
       }
     } catch (error) {
       return {
-        list: []
+        list: [],
+        count: 0
       }
     }
   }

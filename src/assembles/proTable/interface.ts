@@ -13,5 +13,5 @@ export interface ProTableProps {
 
 export interface ResponseProps<T> {
   list: Array<T>;
-  count?: number;
+  count: number;
 }

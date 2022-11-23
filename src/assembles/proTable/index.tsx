@@ -64,7 +64,7 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
       Taro.stopPullDownRefresh()
       setRefresh('start')
     }, 2000)
-    typeof props.limit === 'number' && setHitbottom(currentList.length < (result?.count || 0) ? 'hidden' : 'finish')
+    setHitbottom(currentList.length < result.count ? 'hidden' : 'finish')
   }
 
   usePullDownRefresh(() => {

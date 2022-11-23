@@ -15,7 +15,7 @@ const Index: React.FC<PropsWithChildren<{ $apis, $commonLess }>> = ({ $apis, $co
 
   const dispatch = useDispatch()
   const mangeRef = useRef<any>()
-  const [tabbarIndex, setTabbarIndex] = useState<TabbarIndex>(2)
+  const [tabbarIndex, setTabbarIndex] = useState<TabbarIndex>(0)
 
   const containerColumns = [
     {
