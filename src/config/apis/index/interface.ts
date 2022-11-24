@@ -77,3 +77,7 @@ export interface CompositeAdministratorApplyList {
   page?: number;
   limit?: number;
 }
+
+export interface CompositeBaseUserInfo {
+  jscode: string;
+}

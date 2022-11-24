@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { compositeActions } from '@/store/composite'
 
 import { UsContainer, UsTabbar } from '@components/usIndex'
-import Charts from './charts'
+import Statistics from './statistics'
 import Manage from './manage'
 import Users from './users'
 import Setting from './setting'
@@ -67,18 +67,10 @@ const Index: React.FC<PropsWithChildren<{ $apis, $commonLess }>> = ({ $apis, $co
       isfull={tabbarIndex !== 3}
       columns={containerColumns}
     >
-      {((index) => {
-        switch (index) {
-          case 0:
-            return <Charts />
-          case 1:
-            return <Manage ref={mangeRef} {...{ $apis, $commonLess } as any} />
-          case 2:
-            return <Users $apis={$apis} />
-          case 3:
-            return <Setting $apis={$apis} />
-        }
-      })(tabbarIndex)}
+      <Statistics visible={tabbarIndex === 0} $apis={$apis} />
+      <Manage visible={tabbarIndex === 1} ref={mangeRef} $apis={$apis} $commonLess={$commonLess} />
+      <Users visible={tabbarIndex === 2} $apis={$apis} />
+      <Setting visible={tabbarIndex === 3} $apis={$apis} />
       <UsTabbar
         current={tabbarIndex}
         list={tabbarList}

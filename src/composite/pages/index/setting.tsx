@@ -1,18 +1,20 @@
-import React, { PropsWithChildren } from "react"
+import React, { PropsWithChildren, useState } from "react"
 import type { SettingItem } from './interface'
 import './setting.less'
-import Taro, { useLoad } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import Taro, { useLoad, useDidShow } from '@tarojs/taro'
+import { View } from '@tarojs/components'
 import { useSelector, useDispatch } from "react-redux"
 import { compositeActions } from "@/store/composite"
 
 import { UsImage } from '@components/usIndex'
 
-const Setting: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
+const Setting: React.FC<PropsWithChildren<{ visible, $apis }>> = ({ visible, $apis }) => {
 
   const storeGlobal = useSelector(state => (state as any).global)
   const storeComposite = useSelector(state => (state as any).composite)
   const dispatch = useDispatch()
+  const [userInfo, setUserInfo] = useState<any>(null)
+  const [isJump, setIsJump] = useState<boolean>(false)
 
   const columns: Array<SettingItem> = [
     {
@@ -41,13 +43,31 @@ const Setting: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     getUserInfo()
   })
 
-  const getUserInfo = () => {
-    $apis.composite.common.baseUserInfo.get().then(res => {
-      console.log(res)
+  useDidShow(() => {
+    isJump && getUserInfo()
+  })
+
+  const getUserInfo = async () => {
+    const jscode = await new Promise((resolve) => Taro.login({
+      success: result => resolve(result?.code || ''),
+      fail: () => resolve('')
+    }))
+    $apis.composite.common.baseUserInfo.post({
+      jscode
+    }).then(res => {
+      setUserInfo(res.data.userInfo)
+      setIsJump(false)
     })
   }
 
-  return (
+  const toRegister = () => {
+    Boolean(userInfo === null) && Taro.navigateTo({
+      url: '/pages/verify/register/index',
+      success: () => setIsJump(true)
+    })
+  }
+
+  return visible && (
     <React.Fragment>
       <View
         className="block_sett_back"
@@ -56,9 +76,19 @@ const Setting: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
         }}
       />
       <View className="block_sett_card">
-        <View className="card_sett">
-          <UsImage className="image" shape="circle" />
-          <Text className="name">style@@</Text>
+        <View
+          className="card_sett"
+          onClick={toRegister}
+        >
+          <UsImage className="sett_image" src={userInfo?.avatarUrl} shape="circle" />
+          <View className="sett_info">
+            <View className="name">{userInfo?.nickName || '平台管家'}</View>
+            {Boolean(userInfo !== null) ? (
+              <View className="true">已授权</View>
+            ) : (
+              <View className="false">去认证</View>
+            )}
+          </View>
         </View>
         <View className="card_detail">
           <View className="text">登录于</View>

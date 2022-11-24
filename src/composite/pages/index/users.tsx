@@ -7,7 +7,7 @@ import { View } from '@tarojs/components'
 import { UsImage } from '@components/usIndex'
 import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
 
-const Users: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
+const Users: React.FC<PropsWithChildren<{ visible, $apis }>> = ({ visible, $apis }) => {
   
   const [querySelect, setQuerySelect] = useState<any>({})
 
@@ -42,7 +42,7 @@ const Users: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     })
   }
 
-  return (
+  return visible && (
     <React.Fragment>
       <QuerySelect
         search

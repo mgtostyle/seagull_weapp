@@ -23,7 +23,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
   constructor (props) {
     super (props)
     this.state = {
-      isHead: getCurrentPages().length <= 1 ? true : false
+      isHead: getCurrentPages().length <= 1 && !Boolean(props?.setting) ? true : false
     }
   }
 

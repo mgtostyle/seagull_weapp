@@ -8,7 +8,7 @@ import moment from 'moment'
 import { UsImage, UsButton } from '@components/usIndex'
 import { QuerySelect, ProTable } from '@/assembles/moduleIndex'
 
-const Manage: React.FC<PropsWithChildren<{ $apis, $commonLess }>> = forwardRef(({ $apis, $commonLess }, ref) => {
+const Manage: React.FC<PropsWithChildren<{ visible, $apis, $commonLess, ref }>> = forwardRef(({ visible, $apis, $commonLess }, ref) => {
 
   const querySelectRef = useRef<any>()
   const proTableRef = useRef<any>()
@@ -81,7 +81,7 @@ const Manage: React.FC<PropsWithChildren<{ $apis, $commonLess }>> = forwardRef((
     })
   }
 
-  return (
+  return visible && (
     <React.Fragment>
       <QuerySelect
         ref={querySelectRef}
