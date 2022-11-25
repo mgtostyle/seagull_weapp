@@ -4,7 +4,15 @@ module.exports = {
   },
   defineConstants: {
   },
-  mini: {},
+  mini: {
+    webpackChain (chain) {
+      chain.merge({
+        performance: {
+          maxAssetSize: 1024 * 1024
+        }
+      })
+    }
+  },
   h5: {
     /**
      * WebpackChain 插件配置

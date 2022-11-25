@@ -6,6 +6,8 @@ import { EChart } from "echarts-taro3-react"
 
 class PlatformPie extends Component<PropsWithChildren<PlatformPieProps>> {
 
+  private chartRef;
+
   static defaultProps: PlatformPieProps = {
     statistics: []
   }
@@ -51,17 +53,13 @@ class PlatformPie extends Component<PropsWithChildren<PlatformPieProps>> {
         }
       ]
     };
-    this.barChart.refresh(defautOption);
+    this.chartRef.refresh(defautOption);
   }
-
-  barChart: any;
-
-  refBarChart = (node) => this.barChart = node;
 
   render() {
     return (
       <View className={less.platform_pie_container}>
-        <EChart ref={this.refBarChart} canvasId='bar-canvas' />
+        <EChart ref={node => this.chartRef = node} canvasId='pie-chart' />
       </View>
     );
   }

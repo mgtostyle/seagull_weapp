@@ -39,13 +39,8 @@ const Setting: React.FC<PropsWithChildren<{ visible, $apis }>> = ({ visible, $ap
     })
   }
 
-  useLoad(() => {
-    getUserInfo()
-  })
-
-  useDidShow(() => {
-    isJump && getUserInfo()
-  })
+  useLoad(() => getUserInfo())
+  useDidShow(() => isJump && getUserInfo())
 
   const getUserInfo = async () => {
     const jscode = await new Promise((resolve) => Taro.login({
