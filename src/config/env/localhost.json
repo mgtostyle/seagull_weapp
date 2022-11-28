@@ -1,3 +1,8 @@
 {
-  "DOMAIN_NAME": "http://127.0.0.1:3031"
+  "composite": {
+    "DOMAIN_NAME": "http://127.0.0.1:3031"
+  },
+  "wfood": {
+    "DOMAIN_NAME": "http://127.0.0.1:3032"
+  }
 }

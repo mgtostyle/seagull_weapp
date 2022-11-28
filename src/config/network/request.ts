@@ -1,15 +1,13 @@
 import Https from './https'
 import type { Method, FormDataType, UploadFileOptions, OperateDefaultParams, RefuseItem } from './interface'
+import { esParams, esRequest } from './extends'
 
 export default class Request<T> extends Https<T> {
 
   #joggle: string;
-  #operateDefaultParams: OperateDefaultParams = {
-    toast: false
-  }
 
   constructor (method: Method, joggle: string, type: FormDataType = 'Object') {
-    super (method)
+    super (method, joggle)
     this.#joggle = joggle
     this[method.toLocaleLowerCase()] = (...args: [T]) => this.#method(type, ...args)
   }
@@ -21,24 +19,41 @@ export default class Request<T> extends Https<T> {
     return this
   }
 
-  operate (args: OperateDefaultParams = this.#operateDefaultParams) {
-    const { callback, taskCb, ...params } = args
+  operate (defaultParams: OperateDefaultParams = this.operateDefaultParams) {
+    const { callback, taskCb, ...params } = defaultParams
+    this.operateDefaultParams = params
     typeof callback === 'function' && callback(this)
     this.taskCb = typeof taskCb === 'function' ? taskCb : false
+    return this
+  }
+
+  #default () {
+    const _this = this
+    try {
+      Object.keys(_this.operateDefaultParams).map((key: string) => {
+        if (esParams.includes(key) && typeof _this.operateDefaultParams[key] !== 'function') {
+          esRequest[key](_this, _this.operateDefaultParams[key])
+        } else {
+          esRequest[key](_this)
+        }
+      })
+    } catch (error) {
+      console.log(error.message)
+    }
     return this
   }
 
   #method (type: FormDataType, params: T) {
     switch (type) {
       case 'Suffix':
-        return this.setPromise(this.#joggle + params)
+        return this.#default().setPromise(this.#joggle + params)
       default:
-        return this.setPromise(this.#joggle, params)
+        return this.#default().setPromise(this.#joggle, params)
     }
   }
 
   upload (params: UploadFileOptions) {
-    return this.setUpload(this.#joggle, params)
+    return this.#default().setUpload(this.#joggle, params)
   }
 
 }

@@ -6,6 +6,12 @@ import Taro from '@tarojs/taro'
 
 export default class Environment implements EnvironmentProps {
 
+  #localhost: DomainValues = localhost.composite;
+
+  constructor (joggle: string) {
+    if (!Boolean(process.env.LOCAL_ENV)) this.#localhost = localhost[joggle.split('/')[1]]
+  }
+
   get #local (): DomainValues {
     switch (process.env.LOCAL_ENV) {
       case 'test':
@@ -13,7 +19,7 @@ export default class Environment implements EnvironmentProps {
       case 'prod':
         return production;
       default:
-        return localhost;
+        return this.#localhost;
     }
   }
 

@@ -1,16 +1,29 @@
 import Environment from "./environment"
-import type { HttpsProps, DomainValues, RequestDefaultParams, Method, ResponseParams, UploadFileParams, UploadFileOptions } from "./interface"
+import type {
+  HttpsProps,
+  DomainValues,
+  RequestDefaultParams,
+  OperateDefaultParams,
+  Method,
+  ResponseParams,
+  UploadFileParams,
+  UploadFileOptions
+} from "./interface"
+import { esParams, esResponse } from './extends'
 import Taro, { RequestParams } from "@tarojs/taro"
 
 export default class Https<ReqOptions> extends Environment implements HttpsProps {
 
   #environment: DomainValues = super.env();
   #requestDefaultParams: RequestDefaultParams;
+  operateDefaultParams: OperateDefaultParams = {
+    toast: true
+  }
   useRefuse = false
   taskCb: boolean | (<Task>(values?: Task) => void) = false
 
-  constructor (method: Method) {
-    super ()
+  constructor (method: Method, joggle: string) {
+    super (joggle)
     this.#requestDefaultParams = {
       method,
       timeout: 5000,
@@ -39,7 +52,7 @@ export default class Https<ReqOptions> extends Environment implements HttpsProps
       if (Object.prototype.toString.call(params) === '[object Object]') handler.data = params
       handler.success = (result) => {
         const res = result.data as ResponseParams
-        this.#setSuccess(res, resolve)
+        this.#default().#setSuccess(res, resolve)
       }
       handler.fail = (error) => {
         reject(error)
@@ -65,7 +78,7 @@ export default class Https<ReqOptions> extends Environment implements HttpsProps
           authorization: `Bearer ${token}`
         }),
         success: (result) => result.statusCode === 200
-        ? ((res) => this.#setSuccess(res, resolve))(JSON.parse(result.data))
+        ? ((res) => this.#default().#setSuccess(res, resolve))(JSON.parse(result.data))
         : Taro.showToast({
           title: '请求失败，请重新试试吧',
           icon: 'none',
@@ -84,6 +97,18 @@ export default class Https<ReqOptions> extends Environment implements HttpsProps
       return !this.useRefuse && uploadTask;
     }
     return new Promise((resolve, reject) => uploadHandler(resolve, reject))
+  }
+
+  #default () {
+    const _this = this
+    try {
+      Object.keys(_this.operateDefaultParams).map((key: string) => {
+        esParams.includes(key) && esResponse[key](_this)
+      })
+    } catch (error) {
+      console.log(error.message)
+    }
+    return this
   }
 
   #setSuccess (result, resolve) {
