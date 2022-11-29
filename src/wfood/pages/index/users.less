@@ -1,0 +1,57 @@
+@import url('@assets/less/common.less');
+
+.block_users_header{
+  position: relative;
+  display: block;
+  width: 100vw;
+  .inline_users_back{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 120rpx;
+    background-color: @placeholderColor;
+    overflow: hidden;
+  }
+  .inline_users_info{
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 120rpx 20rpx 0;
+    background-color: #ffffff;
+    padding-bottom: 50rpx;
+    border-radius: 12rpx;
+    .info_image{
+      width: 160rpx;
+      height: 160rpx;
+      border: 10rpx solid #ffffff;
+      object-fit: cover;
+      margin: -90rpx 0 15rpx;
+    }
+    .info_name{
+      font-size: 36rpx;
+      font-weight: bolder;
+      padding-bottom: 10rpx;
+    }
+    .info_code{
+      font-size: 24rpx;
+      color: @labelColor;
+      padding-bottom: 20rpx;
+    }
+    .info_tag{
+      display: flex;
+      align-items: center;
+      grid-gap: 16rpx;
+      text{
+        padding: 6rpx 12rpx;
+        font-size: 18rpx;
+        color: #ffffff;
+        background-color: @textColor;
+        border-radius: 4rpx;
+        overflow: hidden;
+      }
+    }
+  }
+}

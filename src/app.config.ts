@@ -16,6 +16,12 @@ export default defineAppConfig({
         'pages/accounts/detail',
         'pages/accounts/apply'
       ]
+    },
+    {
+      root: 'wfood',
+      pages: [
+        'pages/index/index'
+      ]
     }
   ],
   window: {
