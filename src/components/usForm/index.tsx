@@ -75,10 +75,12 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
         {...params}
         onSubmit={(e) => this.onSubmit(e)}
       >
-        {React.Children.map(this.props.children, (childrenNode: any) => React.cloneElement(childrenNode, {
-          initialValue: initialValues?.[childrenNode.props.name] || '',
-          setFieldValue: this.setFieldValue.bind(this)
-        }))}
+        {React.Children.map(this.props.children, (childrenNode: any) => {
+          return Boolean(childrenNode) && React.cloneElement(childrenNode, {
+            initialValue: initialValues?.[childrenNode.props.name] || '',
+            setFieldValue: this.setFieldValue.bind(this)
+          })
+        })}
         <View className={less.inline_item_submit}>
           <View
             className={less.submit_box}

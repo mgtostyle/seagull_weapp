@@ -5,6 +5,9 @@ import * as compositeSelect from '@/config/apis/composite/select'
 import * as compositeCommon from '@/config/apis/composite/common'
 import * as compositeAdministrator from '@/config/apis/composite/administrator'
 
+import * as wfoodCommon from '@/config/apis/wfood/common'
+import * as wfoodSetting from '@/config/apis/wfood/setting'
+
 export default {
   composite: {
     verify: compositeVerify,
@@ -13,5 +16,9 @@ export default {
     select: compositeSelect,
     common: compositeCommon,
     administrator: compositeAdministrator
+  },
+  wfood: {
+    common: wfoodCommon,
+    setting: wfoodSetting
   }
 }

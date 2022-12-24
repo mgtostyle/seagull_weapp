@@ -26,11 +26,11 @@ const Setting: React.FC<PropsWithChildren<{ visible, $apis }>> = ({ visible, $ap
       icon: 'icon-line-signout1',
       name: '退出账号',
       value: '',
-      result: () => setLoginOut()
+      result: () => getLoginOut()
     }
   ]
 
-  const setLoginOut = () => {
+  const getLoginOut = () => {
     Taro.showModal({
       title: '退出账号',
       content: '是否退出当前账号，并返回登录页面，请再次确认您的操作！！！',

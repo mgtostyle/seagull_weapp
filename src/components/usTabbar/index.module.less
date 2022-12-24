@@ -21,17 +21,30 @@
     align-items: center;
     justify-content: center;
     .icon{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50rpx;
+      height: 50rpx;
       font-size: 38rpx;
       color: @labelColor;
     }
     .name{
       font-size: 20rpx;
       color: @labelColor;
-      margin-top: 6rpx;
     }
     &.active{
       .icon{
-        color: @textColor;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        background-color: @textColor;
+        width: 70rpx;
+        height: 70rpx;
+        margin-top: -40rpx;
+        border-radius: 50%;
+        border: 10rpx solid #ffffff;
       }
       .name{
         color: @textColor;

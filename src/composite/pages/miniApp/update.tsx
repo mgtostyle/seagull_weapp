@@ -43,7 +43,7 @@ const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis 
     })).then(res => res.data.status === 1 && Taro.navigateBack({
       delta: 1,
       success: () => Taro.showToast({
-        title: id ? '编辑' : '创建成功',
+        title: id ? '更新成功' : '创建成功',
         icon: 'success',
         duration: 1500
       })

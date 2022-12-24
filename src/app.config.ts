@@ -20,7 +20,9 @@ export default defineAppConfig({
     {
       root: 'wfood',
       pages: [
-        'pages/index/index'
+        'pages/index/index',
+        'pages/navigateMent/index',
+        'pages/navigateMent/update'
       ]
     }
   ],

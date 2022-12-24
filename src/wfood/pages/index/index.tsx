@@ -4,7 +4,7 @@ import type { TabbarIndex } from './interface'
 import { UsContainer, UsTabbar } from "@components/usIndex"
 import Users from './users'
 
-const Index: React.FC<PropsWithChildren> = () => {
+const Index: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
   const [tabbarIndex, setTabbarIndex] = useState<TabbarIndex>(2)
 
@@ -28,7 +28,7 @@ const Index: React.FC<PropsWithChildren> = () => {
       title={tabbarList[tabbarIndex].name}
       isfull={tabbarIndex !== tabbarList.length - 1}
     >
-      <Users visible={tabbarIndex === tabbarList.length - 1} />
+      <Users visible={tabbarIndex === tabbarList.length - 1} $apis={$apis} />
       <UsTabbar
         current={tabbarIndex}
         list={tabbarList}

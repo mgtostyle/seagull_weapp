@@ -9,7 +9,7 @@ export default class Environment implements EnvironmentProps {
   #localhost: DomainValues = localhost.composite;
 
   constructor (joggle: string) {
-    if (!Boolean(process.env.LOCAL_ENV)) this.#localhost = localhost[joggle.split('/')[1]]
+    if (process.env.LOCAL_ENV === 'local') this.#localhost = localhost[joggle.split('/')[1]]
   }
 
   get #local (): DomainValues {
