@@ -26,9 +26,6 @@ const NavigateUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
   })
 
   const onSubmit = (values) => {
-    values.level = + level
-    if (type === 'MODIFY') values.id = detail.id
-    if (+level !== 1) values.connect_id = detail.connect_id
     $apis.wfood.setting.navigateUpdate.post(Object.assign(
       values,
       type === 'MODIFY' && {
@@ -85,7 +82,7 @@ const NavigateUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
           <UsInput placeholder='请输入...' />
         </UsForm.Item>
         {Number(level) === 3 && (
-          <UsForm.Item label="关联路径" name="path">
+          <UsForm.Item label="关联路径" name="app_path">
             <UsInput placeholder='请输入...' />
           </UsForm.Item>
         )}
