@@ -47,15 +47,52 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     })
   }
 
-  const setVisible = () => {
-    // proTableRef.current.setList(list => {
-    //   console.log(
-    //     list.reduce((prev, curr) => {
-    //       return curr
-    //     }, [])
-    //   )
-    //   return list
-    // })
+  const setVisible = (id: string, type?: string, value?) => {
+    proTableRef.current.setList(list => {
+      const isChange = (currList) => {
+        return currList.map(item => {
+          if (item.id === id) {
+            switch (type) {
+              case 'status':
+                item.status = value
+                break;
+              default:
+                item.visible = !Boolean(item.visible)
+                break;
+            }
+          }
+          else if (item?.list && Array.isArray(item.list)) isChange(item.list)
+          return item
+        })
+      }
+      return isChange(list)
+    })
+  }
+
+  const setNavigateStatus = (detail) => {
+    let { id, status } = detail
+    $apis.wfood.setting.navigateStatus.get(`/${id}/${status === 1 ? 2 : 1}`).then(res => {
+      res.data.status === 1 && Taro.showToast({
+        title: status === 1 ? '已隐藏' : '已展示',
+        icon: 'success',
+        duration: 3000,
+        success: () => setVisible(id, 'status', status === 1 ? 2 : 1)
+      })
+    })
+  }
+
+  const setNavigateDelete = (id: string) => {
+    Taro.showModal({
+      title: '提示',
+      content: '是否删除该导航栏信息，将无法恢复此选项，请谨慎操作！！！',
+      success: resModal => {
+        if (resModal.confirm) {
+          $apis.wfood.setting.navigateDelete.delete(`/${id}`).then(res => {
+            res.data.status === 1 && proTableRef.current?.reLoad()
+          })
+        }
+      }
+    })
   }
 
   return (
@@ -82,6 +119,7 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
               </View>
               <View
                 className="header_operate iconfont icon-line-open"
+                onClick={() => setVisible(detail.id)}
               />
             </View>
             {Boolean(detail?.visible) && (
@@ -110,7 +148,14 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                 >编辑</UsButton>
                 <UsButton
                   size="mini"
+                  ghost
+                  theme={detail.status === 1 ? 'danger' : 'primary'}
+                  onClick={() => setNavigateStatus(detail)}
+                >{detail.status === 1 ? '隐藏' : '展示'}</UsButton>
+                <UsButton
+                  size="mini"
                   theme="danger"
+                  onClick={() => setNavigateDelete(detail.id)}
                 >删除</UsButton>
               </View>
             )}
@@ -126,6 +171,7 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                   </View>
                   <View
                     className="header_operate iconfont icon-line-open"
+                    onClick={() => setVisible(secDetail.id)}
                   />
                 </View>
                 {Boolean(secDetail?.visible) && (
@@ -154,7 +200,14 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                     >编辑</UsButton>
                     <UsButton
                       size="mini"
+                      ghost
+                      theme={secDetail.status === 1 ? 'danger' : 'primary'}
+                      onClick={() => setNavigateStatus(secDetail)}
+                    >{secDetail.status === 1 ? '隐藏' : '展示'}</UsButton>
+                    <UsButton
+                      size="mini"
                       theme="danger"
+                      onClick={() => setNavigateDelete(detail.id)}
                     >删除</UsButton>
                   </View>
                 )}
@@ -170,6 +223,7 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                       </View>
                       <View
                         className="header_operate iconfont icon-line-open"
+                        onClick={() => setVisible(thrDetail.id)}
                       />
                     </View>
                     {Boolean(thrDetail?.visible) && (
@@ -187,7 +241,14 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                         >编辑</UsButton>
                         <UsButton
                           size="mini"
+                          ghost
+                          theme={thrDetail.status === 1 ? 'danger' : 'primary'}
+                          onClick={() => setNavigateStatus(thrDetail)}
+                        >{thrDetail.status === 1 ? '隐藏' : '展示'}</UsButton>
+                        <UsButton
+                          size="mini"
                           theme="danger"
+                          onClick={() => setNavigateDelete(thrDetail.id)}
                         >删除</UsButton>
                       </View>
                     )}

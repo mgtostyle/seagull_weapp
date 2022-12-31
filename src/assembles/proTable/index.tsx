@@ -21,7 +21,8 @@ const ProTableItem = <T extends unknown>(props): ReactElement | null => {
 const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): ReactElement | null => {
 
   useImperativeHandle(ref, () => ({
-    setList
+    setList,
+    reLoad: () => useRequest({ ...initialValues, page: 1 })
   }))
 
   const defaultProps: ProTableProps = Object.assign({

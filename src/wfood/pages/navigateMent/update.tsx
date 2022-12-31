@@ -24,14 +24,30 @@ const NavigateUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
         return '未定义'
     }
   })
+  const [navigate_connect, setConnectBy] = useState<string>('')
+
+  const getNavigateDetail = async () => {
+    try {
+      let result = await $apis.wfood.setting.navigateDetail.get(`/id/${detail?.id}`)
+      let { icon, path, connect_by, ...params } = result.data.detail
+      setConnectBy(connect_by)
+      return {
+        ...params,
+        app_icon: icon,
+        app_path: path
+      }
+    } catch (error) {
+      return {}
+    }
+  }
 
   const onSubmit = (values) => {
     $apis.wfood.setting.navigateUpdate.post(Object.assign(
       values,
-      type === 'MODIFY' && {
+      type === 'MODITY' && {
         id: detail.id
       },
-      +level !== 1 && {
+      type === 'CREATE' && +level !== 1 && {
         connect_id: detail.connect_id
       },
       {
@@ -54,13 +70,12 @@ const NavigateUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
         <View className="inline_title">基本信息</View>
         <View className="inline_content">
           <Text>类型：{navigat_type}</Text>
-          {Boolean(detail?.connect_id) && (
-             <Text>关联 ~ {}</Text>
-          )}
+          {Boolean(navigate_connect) && <Text>所属：{navigate_connect}</Text>}
         </View>
       </View>
       <UsForm
         formRef={node => setFormRef(node)}
+        request={detail?.id ? getNavigateDetail : false}
         buttonConfig={{
           submitText: detail?.id ? '更新' : '创建'
         }}
@@ -76,7 +91,7 @@ const NavigateUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
           <UsInput placeholder="请输入..." />
         </UsForm.Item>
         <UsForm.Item label="唯一ID" name="key">
-          <UsInput placeholder='请输入...' />
+          <UsInput placeholder='请输入...' disabled={Boolean(detail.id)} />
         </UsForm.Item>
         <UsForm.Item label="权重" name="weight">
           <UsInput placeholder='请输入...' />

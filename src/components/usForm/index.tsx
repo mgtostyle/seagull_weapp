@@ -58,8 +58,7 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
       content: `再次确认信息是否填写完整，并${buttonConfig?.submitText || '提交'}`,
       confirmText: buttonConfig?.submitText || '提交',
       success: res => res.confirm && typeof onSubmit === 'function' && onSubmit({
-        ...e.detail.value,
-        ...this.state.initialValues
+        ...e.detail.value
       })
     })
   }
