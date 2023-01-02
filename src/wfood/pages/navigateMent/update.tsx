@@ -44,7 +44,7 @@ const NavigateUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
   const onSubmit = (values) => {
     $apis.wfood.setting.navigateUpdate.post(Object.assign(
       values,
-      type === 'MODITY' && {
+      type === 'MODIFY' && {
         id: detail.id
       },
       type === 'CREATE' && +level !== 1 && {
@@ -91,7 +91,7 @@ const NavigateUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
           <UsInput placeholder="请输入..." />
         </UsForm.Item>
         <UsForm.Item label="唯一ID" name="key">
-          <UsInput placeholder='请输入...' disabled={Boolean(detail.id)} />
+          <UsInput placeholder='请输入...' disabled={Boolean(detail?.id)} />
         </UsForm.Item>
         <UsForm.Item label="权重" name="weight">
           <UsInput placeholder='请输入...' />

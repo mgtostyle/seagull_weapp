@@ -31,7 +31,6 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
   }
 
   setFieldValue (params: FieldValue) {
-    console.log(params)
     this.setState((state: PageState) => {
       state.initialValues[params.name] = params.value
       return state;
@@ -53,13 +52,15 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
 
   private onSubmit (e) {
     const { buttonConfig, onSubmit }: PageProps = this.props
+    const params = JSON.parse(JSON.stringify({
+      ...e.detail.value,
+      ...this.state.initialValues
+    }))
     Taro.showModal({
       title: '提示',
       content: `再次确认信息是否填写完整，并${buttonConfig?.submitText || '提交'}`,
       confirmText: buttonConfig?.submitText || '提交',
-      success: res => res.confirm && typeof onSubmit === 'function' && onSubmit({
-        ...e.detail.value
-      })
+      success: res => res.confirm && typeof onSubmit === 'function' && onSubmit(params)
     })
   }
 

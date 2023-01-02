@@ -8,6 +8,7 @@ import * as compositeAdministrator from '@/config/apis/composite/administrator'
 import * as wfoodCommon from '@/config/apis/wfood/common'
 import * as wfoodSetting from '@/config/apis/wfood/setting'
 import * as wfoodGallery from '@/config/apis/wfood/gallery'
+import * as wfoodCategory from '@/config/apis/wfood/category'
 
 export default {
   composite: {
@@ -21,6 +22,7 @@ export default {
   wfood: {
     common: wfoodCommon,
     setting: wfoodSetting,
-    gallery: wfoodGallery
+    gallery: wfoodGallery,
+    category: wfoodCategory
   }
 }

@@ -18,9 +18,10 @@ const GalleryIndex: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     })
   }
 
-  const toPageIndex = (path: string) => {
+  const toPageIndex = (detail) => {
+    let { app_path, name } = detail
     Taro.navigateTo({
-      url: path
+      url: `${app_path}?title=${name}`
     })
   }
 
@@ -34,7 +35,7 @@ const GalleryIndex: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
               <View
                 className="list_item"
                 key={itemIndex}
-                onClick={() => toPageIndex(element.app_path)}
+                onClick={() => toPageIndex(item)}
               >
                 <View className="name">{item.name}</View>
                 <View className="iconfont icon-line-right" />

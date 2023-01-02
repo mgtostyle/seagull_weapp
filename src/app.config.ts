@@ -23,7 +23,11 @@ export default defineAppConfig({
         'pages/index/index',
         'pages/navigateMent/index',
         'pages/navigateMent/update',
-        'pages/gallery/index'
+        'pages/gallery/index',
+        'pages/catesMent/list',
+        'pages/catesMent/update',
+        'pages/goodsMent/list',
+        'pages/goodsMent/publish'
       ]
     }
   ],

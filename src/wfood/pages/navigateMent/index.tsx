@@ -1,7 +1,7 @@
-import React, { PropsWithChildren, useRef } from 'react'
+import React, { PropsWithChildren, useRef, useState } from 'react'
 import './index.less'
 import type { NavigateUpdateParams } from './interface'
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
 
@@ -11,11 +11,12 @@ import { QuerySelect, ProTable } from '@assembles/moduleIndex'
 const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
   const proTableRef = useRef<any>()
+  const [isJump, setIsJump] = useState<boolean>(false)
 
   const containerColumns = [
     {
       name: '创建模块',
-      result: () => toCreateNavigate({
+      result: () => toUpdateNavigate({
         type: 'CREATE',
         level: 1
       })
@@ -26,9 +27,12 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     }
   ]
 
+  useDidShow(() => isJump && proTableRef.current.reLoad())
+
   const getNavigateList = async () => {
     try {
       let result = await $apis.wfood.setting.navigateMap.post()
+      setIsJump(false)
       return {
         list: result.data,
         count: result.data.length
@@ -41,9 +45,10 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     }
   }
 
-  const toCreateNavigate = (params: NavigateUpdateParams) => {
+  const toUpdateNavigate = (params: NavigateUpdateParams) => {
     Taro.navigateTo({
-      url: `/wfood/pages/navigateMent/update?navigateParams=${encodeURIComponent(JSON.stringify(params))}`
+      url: `/wfood/pages/navigateMent/update?navigateParams=${encodeURIComponent(JSON.stringify(params))}`,
+      success: () => setIsJump(true)
     })
   }
 
@@ -127,7 +132,7 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                 <UsButton
                   size="mini"
                   theme="primary"
-                  onClick={() => toCreateNavigate({
+                  onClick={() => toUpdateNavigate({
                     type: 'CREATE',
                     level: 2,
                     detail: {
@@ -138,8 +143,8 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                 <UsButton
                   size="mini"
                   theme="default"
-                  onClick={() => toCreateNavigate({
-                    type: 'MODITY',
+                  onClick={() => toUpdateNavigate({
+                    type: 'MODIFY',
                     level: 1,
                     detail: {
                       id: detail.id
@@ -179,7 +184,7 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                     <UsButton
                       size="mini"
                       theme="primary"
-                      onClick={() => toCreateNavigate({
+                      onClick={() => toUpdateNavigate({
                         type: 'CREATE',
                         level: 3,
                         detail: {
@@ -190,8 +195,8 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                     <UsButton
                       size="mini"
                       theme="default"
-                      onClick={() => toCreateNavigate({
-                        type: 'MODITY',
+                      onClick={() => toUpdateNavigate({
+                        type: 'MODIFY',
                         level: 2,
                         detail: {
                           id: secDetail.id
@@ -231,8 +236,8 @@ const NavigateMap: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                         <UsButton
                           size="mini"
                           theme="default"
-                          onClick={() => toCreateNavigate({
-                            type: 'MODITY',
+                          onClick={() => toUpdateNavigate({
+                            type: 'MODIFY',
                             level: 3,
                             detail: {
                               id: thrDetail.id

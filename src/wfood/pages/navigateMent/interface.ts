@@ -1,5 +1,5 @@
 export interface NavigateUpdateParams {
-  type: 'CREATE' | 'MODITY';
+  type: 'CREATE' | 'MODIFY';
   level: 1 | 2 | 3;
   detail?;
 }
