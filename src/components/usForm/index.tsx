@@ -21,20 +21,23 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
     }
   }
 
-  componentDidMount () {
-    this.props.formRef && this.props.formRef(this)
-    typeof this.props.request === 'function' && this.props.request().then(values => {
-      this.setState({
-        initialValues: values
+  async componentDidMount () {
+    if (typeof this.props.request === 'function') {
+      this.props.request().then(values => {
+        this.setState({
+          initialValues: values
+        }, () => this.props.formRef && this.props.formRef(this))
       })
-    })
+    } else {
+      this.props.formRef && this.props.formRef(this)
+    }
   }
 
   setFieldValue (params: FieldValue) {
     this.setState((state: PageState) => {
       state.initialValues[params.name] = params.value
       return state;
-    })
+    }, () => this.props.formRef && this.props.formRef(this))
   }
 
   resetFields (params?: {[propsName: string]: any}) {

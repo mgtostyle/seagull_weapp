@@ -6,7 +6,7 @@ import { View } from '@tarojs/components'
 import moment from 'moment'
 
 import { UsContainer, UsImage, UsButton } from '@components/usIndex'
-import { QuerySelect, ProTable } from '@assembles/moduleIndex'
+import { QuerySelect, QuerySelectColumns, ProTable } from '@assembles/moduleIndex'
 
 const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
@@ -31,6 +31,28 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     {
       name: '设置为快捷入口',
       result: () => console.log('设置成功')
+    }
+  ]
+
+  const columns: QuerySelectColumns = [
+    {
+      title: '排序方式',
+      dataIndex: 'order_by',
+      valueEnum: {
+        weightAsc: '按权重升序',
+        weightDesc: '按权重降序',
+        updatedAtAsc: '按更新时间升序',
+        updatedAtDesc: '按更新时间降序'
+      }
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueEnum: {
+        0: '全部',
+        1: '显示',
+        2: '隐藏'
+      }
     }
   ]
 
@@ -88,7 +110,10 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       setting
       columns={containerColumns}
     >
-      <QuerySelect />
+      <QuerySelect
+        select
+        columns={columns}
+      />
       <ProTable
         ref={proTableRef}
         request={getCategoryList}

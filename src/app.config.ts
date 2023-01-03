@@ -27,7 +27,8 @@ export default defineAppConfig({
         'pages/catesMent/list',
         'pages/catesMent/update',
         'pages/goodsMent/list',
-        'pages/goodsMent/publish'
+        'pages/goodsMent/publish',
+        'pages/goodsMent/update'
       ]
     }
   ],

@@ -38,3 +38,8 @@ export interface ButtonConfig {
   resetButtonProps?: FormButtonProps;
   submitButtonProps?: FormButtonProps;
 }
+
+export interface PageItemGroupProps {
+  label: string;
+  setFieldValue?: (fieldValue: FieldValue) => void;
+}

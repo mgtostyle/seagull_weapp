@@ -11,7 +11,7 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
   static defaultProps: PageProps = {
     icon: 'icon-line-open2',
     placeholder: '',
-    initialValue: '',
+    initialValue: [1],
     modal: {
       title: '',
       range: []
@@ -50,7 +50,7 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
   }
 
   private onChange (value) {
-    const { modal, onChange }: PageProps = this.props
+    const { modal, onChange, setChange }: PageProps = this.props
     const detail = this.setRangeList(modal.range).find((item: any) => item.value === value)
     if (detail?.children) {
       this.setState((state: PageState) => {
@@ -63,7 +63,10 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
         state.initialValue = state.initialValue.slice(0, state.current).concat([value]),
         state.visible = false
         return state;
-      }, () => typeof onChange === 'function' && onChange({ value: this.state.initialValue }))
+      }, () => {
+        typeof onChange === 'function' && onChange({ value: this.state.initialValue })
+        typeof setChange === 'function' && setChange(this.state.initialValue)
+      })
     }
   }
 
