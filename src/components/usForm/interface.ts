@@ -24,7 +24,7 @@ export interface PageItemProps {
   label: string;
   name: string;
   direction: 'horizontal' | 'vertical';
-  initialValue?: string;
+  initialValue?;
   setFieldValue?: (fieldValue: FieldValue) => void;
 }
 
@@ -41,5 +41,6 @@ export interface ButtonConfig {
 
 export interface PageItemGroupProps {
   label: string;
+  initialValue?;
   setFieldValue?: (fieldValue: FieldValue) => void;
 }

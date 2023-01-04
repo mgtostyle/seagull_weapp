@@ -11,7 +11,7 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
   static defaultProps: PageProps = {
     icon: 'icon-line-open2',
     placeholder: '',
-    initialValue: [1],
+    initialValue: [],
     modal: {
       title: '',
       range: []
@@ -27,6 +27,13 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
     }
   }
 
+  get range_detail () {
+    return {
+      initialValue: Boolean(this.state.initialValue?.length) ? this.state.initialValue : this.props.initialValue,
+      current: Boolean(this.state.initialValue?.length) ? this.state.initialValue.length - 1 : this.props.initialValue.length - 1
+    }
+  }
+
   private setReduce (list, init, index = 0, newArray = new Array()) {
     const item = list.find((item: any) => item.value === init?.[index])
     if (item) {
@@ -37,7 +44,7 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
   }
 
   private setRangeList (list, index = 0) {
-    const { initialValue, current }: PageState = this.state
+    const { initialValue, current } = this.range_detail
     if (typeof current !== 'number') {
       return []
     } else if (current > index) {
@@ -50,7 +57,7 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
   }
 
   private onChange (value) {
-    const { modal, onChange, setChange }: PageProps = this.props
+    const { modal, onChange }: PageProps = this.props
     const detail = this.setRangeList(modal.range).find((item: any) => item.value === value)
     if (detail?.children) {
       this.setState((state: PageState) => {
@@ -63,17 +70,15 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
         state.initialValue = state.initialValue.slice(0, state.current).concat([value]),
         state.visible = false
         return state;
-      }, () => {
-        typeof onChange === 'function' && onChange({ value: this.state.initialValue })
-        typeof setChange === 'function' && setChange(this.state.initialValue)
-      })
+      }, () => typeof onChange === 'function' && onChange({ value: this.state.initialValue }))
     }
   }
 
   render (): ReactNode {
-    const { icon, placeholder, modal }: PageProps = this.props
+    const { initialValue, icon, placeholder, modal }: PageProps = this.props
     const { safeAreaHeight, theme } = this.props.global
-    const { initialValue, visible, current }: PageState = this.state
+    const { visible }: PageState = this.state
+    const { current } = this.range_detail
     const rangeArray = this.setReduce(modal.range, initialValue)
     const value = rangeArray.join(' · ')
     return (

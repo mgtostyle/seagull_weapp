@@ -19,6 +19,7 @@ import UsDataNone from '../usDataNone'
 import UsPopup from '../usPopup'
 import UsActionSheet from '../usActionSheet'
 import UsBadge from '../usBadge'
+import UsCascader from '../usCascader'
 
 const UsForm = (UsFormComponent as any).default
 const UsFormItem = (UsFormItemComponent as any).default
@@ -52,5 +53,6 @@ export {
   UsDataNone,
   UsPopup,
   UsActionSheet,
-  UsBadge
+  UsBadge,
+  UsCascader
 }

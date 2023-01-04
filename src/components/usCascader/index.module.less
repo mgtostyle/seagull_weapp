@@ -1,0 +1,25 @@
+@import url('@assets/less/common.less');
+
+.block_container {
+  display: flex;
+  align-items: center;
+  height: 98rpx;
+  .inline_text {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 26rpx;
+    &.value {
+      color: @textColor;
+    }
+    &.placeholder {
+      color: @placeholderColor;
+    }
+  }
+  .inline_icon {
+    font-size: 32rpx;
+    color: @placeholderColor;
+    padding-left: 20rpx;
+  }
+}

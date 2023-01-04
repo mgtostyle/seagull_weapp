@@ -1,10 +1,9 @@
 export interface PageProps {
   icon: string;
   placeholder: string;
-  initialValue: any;
+  initialValue;
   modal: Modal;
   onChange?: (value: any) => void;
-  setChange?: (value: any) => void;
 }
 
 export interface PageState {

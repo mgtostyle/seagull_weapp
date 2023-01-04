@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useState } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 
-import { UsContainer, UsForm, UsUpload, UsPicker, UsInput } from '@components/usIndex'
+import { UsContainer, UsForm, UsUpload, UsPicker, UsInput, UsCascader } from '@components/usIndex'
 
 const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
@@ -59,16 +59,18 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                 title: '类型',
                 range: priceTypeRange
               }}
-              setChange={value => setPriceType(value[0])}
             />
           </UsForm.Item>
-          <UsForm.Item label={priceType === 1 ? '市场价' : '最低价'} name="price0">
+          <UsForm.Item name="price0">
             <UsInput placeholder='请输入...' />
           </UsForm.Item>
-          <UsForm.Item label={priceType === 1 ? '销售价' : '最高价'} name="price1">
+          <UsForm.Item name="price1">
             <UsInput placeholder='请输入...' />
           </UsForm.Item>
         </UsForm.Item.Group>
+        <UsForm.Item label="所属分类" name="categoryId">
+          <UsCascader />
+        </UsForm.Item>
       </UsForm>
     </UsContainer>
   )
