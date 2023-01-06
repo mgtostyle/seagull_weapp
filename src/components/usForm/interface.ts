@@ -44,3 +44,7 @@ export interface PageItemGroupProps {
   initialValue?;
   setFieldValue?: (fieldValue: FieldValue) => void;
 }
+
+export interface PageConsumerProps {
+  
+}

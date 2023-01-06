@@ -3,6 +3,7 @@ import UsTabbar from '../usTabbar'
 import * as UsFormComponent from '../usForm'
 import * as UsFormItemComponent from '../usForm/item'
 import UsFormItemGroup from '../usForm/itemGroup'
+import UsFormConsumer from '../usForm/consumer'
 import UsInput from '../usInput'
 import UsTextArea from '../usTextArea'
 import * as UsRadioComponent from '../usRadio'
@@ -25,6 +26,7 @@ const UsForm = (UsFormComponent as any).default
 const UsFormItem = (UsFormItemComponent as any).default
 UsFormItem.Group = UsFormItemGroup
 UsForm.Item = UsFormItem
+UsForm.Consumer = UsFormConsumer
 
 const UsRadio = (UsRadioComponent as any).default
 UsRadio.Group = UsRadioGroup

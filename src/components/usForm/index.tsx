@@ -33,9 +33,15 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
     }
   }
 
+  getFieldValue (name) {
+    return this.state?.initialValues?.[name]
+  }
+
   setFieldValue (params: FieldValue) {
     this.setState((state: PageState) => {
-      state.initialValues[params.name] = params.value
+      state.initialValues = Object.assign(state.initialValues, {
+        [params.name]: params.value
+      })
       return state;
     }, () => this.props.formRef && this.props.formRef(this))
   }
@@ -81,6 +87,7 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
         {React.Children.map(this.props.children, (childrenNode: any) => {
           if (Boolean(childrenNode)) {
             let childrenProps: any = {
+              initialValues,
               setFieldValue: this.setFieldValue.bind(this)
             }
             if (Array.isArray(childrenNode.props.children)) {

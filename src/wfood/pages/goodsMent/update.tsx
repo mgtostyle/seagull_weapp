@@ -1,7 +1,9 @@
 import React, { PropsWithChildren, useState } from 'react'
+import './update.less'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
+import { View } from '@tarojs/components'
 
-import { UsContainer, UsForm, UsUpload, UsPicker, UsInput, UsCascader } from '@components/usIndex'
+import { UsContainer, UsForm, UsUpload, UsPicker, UsInput, UsCascader, UsButton, UsDataNone, UsTextArea } from '@components/usIndex'
 
 const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
@@ -30,6 +32,11 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
         priceType: [1]
       }
     }
+  }
+
+  const setGoodsDetailsItem = (key: 'title' | 'content' | 'image' | 'distance') => {
+    let details = formRef.getFieldValue('details') || []
+    formRef.setFieldValue({ name: 'details', value: details.concat([{ key, value: '' }]) })
   }
 
   return (
@@ -71,6 +78,46 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
         <UsForm.Item label="所属分类" name="categoryId">
           <UsCascader />
         </UsForm.Item>
+        <UsForm.Consumer label="详情配置">
+          {initialValues => (
+            <React.Fragment>
+              {Array.isArray(initialValues.details) && Boolean(initialValues.details.length > 0) ? (
+                <View className="inline_detail_list">
+                  {initialValues.details.map((element, index: number) => {
+                    switch (element.key) {
+                      case 'title':
+                        return (
+                          <UsInput className="inline_input" key={index} placeholder='请输入标题...' onChange={value => console.log(value)} />
+                        )
+                      case 'content':
+                        return (
+                          <UsTextArea key={index} placeholder='请输入描述的内容吧...' onLineChange={value => console.log(value)} />
+                        )
+                      case 'image':
+                        return (
+                          <UsUpload key={index} limit={1} />
+                        )
+                      case 'distance':
+                        return (
+                          <UsInput className="inline_input" key={index} placeholder='请输入0 ～ ∞范围' />
+                        )
+                      default:
+                        return false
+                    }
+                  })}
+                </View>
+              ) : (
+                <UsDataNone>暂无数据，点击下方添加相应选项并进行内容编辑</UsDataNone>
+              )}
+              <View className="block_detail_operate">
+                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItem('title')}>+ 标题</UsButton>
+                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItem('content')}>+ 短文</UsButton>
+                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItem('image')}>+ 图片</UsButton>
+                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItem('distance')}>+ 间距</UsButton>
+              </View>
+            </React.Fragment>
+          )}
+        </UsForm.Consumer>
       </UsForm>
     </UsContainer>
   )
