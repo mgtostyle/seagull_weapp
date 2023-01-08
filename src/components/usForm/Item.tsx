@@ -8,27 +8,29 @@ class UsFormItem extends PureComponent<PropsWithChildren<PageItemProps>> {
   static defaultProps: PageItemProps = {
     label: '',
     name: '',
-    direction: 'vertical',
+    direction: 'vertical'
   }
 
   render (): ReactNode {
-    const { label, name, direction, initialValue, nodeKey, setFieldValue }: PageItemProps = this.props
+    const { label, name, direction, initialValues, nodeKey, setFieldValue }: PageItemProps = this.props
     const nodeClass = `inline${(nodeKey || '').replace(/[A-Z]/g, value => `_${value.toLocaleLowerCase()}`)}`
     return (
       <View className={`${less.block_item_container} ${less[direction]} ${less[nodeClass]}`}>
         {label && (<Text>{label}</Text>)}
         <Label for={name}>
-          {React.Children.map(this.props.children, (childrenNode: any) => {
-            let childrenProps: any = {
+          {React.Children.map(this.props.children, childrenNode => {
+            let childrenProps = {
               nodeKey: 'Item',
               name,
-              onChange: (fieldValue: FieldValue) => typeof setFieldValue === 'function' && setFieldValue({
+              initialValue: initialValues?.[name],
+              setFieldValue: (fieldValue: FieldValue) => typeof setFieldValue === 'function' && setFieldValue({
+                update: true,
                 ...fieldValue,
-                name,
+                name
               })
             }
-            if (initialValue) childrenProps.initialValue = initialValue
-            return React.cloneElement(childrenNode, childrenProps)
+            // if (initialValue) childrenProps.initialValue = initialValue
+            return React.cloneElement(childrenNode as any, childrenProps)
           })}
         </Label>
       </View>

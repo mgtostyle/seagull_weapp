@@ -3,7 +3,7 @@ export interface PageProps {
   placeholder: string;
   initialValue;
   modal: Modal;
-  onChange?: (value: any) => void;
+  setFieldValue?: (value: any) => void;
 }
 
 export interface PageState {

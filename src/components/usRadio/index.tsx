@@ -7,12 +7,12 @@ import { connect } from 'react-redux'
 class UsRadio extends Component<PropsWithChildren<PageProps & ReturnType<typeof mapStateToProps>>> {
 
   render (): ReactNode {
-    const { initialValue, value, onChange }: PageProps = this.props
+    const { initialValue, value, setFieldValue }: PageProps = this.props
     const { theme } = this.props.global
     return (
       <View
         className={less.block_container}
-        onClick={() => typeof onChange === 'function' && onChange(isNaN(Number(value)) ? value.toString() : Number(value))}
+        onClick={() => typeof setFieldValue === 'function' && setFieldValue(isNaN(Number(value)) ? value.toString() : Number(value))}
       >
         <View
           className={less.text}

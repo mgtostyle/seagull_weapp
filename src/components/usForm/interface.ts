@@ -4,6 +4,7 @@ import type { PageProps as FormButtonProps } from '@components/usButton/interfac
 export interface FieldValue {
   name: string;
   value: any;
+  update?: boolean;
 }
 
 export interface PageProps extends FormProps {
@@ -16,7 +17,9 @@ export interface PageProps extends FormProps {
 }
 
 export interface PageState {
+  visible: boolean;
   initialValues: {[propsName: string]: any};
+  shouldComponentUpdate: boolean;
 }
 
 export interface PageItemProps {
@@ -24,7 +27,7 @@ export interface PageItemProps {
   label: string;
   name: string;
   direction: 'horizontal' | 'vertical';
-  initialValue?;
+  initialValues?;
   setFieldValue?: (fieldValue: FieldValue) => void;
 }
 
@@ -41,10 +44,18 @@ export interface ButtonConfig {
 
 export interface PageItemGroupProps {
   label: string;
-  initialValue?;
+  initialValues?;
   setFieldValue?: (fieldValue: FieldValue) => void;
 }
 
 export interface PageConsumerProps {
-  
+  label: string;
+  initialValues?;
+  shouldComponentUpdate?: boolean;
+  setFieldValue?: (FieldValue: FieldValue) => void;
+  children?;
+}
+
+export interface PageConsumerState {
+  updateVisible: boolean;
 }

@@ -1,11 +1,51 @@
+@import url('@assets/less/common.less');
+
 .inline_detail_list{
   display: flex;
   flex-direction: column;
   padding: 20rpx 20rpx 0;
-  .inline_input{
-    text-align: center;
-    padding-left: 20rpx;
-    padding-right: 20rpx;
+  .inline_detail_item{
+    position: relative;
+    .item_input{
+      text-align: center;
+      padding-left: 20rpx;
+      padding-right: 20rpx;
+      box-sizing: content-box;
+      border: 1PX dashed @placeholderColor;
+    }
+    .item_textarea{
+      box-sizing: content-box;
+      border: 1PX dashed @placeholderColor;
+    }
+    .item_upload{
+      grid-template-columns: none;
+      padding: 0;
+      .block_upload_box{
+        height: auto;
+        min-height: 200rpx;
+        padding: 0;
+      }
+    }
+    .item_operate{
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      grid-gap: 10rpx;
+      padding: 10rpx;
+      .iconfont{
+        display: block;
+        text-align: center;
+        width: 40rpx;
+        height: 40rpx;
+        line-height: 40rpx;
+        border-radius: 6rpx;
+        background-color: @textColor;
+        color: #ffffff;
+        font-size: 28rpx;
+      }
+    }
   }
 }
 .block_detail_operate{

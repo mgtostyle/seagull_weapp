@@ -1,0 +1,1 @@
+export type GoodsDetailsKey = 'title' | 'content' | 'image' | 'distance';

@@ -1,16 +1,16 @@
 import React, { PropsWithChildren, useState } from 'react'
+import type { GoodsDetailsKey } from './interface'
 import './update.less'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import { getCurrentInstance } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
-import { UsContainer, UsForm, UsUpload, UsPicker, UsInput, UsCascader, UsButton, UsDataNone, UsTextArea } from '@components/usIndex'
+import { UsContainer, UsForm, UsUpload, UsInput, UsCascader, UsButton, UsDataNone, UsTextArea } from '@components/usIndex'
 
 const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
   const { id } = (getCurrentInstance as any)().router.params
   
   const [formRef, setFormRef]= useState<any>(null)
-  const [priceType, setPriceType] = useState<number>(1)
 
   const priceTypeRange = [
     {
@@ -29,14 +29,17 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       return result.data.detail
     } catch (error) {
       return {
-        priceType: [1]
+        priceType: 1
       }
     }
   }
 
-  const setGoodsDetailsItem = (key: 'title' | 'content' | 'image' | 'distance') => {
+  const setGoodsDetailsItem = (key: GoodsDetailsKey) => {
     let details = formRef.getFieldValue('details') || []
-    formRef.setFieldValue({ name: 'details', value: details.concat([{ key, value: '' }]) })
+    formRef.setFieldValue({
+      name: 'details',
+      value: details.concat([{ key, value: '' }])
+    }, true)
   }
 
   return (
@@ -59,52 +62,90 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
         <UsForm.Item label="媒体资源（图片轮播）" name="sourceList">
           <UsUpload limit={9} />
         </UsForm.Item>
-        <UsForm.Item.Group label="价格配置">
-          <UsForm.Item label="类型" name="priceType">
-            <UsPicker
-              modal={{
-                title: '类型',
-                range: priceTypeRange
-              }}
-            />
-          </UsForm.Item>
-          <UsForm.Item name="price0">
-            <UsInput placeholder='请输入...' />
-          </UsForm.Item>
-          <UsForm.Item name="price1">
-            <UsInput placeholder='请输入...' />
-          </UsForm.Item>
-        </UsForm.Item.Group>
+        <UsForm.Consumer label="价格配置">
+          {({ setFieldValue, initialValues }) => (
+            <UsForm.Item.Group initialValues={initialValues} setFieldValue={setFieldValue}>
+              <UsForm.Item label="类型" name="priceType">
+                <UsCascader
+                  modal={{
+                    title: '类型',
+                    range: priceTypeRange
+                  }}
+                />
+              </UsForm.Item>
+              <UsForm.Item label={initialValues.priceType === 1 ? '销售价' : '最低价'} name="price0">
+                <UsInput placeholder='请输入...' />
+              </UsForm.Item>
+              <UsForm.Item label={initialValues.priceType === 1 ? '市场价' : '最高价'} name="price1">
+                <UsInput placeholder='请输入...' />
+              </UsForm.Item>
+            </UsForm.Item.Group>
+          )}
+        </UsForm.Consumer>
         <UsForm.Item label="所属分类" name="categoryId">
           <UsCascader />
         </UsForm.Item>
         <UsForm.Consumer label="详情配置">
-          {initialValues => (
+          {({ initialValues, setFieldValue }) => (
             <React.Fragment>
               {Array.isArray(initialValues.details) && Boolean(initialValues.details.length > 0) ? (
                 <View className="inline_detail_list">
-                  {initialValues.details.map((element, index: number) => {
-                    switch (element.key) {
-                      case 'title':
-                        return (
-                          <UsInput className="inline_input" key={index} placeholder='请输入标题...' onChange={value => console.log(value)} />
-                        )
-                      case 'content':
-                        return (
-                          <UsTextArea key={index} placeholder='请输入描述的内容吧...' onLineChange={value => console.log(value)} />
-                        )
-                      case 'image':
-                        return (
-                          <UsUpload key={index} limit={1} />
-                        )
-                      case 'distance':
-                        return (
-                          <UsInput className="inline_input" key={index} placeholder='请输入0 ～ ∞范围' />
-                        )
-                      default:
-                        return false
-                    }
-                  })}
+                  {initialValues.details.map((element, index: number, detailsArr) => (
+                    <View className="inline_detail_item" key={index}>
+                      {((detail) => {
+                        switch (detail.key) {
+                          case 'title':
+                            return (
+                              <UsInput
+                                className="item_input"
+                                placeholder='请输入标题...'
+                                value={element.value}
+                                setFieldValue={e => setFieldValue({
+                                  details: detailsArr.map((item, item_index: number) => {
+                                    if (item_index === index) item.value = e.value
+                                  }),
+                                  update: e.update
+                                })}
+                              />
+                            )
+                          case 'content':
+                            return (
+                              <UsTextArea
+                                className="item_textarea"
+                                placeholder='请输入描述的内容吧...'
+                                autoHeight={true}
+                              />
+                            )
+                          case 'image':
+                            return (
+                              <UsUpload
+                                className="item_upload"
+                                mode="widthFix"
+                                limit={1}
+                              />
+                            )
+                          case 'distance':
+                            return (
+                              <UsInput
+                                className="item_input"
+                                placeholder='请输入0 ～ ∞范围'
+                              />
+                            )
+                          default:
+                            return false
+                        }
+                      })(element)}
+                      <View className="item_operate">
+                        {Boolean(detailsArr.length - 1 > index) && (
+                          <View className="iconfont">↓</View>
+                        )}
+                        {Boolean(index > 0) && (
+                          <View className="iconfont">↑</View>
+                        )}
+                        <View className="iconfont icon-line-delete1" />
+                      </View>
+                    </View>
+                  ))}
                 </View>
               ) : (
                 <UsDataNone>暂无数据，点击下方添加相应选项并进行内容编辑</UsDataNone>

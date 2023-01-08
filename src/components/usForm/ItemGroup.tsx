@@ -10,18 +10,19 @@ class UsFormItemGroup extends PureComponent<PropsWithChildren<PageItemGroupProps
   }
 
   render (): ReactNode {
-    const { label, setFieldValue }: PageItemGroupProps = this.props
+    const { label, initialValues, setFieldValue }: PageItemGroupProps = this.props
     return (
       <React.Fragment>
         {label && (<View className={less.block_item_group_label}>{label}</View>)}
         <View className={less.block_item_group_container}>
-          {React.Children.map(this.props.children, (childrenNode: any) => {
-            let childrenProps: any = {
+          {React.Children.map(this.props.children, childrenNode => {
+            let childrenProps = {
               nodeKey: 'ItemGroup',
               direction: 'horizontal',
+              initialValues,
               setFieldValue
             }
-            return React.cloneElement(childrenNode, childrenProps)
+            return React.cloneElement(childrenNode as any, childrenProps)
           })}
         </View>
       </React.Fragment>

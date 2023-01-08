@@ -6,7 +6,7 @@ import { CheckboxGroup } from '@tarojs/components'
 class UsCheckboxGroup extends Component<PropsWithChildren<PageGroupProps>> {
 
   render (): ReactNode {
-    const { children: parentChildren, ...params }: PageGroupProps = this.props
+    const { ...params }: PageGroupProps = this.props
     return (
       <CheckboxGroup
         className={less.block_checkbox_group_container}

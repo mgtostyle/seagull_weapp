@@ -17,7 +17,9 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
   constructor (props) {
     super (props)
     this.state = {
-      initialValues: props.request ? props.request : props.initialValues
+      visible: false,
+      initialValues: props.request ? props.request : props.initialValues,
+      shouldComponentUpdate: true
     }
   }
 
@@ -25,11 +27,14 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
     if (typeof this.props.request === 'function') {
       this.props.request().then(values => {
         this.setState({
+          visible: true,
           initialValues: values
         }, () => this.props.formRef && this.props.formRef(this))
       })
     } else {
-      this.props.formRef && this.props.formRef(this)
+      this.setState({
+        visible: true
+      }, () => this.props.formRef && this.props.formRef(this))
     }
   }
 
@@ -37,11 +42,13 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
     return this.state?.initialValues?.[name]
   }
 
-  setFieldValue (params: FieldValue) {
+  setFieldValue (params: FieldValue, update?: boolean) {
+    console.log(update)
     this.setState((state: PageState) => {
       state.initialValues = Object.assign(state.initialValues, {
         [params.name]: params.value
       })
+      state.shouldComponentUpdate = Boolean(update)
       return state;
     }, () => this.props.formRef && this.props.formRef(this))
   }
@@ -77,8 +84,8 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
     const { onReset, buttonConfig, ...params }: PageProps = this.props
     const { resetText, submitText, resetButtonProps, submitButtonProps } = (buttonConfig as ButtonConfig)
     const { safeAreaHeight } = this.props.global
-    const { initialValues }: PageState = this.state
-    return (
+    const { visible, initialValues, shouldComponentUpdate }: PageState = this.state
+    return visible && (
       <Form
         className={less.block_form_container}
         {...params}
@@ -88,17 +95,18 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
           if (Boolean(childrenNode)) {
             let childrenProps: any = {
               initialValues,
+              shouldComponentUpdate,
               setFieldValue: this.setFieldValue.bind(this)
             }
-            if (Array.isArray(childrenNode.props.children)) {
-              childrenProps.children = childrenNode.props.children.map(item => {
-                return React.cloneElement(item, {
-                  initialValue: initialValues?.[item.props.name] || ''
-                })
-              })
-            } else {
-              childrenProps.initialValue = initialValues?.[childrenNode.props.name] || ''
-            }
+            // if (Array.isArray(childrenNode.props.children)) {
+            //   childrenProps.children = childrenNode.props.children.map(item => {
+            //     return React.cloneElement(item, {
+            //       initialValue: initialValues?.[item.props.name] || ''
+            //     })
+            //   })
+            // } else {
+            //   childrenProps.initialValue = initialValues?.[childrenNode.props.name] || ''
+            // }
             return React.cloneElement(childrenNode, childrenProps)
           } else {
             return false

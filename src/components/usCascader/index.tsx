@@ -51,10 +51,10 @@ class UsCascader extends Component<PropsWithChildren<PageProps & ReturnType<type
   }
 
   onChange (value) {
-    const { onChange }: PageProps = this.props
+    const { setFieldValue }: PageProps = this.props
     this.setState({
       visible: false
-    }, () => typeof onChange === 'function' && onChange({ value }))
+    }, () => typeof setFieldValue === 'function' && setFieldValue({ value }))
   }
 
   setRangeChildDetail (list) {

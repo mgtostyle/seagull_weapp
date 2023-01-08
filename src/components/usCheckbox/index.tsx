@@ -1,11 +1,11 @@
 import { Component, ReactNode, PropsWithChildren } from 'react'
-import type { CheckProps } from './interface'
+import type { PageProps } from './interface'
 import less from './index.module.less'
 import { View } from '@tarojs/components'
 
-class UsCheckbox extends Component<PropsWithChildren<CheckProps>> {
+class UsCheckbox extends Component<PropsWithChildren<PageProps>> {
 
-  static defaultProps: CheckProps = {
+  static defaultProps: PageProps = {
     className: '',
     value: '',
     color: less.usTextColor,
@@ -15,11 +15,11 @@ class UsCheckbox extends Component<PropsWithChildren<CheckProps>> {
   }
 
   render (): ReactNode {
-    const { className, value, color, checked, disabled, direction, onChange }: CheckProps = this.props
+    const { className, value, color, checked, disabled, direction, setFieldValue }: PageProps = this.props
     return (
       <View
         className={`${less.block_container} ${less[direction]} ${className}`}
-        onClick={() => !disabled && typeof onChange === 'function' && onChange(isNaN(Number(value)) ? value.toString() : Number(value), !checked)}
+        onClick={() => !disabled && typeof setFieldValue === 'function' && setFieldValue(isNaN(Number(value)) ? value.toString() : Number(value), !checked)}
       >
         <View
           className={[less.icon, checked && less.check, disabled && less.disable].filter(css => Boolean(css)).join(' ')}

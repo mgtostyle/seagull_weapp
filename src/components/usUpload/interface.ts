@@ -1,7 +1,9 @@
 export interface PageProps {
+  className?: string;
+  mode: string;
   initialValue: Array<ImageItem>;
   limit: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-  onChange?: (e: {value: Array<ImageItem>}) => void;
+  setFieldValue?: (e: {value: Array<ImageItem>}) => void;
 }
 
 export interface ImageItem {

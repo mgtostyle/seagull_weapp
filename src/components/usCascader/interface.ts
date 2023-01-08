@@ -3,7 +3,7 @@ export interface PageProps {
   placeholder: string;
   icon: string;
   modal: Modal;
-  onChange?: (value: any) => void;
+  setFieldValue?: (value: { value: string | number }) => void;
 }
 
 export interface PageState {

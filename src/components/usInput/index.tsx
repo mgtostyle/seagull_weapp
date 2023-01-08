@@ -10,21 +10,23 @@ class UsInput extends Component<PropsWithChildren<PageProps>> {
   }
 
   private onInput (e) {
-    const { onChange } = this.props
+    const { setFieldValue } = this.props
     const { value } = e.detail
-    typeof onChange === 'function' && onChange({
-      value: isNaN(Number(value)) ? value.toString() : Number(value)
+    typeof setFieldValue === 'function' && setFieldValue({
+      value: isNaN(Number(value)) || value === '' ? value.toString() : Number(value),
+      update: false
     })
   }
 
   render (): ReactNode {
-    const { className, placeholderClass, initialValue, onChange, ...params }: PageProps = this.props
+    const { className, placeholderClass, initialValue, ...params }: PageProps = this.props
     if (initialValue) params.value = initialValue
     return (
       <Input
         className={`${className} ${less.inline_input} ${params.disabled && less.disabled}`}
         {...params}
         placeholderClass={`${less.inline_input_placeholder} ${placeholderClass}`}
+        onFocus={e => this.onInput(e)}
         onInput={e => this.onInput(e)}
       />
     )
