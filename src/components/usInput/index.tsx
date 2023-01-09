@@ -26,7 +26,6 @@ class UsInput extends Component<PropsWithChildren<PageProps>> {
         className={`${className} ${less.inline_input} ${params.disabled && less.disabled}`}
         {...params}
         placeholderClass={`${less.inline_input_placeholder} ${placeholderClass}`}
-        onFocus={e => this.onInput(e)}
         onInput={e => this.onInput(e)}
       />
     )

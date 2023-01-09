@@ -10,15 +10,15 @@ class UsTextArea extends Component<PropsWithChildren<PageProps>> {
   }
 
   render (): ReactNode {
-    const { className, placeholderClass, nodeKey, initialValue, value, setFieldValue, ...params }: PageProps = this.props
+    const { className, placeholderClass, nodeKey, initialValue, setFieldValue, ...params }: PageProps = this.props
     const nodeClass = `inline${(nodeKey || '').replace(/[A-Z]/g, value => `_${value.toLocaleLowerCase()}`)}`
+    if (initialValue) params.value = initialValue
     return (
       <Textarea
         className={`${className} ${less.block_container} ${less[nodeClass]}`}
         {...params}
-        value={initialValue}
         placeholderClass={`${less.inline_input_placeholder} ${placeholderClass}`}
-        onInput={e => typeof setFieldValue === 'function' && setFieldValue({ value: e.detail.value })}
+        onInput={e => typeof setFieldValue === 'function' && setFieldValue({ value: e.detail.value, update: false })}
       />
     )
   }

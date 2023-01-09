@@ -7,31 +7,17 @@ class UsFormConsumer extends Component<PropsWithChildren<PageConsumerProps>, Pag
 
   static defaultProps: PageConsumerProps = {
     label: '',
-    initialValues: {}
+    initialValues: {},
+    shouldComponentUpdate: true
   }
 
-  constructor (props) {
-    super (props)
-    this.state = {
-      updateVisible: true
-    }
-  }
-
-  shouldComponentUpdate(nextProps: Readonly<React.PropsWithChildren<PageConsumerProps>>, nextState: Readonly<PageConsumerState>): boolean {
-    console.log(nextProps.shouldComponentUpdate, nextState.updateVisible)
-    if (nextProps.shouldComponentUpdate && !nextState.updateVisible) {
+  shouldComponentUpdate(nextProps: Readonly<React.PropsWithChildren<PageConsumerProps>>): boolean {
+    console.log(1)
+    if (nextProps.shouldComponentUpdate === true && this.props.shouldComponentUpdate === false) {
       return true
     } else {
-      return nextState.updateVisible
+      return nextProps.shouldComponentUpdate
     }
-  }
-
-  setFieldValue (params) {
-    console.log(params)
-    const { setFieldValue }: PageConsumerProps = this.props
-    this.setState({
-      updateVisible: params.update
-    }, () => typeof setFieldValue === 'function' && setFieldValue(params))
   }
 
   render () {
@@ -43,7 +29,7 @@ class UsFormConsumer extends Component<PropsWithChildren<PageConsumerProps>, Pag
         <View className={less.block_index_consumer}>
           <TableContext.Provider value={{
             initialValues,
-            setFieldValue: this.setFieldValue.bind(this)
+            setFieldValue
           }}>
             <TableContext.Consumer>{this.props.children}</TableContext.Consumer>
           </TableContext.Provider>

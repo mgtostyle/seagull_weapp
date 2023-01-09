@@ -51,7 +51,7 @@ export interface PageItemGroupProps {
 export interface PageConsumerProps {
   label: string;
   initialValues?;
-  shouldComponentUpdate?: boolean;
+  shouldComponentUpdate: boolean;
   setFieldValue?: (FieldValue: FieldValue) => void;
   children?;
 }

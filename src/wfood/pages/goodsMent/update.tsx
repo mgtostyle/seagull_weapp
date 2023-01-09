@@ -39,7 +39,19 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     formRef.setFieldValue({
       name: 'details',
       value: details.concat([{ key, value: '' }])
-    }, true)
+    })
+  }
+
+  const setGoodsDetailsValue = (current: number, params) => {
+    let details = formRef.getFieldValue('details') || []
+    formRef.setFieldValue({
+      name: 'details',
+      value: details.map((item, index: number) => {
+        if (current === index) item.value = params.value
+        return item
+      }),
+      update: params?.update
+    })
   }
 
   return (
@@ -63,7 +75,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
           <UsUpload limit={9} />
         </UsForm.Item>
         <UsForm.Consumer label="价格配置">
-          {({ setFieldValue, initialValues }) => (
+          {({ initialValues, setFieldValue }) => (
             <UsForm.Item.Group initialValues={initialValues} setFieldValue={setFieldValue}>
               <UsForm.Item label="类型" name="priceType">
                 <UsCascader
@@ -86,7 +98,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
           <UsCascader />
         </UsForm.Item>
         <UsForm.Consumer label="详情配置">
-          {({ initialValues, setFieldValue }) => (
+          {({ initialValues }) => (
             <React.Fragment>
               {Array.isArray(initialValues.details) && Boolean(initialValues.details.length > 0) ? (
                 <View className="inline_detail_list">
@@ -100,12 +112,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                                 className="item_input"
                                 placeholder='请输入标题...'
                                 value={element.value}
-                                setFieldValue={e => setFieldValue({
-                                  details: detailsArr.map((item, item_index: number) => {
-                                    if (item_index === index) item.value = e.value
-                                  }),
-                                  update: e.update
-                                })}
+                                setFieldValue={e => setGoodsDetailsValue(index, e)}
                               />
                             )
                           case 'content':
@@ -114,6 +121,8 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                                 className="item_textarea"
                                 placeholder='请输入描述的内容吧...'
                                 autoHeight={true}
+                                value={element.value}
+                                setFieldValue={e => setGoodsDetailsValue(index, e)}
                               />
                             )
                           case 'image':
@@ -122,6 +131,8 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                                 className="item_upload"
                                 mode="widthFix"
                                 limit={1}
+                                initialValue={Array.isArray(element?.value) ? element.value : []}
+                                setFieldValue={e => setGoodsDetailsValue(index, e)}
                               />
                             )
                           case 'distance':
@@ -129,6 +140,8 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                               <UsInput
                                 className="item_input"
                                 placeholder='请输入0 ～ ∞范围'
+                                value={element.value}
+                                setFieldValue={e => setGoodsDetailsValue(index, e)}
                               />
                             )
                           default:

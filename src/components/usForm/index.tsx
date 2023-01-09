@@ -42,13 +42,12 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
     return this.state?.initialValues?.[name]
   }
 
-  setFieldValue (params: FieldValue, update?: boolean) {
-    console.log(update)
+  setFieldValue (params: FieldValue) {
     this.setState((state: PageState) => {
       state.initialValues = Object.assign(state.initialValues, {
         [params.name]: params.value
       })
-      state.shouldComponentUpdate = Boolean(update)
+      state.shouldComponentUpdate = typeof params?.update === 'boolean' ? params.update : true
       return state;
     }, () => this.props.formRef && this.props.formRef(this))
   }
