@@ -9,6 +9,7 @@ import * as wfoodCommon from '@/config/apis/wfood/common'
 import * as wfoodSetting from '@/config/apis/wfood/setting'
 import * as wfoodGallery from '@/config/apis/wfood/gallery'
 import * as wfoodCategory from '@/config/apis/wfood/category'
+import * as wfoodSelect from '@/config/apis/wfood/select'
 
 export default {
   composite: {
@@ -23,6 +24,7 @@ export default {
     common: wfoodCommon,
     setting: wfoodSetting,
     gallery: wfoodGallery,
-    category: wfoodCategory
+    category: wfoodCategory,
+    select: wfoodSelect
   }
 }

@@ -9,8 +9,8 @@ import { UsRadio } from '../usIndex'
 class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof mapStateToProps>>, PageState> {
 
   static defaultProps: PageProps = {
-    icon: 'icon-line-open2',
-    placeholder: '',
+    icon: 'icon-fill-down',
+    placeholder: '请选择...',
     initialValue: [],
     modal: {
       title: '',
@@ -80,7 +80,7 @@ class UsPicker extends Component<PropsWithChildren<PageProps & ReturnType<typeof
     const { visible }: PageState = this.state
     const { current } = this.range_detail
     const rangeArray = this.setReduce(modal.range, initialValue)
-    const value = rangeArray.join(' · ')
+    const value = rangeArray.join(' / ')
     return (
       <React.Fragment>
         <View

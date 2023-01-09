@@ -12,7 +12,6 @@ class UsFormConsumer extends Component<PropsWithChildren<PageConsumerProps>, Pag
   }
 
   shouldComponentUpdate(nextProps: Readonly<React.PropsWithChildren<PageConsumerProps>>): boolean {
-    console.log(1)
     if (nextProps.shouldComponentUpdate === true && this.props.shouldComponentUpdate === false) {
       return true
     } else {

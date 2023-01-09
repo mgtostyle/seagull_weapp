@@ -6,7 +6,7 @@ import { View } from '@tarojs/components'
 
 import { UsContainer, UsForm, UsUpload, UsInput, UsCascader, UsButton, UsDataNone, UsTextArea } from '@components/usIndex'
 
-const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
+const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $filter }) => {
 
   const { id } = (getCurrentInstance as any)().router.params
   
@@ -34,7 +34,17 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     }
   }
 
-  const setGoodsDetailsItem = (key: GoodsDetailsKey) => {
+  const getCategorySelect = async () => {
+    try {
+      let result = await $apis.wfood.select.goodsCategory.post()
+      console.log(result.data.list)
+      return result.data.list
+    } catch (error) {
+      return []
+    }
+  }
+
+  const setGoodsDetailsItemCreate = (key: GoodsDetailsKey) => {
     let details = formRef.getFieldValue('details') || []
     formRef.setFieldValue({
       name: 'details',
@@ -42,7 +52,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     })
   }
 
-  const setGoodsDetailsValue = (current: number, params) => {
+  const setGoodsDetailsItemChange = (current: number, params) => {
     let details = formRef.getFieldValue('details') || []
     formRef.setFieldValue({
       name: 'details',
@@ -51,6 +61,30 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
         return item
       }),
       update: params?.update
+    })
+  }
+
+  const setGoodsDetailsItemUp = (index: number) => {
+    let details = formRef.getFieldValue('details') || []
+    formRef.setFieldValue({
+      name: 'details',
+      value: $filter.swapItems(details, index, index - 1)
+    })
+  }
+
+  const setGoodsDetailsItemDown = (index: number) => {
+    let details = formRef.getFieldValue('details') || []
+    formRef.setFieldValue({
+      name: 'details',
+      value: $filter.swapItems(details, index, index + 1)
+    })
+  }
+
+  const setGoodsDetailsItemDelete = (index: number) => {
+    let details = formRef.getFieldValue('details') || []
+    formRef.setFieldValue({
+      name: 'details',
+      value: details.filter((_, number: number) => number !== index)
     })
   }
 
@@ -86,16 +120,18 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                 />
               </UsForm.Item>
               <UsForm.Item label={initialValues.priceType === 1 ? '销售价' : '最低价'} name="price0">
-                <UsInput placeholder='请输入...' />
+                <UsInput placeholder='请输入金额值...（仅保留两位小数）' />
               </UsForm.Item>
               <UsForm.Item label={initialValues.priceType === 1 ? '市场价' : '最高价'} name="price1">
-                <UsInput placeholder='请输入...' />
+                <UsInput placeholder='请输入金额值...（仅保留两位小数）' />
               </UsForm.Item>
             </UsForm.Item.Group>
           )}
         </UsForm.Consumer>
         <UsForm.Item label="所属分类" name="categoryId">
-          <UsCascader />
+          <UsCascader
+            request={getCategorySelect}
+          />
         </UsForm.Item>
         <UsForm.Consumer label="详情配置">
           {({ initialValues }) => (
@@ -112,7 +148,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                                 className="item_input"
                                 placeholder='请输入标题...'
                                 value={element.value}
-                                setFieldValue={e => setGoodsDetailsValue(index, e)}
+                                setFieldValue={e => setGoodsDetailsItemChange(index, e)}
                               />
                             )
                           case 'content':
@@ -122,7 +158,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                                 placeholder='请输入描述的内容吧...'
                                 autoHeight={true}
                                 value={element.value}
-                                setFieldValue={e => setGoodsDetailsValue(index, e)}
+                                setFieldValue={e => setGoodsDetailsItemChange(index, e)}
                               />
                             )
                           case 'image':
@@ -132,7 +168,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                                 mode="widthFix"
                                 limit={1}
                                 initialValue={Array.isArray(element?.value) ? element.value : []}
-                                setFieldValue={e => setGoodsDetailsValue(index, e)}
+                                setFieldValue={e => setGoodsDetailsItemChange(index, e)}
                               />
                             )
                           case 'distance':
@@ -141,21 +177,21 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                                 className="item_input"
                                 placeholder='请输入0 ～ ∞范围'
                                 value={element.value}
-                                setFieldValue={e => setGoodsDetailsValue(index, e)}
+                                setFieldValue={e => setGoodsDetailsItemChange(index, e)}
                               />
                             )
                           default:
                             return false
                         }
                       })(element)}
-                      <View className="item_operate">
+                      <View className="item_operate" onClick={e => e.stopPropagation()}>
                         {Boolean(detailsArr.length - 1 > index) && (
-                          <View className="iconfont">↓</View>
+                          <View className="iconfont" onClick={() => setGoodsDetailsItemDown(index)}>↓</View>
                         )}
                         {Boolean(index > 0) && (
-                          <View className="iconfont">↑</View>
+                          <View className="iconfont" onClick={() => setGoodsDetailsItemUp(index)}>↑</View>
                         )}
-                        <View className="iconfont icon-line-delete1" />
+                        <View className="iconfont icon-line-delete1" onClick={() => setGoodsDetailsItemDelete(index)} />
                       </View>
                     </View>
                   ))}
@@ -164,10 +200,10 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                 <UsDataNone>暂无数据，点击下方添加相应选项并进行内容编辑</UsDataNone>
               )}
               <View className="block_detail_operate">
-                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItem('title')}>+ 标题</UsButton>
-                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItem('content')}>+ 短文</UsButton>
-                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItem('image')}>+ 图片</UsButton>
-                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItem('distance')}>+ 间距</UsButton>
+                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItemCreate('title')}>+ 标题</UsButton>
+                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItemCreate('content')}>+ 短文</UsButton>
+                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItemCreate('image')}>+ 图片</UsButton>
+                <UsButton size="mini" ghost onClick={() => setGoodsDetailsItemCreate('distance')}>+ 间距</UsButton>
               </View>
             </React.Fragment>
           )}

@@ -11,43 +11,28 @@ class UsCascader extends Component<PropsWithChildren<PageProps & ReturnType<type
   static defaultProps: PageProps = {
     initialValue: '',
     placeholder: '请选择...',
-    icon: 'icon-line-open2',
+    icon: 'icon-fill-down',
     modal: {
       title: '选择',
-      range: [
-        {
-          label: 'haha1',
-          value: 1,
-          children: [
-            {
-              label: 'dasdas3',
-              value: 3,
-              children: [
-                {
-                  label: 'rewrwe5',
-                  value: 5
-                }
-              ]
-            },
-            {
-              label: 'vxcvxce4',
-              value: 4
-            }
-          ]
-        },
-        {
-          label: 'nrtntr2',
-          value: 2
-        }
-      ]
+      range: []
     }
   }
 
   constructor (props) {
     super(props)
     this.state = {
-      visible: false
+      visible: false,
+      modal: props.modal
     }
+  }
+
+  async componentDidMount () {
+    typeof this.props.request === 'function' && this.props.request().then(values => {
+      this.setState((state: any) => {
+        state.modal.range = values
+        return state
+      })
+    })
   }
 
   onChange (value) {
@@ -59,7 +44,7 @@ class UsCascader extends Component<PropsWithChildren<PageProps & ReturnType<type
 
   setRangeChildDetail (list) {
     const { initialValue }: PageProps = this.props
-    return list.map((element, index: number) => (
+    return Array.isArray(list) && list.map((element, index: number) => (
       <View className={less.inline_modal_range} key={index}>
         <View className={less.range_detail}>
           <View className={less.text}>{element.label}</View>
@@ -81,20 +66,20 @@ class UsCascader extends Component<PropsWithChildren<PageProps & ReturnType<type
   }
 
   getFieldValue (list, currentValue, label: string = '') {
-    return list.map((curr) => {
-      let currentLabel = [label, curr.label].filter(value => Boolean(value)).join(' - ')
-      if (curr.value === currentValue) {
+    return Array.isArray(list) ? list.map((item) => {
+      let currentLabel = [label, item.label].filter(value => Boolean(value)).join(' / ')
+      if (item.value === currentValue) {
         return currentLabel
-      } else if (Array.isArray(curr.children)) {
-        return this.getFieldValue(curr.children, currentValue, currentLabel)
+      } else if (Array.isArray(item.children)) {
+        return this.getFieldValue(item.children, currentValue, currentLabel)
       }
-    }).join('')
+    }).join('') : ''
   }
 
   render(): ReactNode {
-    const { initialValue, placeholder, icon, modal }: PageProps = this.props
+    const { initialValue, placeholder, icon }: PageProps = this.props
     const { safeAreaHeight } = this.props.global
-    const { visible }: PageState = this.state
+    const { visible, modal }: PageState = this.state
     const value = this.getFieldValue(modal.range, initialValue)
     return (
       <React.Fragment>
@@ -120,7 +105,7 @@ class UsCascader extends Component<PropsWithChildren<PageProps & ReturnType<type
               <View className={less.title}>{modal.title}</View>
               <View className={`${less.icon} iconfont icon-line-subtraction`} />
             </View>
-            <ScrollView className={less.inline_modal_body} scrollY>{this.setRangeChildDetail(modal?.range || [])}</ScrollView>
+            <ScrollView className={less.inline_modal_body} scrollY>{this.setRangeChildDetail(modal?.range)}</ScrollView>
           </View>
         </View>
       </React.Fragment>

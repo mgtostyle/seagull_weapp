@@ -1,9 +1,11 @@
 import { Component, PropsWithChildren, Children, cloneElement } from 'react'
-import commonLess from '@assets/less/common.module.less'
 import './app.less'
 import store from './store/index'
 import { Provider } from 'react-redux'
+
 import apis from './config/apis/index/index'
+import commonLess from '@assets/less/common.module.less'
+import * as filter from './config/handler/filter'
 
 class App extends Component<PropsWithChildren> {
 
@@ -20,7 +22,8 @@ class App extends Component<PropsWithChildren> {
         {Children.map(this.props.children, (childrenNode) => {
           let childrenProps: {[propsName: string]: any} = {
             $apis: apis,
-            $commonLess: commonLess
+            $commonLess: commonLess,
+            $filter: filter
           }
           return cloneElement((childrenNode as any), childrenProps)
         })}
@@ -31,5 +34,6 @@ class App extends Component<PropsWithChildren> {
 
 Component.prototype.$apis = apis
 Component.prototype.$commonLess = commonLess
+Component.prototype.$filter = filter
 
 export default App

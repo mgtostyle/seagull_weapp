@@ -90,9 +90,9 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
         {...params}
         onSubmit={(e) => this.onSubmit(e)}
       >
-        {React.Children.map(this.props.children, (childrenNode: any) => {
+        {React.Children.map(this.props.children, childrenNode => {
           if (Boolean(childrenNode)) {
-            let childrenProps: any = {
+            let childrenProps = {
               initialValues,
               shouldComponentUpdate,
               setFieldValue: this.setFieldValue.bind(this)
@@ -106,7 +106,7 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
             // } else {
             //   childrenProps.initialValue = initialValues?.[childrenNode.props.name] || ''
             // }
-            return React.cloneElement(childrenNode, childrenProps)
+            return React.cloneElement(childrenNode as any, childrenProps)
           } else {
             return false
           }

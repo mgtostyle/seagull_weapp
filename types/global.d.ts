@@ -23,5 +23,6 @@ declare namespace React {
   interface Component {
     $apis: {[propsName: string]: any};
     $commonLess: {[propsName: string]: any};
+    $filter: {[propsName: string]: any};
   }
 }

@@ -59,7 +59,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                 />
               ) : (
                 <View
-                  className={`${less.inline_single_icon} iconfont ${setting ? 'icon-line-open2' : 'icon-line-left'}`}
+                  className={`${less.inline_single_icon} iconfont ${setting ? 'icon-line-administration1' : 'icon-line-left'}`}
                   style={{
                     left: `${navigate.xBetween}px`,
                     width: `${navigate.bHeight - 1}px`,
@@ -89,7 +89,7 @@ class UsContainer extends Component<PropsWithChildren<PageProps> & ReturnType<ty
                 />
                 <View className={less.line} />
                 <View
-                  className={`${less.right_icon} iconfont icon-line-open2`}
+                  className={`${less.right_icon} iconfont icon-line-administration1`}
                   onClick={() => this.actionSheet.message({ tabbar, columns })}
                 />
               </View>
