@@ -18,7 +18,7 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
     super (props)
     this.state = {
       visible: false,
-      initialValues: props.request ? props.request : props.initialValues,
+      initialValues: {},
       shouldComponentUpdate: true
     }
   }
