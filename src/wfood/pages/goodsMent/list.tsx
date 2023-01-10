@@ -73,10 +73,10 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     Taro.navigateTo(params)
   }
 
-  const toGoodsStatus = (id: number, status: 1 | 2 | 3) => {
-    $apis.wfood.goods.indexStatus.get(`/${id}/${status === 1 ? 2 : 1}`).then(res => {
+  const toGoodsStatus = (id: number, status: 1 | 3) => {
+    $apis.wfood.goods.indexStatus.get(`/${id}/${status === 1 ? 3 : 1}`).then(res => {
       res.data.status === 1 && Taro.showToast({
-        title: status === 1 ? '已隐藏' : '已启用',
+        title: status === 1 ? '已下架' : '已上架',
         icon: 'success',
         duration: 3000
       })
@@ -86,7 +86,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
   const toGoodsDelete = (id: number) => {
     Taro.showModal({
       title: '提示',
-      content: '是否删除该分类信息，将无法恢复此选项，请谨慎操作！！！',
+      content: '是否删除该商品信息，将无法恢复此选项，请谨慎操作！！！',
       success: resModal => {
         if (resModal.confirm) {
           $apis.wfood.goods.indexDelete.delete(`/${id}`).then(res => {
@@ -119,7 +119,14 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
           <View className="inline_index_card">
             <View className="card_header">
               <View className="time">更新于 {moment(detail.updatedAt).format('YYYY-MM-DD HH:mm:ss')}</View>
-              <View className="status">待审核</View>
+              {(status => {
+                switch (status) {
+                  case 1:
+                    return (<View className="status show">已推荐</View>)
+                  case 3:
+                    return (<View className="status hide">已下架</View>)
+                }
+              })(detail.status)}
             </View>
             <View className="card_index_message">
               <UsImage
@@ -177,9 +184,10 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
               >编辑</UsButton>
               <UsButton
                 size="mini"
-                theme="warn"
-                onClick={() => toGoodsStatus(detail.id, 2)}
-              >发布</UsButton>
+                theme={detail.status === 1 ? 'danger' : 'default'}
+                ghost
+                onClick={() => toGoodsStatus(detail.id, detail.status)}
+              >{detail.status === 1 ? '下架' : detail.status === 3 && '上架'}</UsButton>
               <UsButton
                 size="mini"
                 theme="danger"
