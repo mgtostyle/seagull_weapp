@@ -66,14 +66,14 @@ class UsCascader extends Component<PropsWithChildren<PageProps & ReturnType<type
   }
 
   getFieldValue (list, currentValue, label: string = '') {
-    return Array.isArray(list) ? list.map((item) => {
+    return Array.isArray(list) && list.map((item) => {
       let currentLabel = [label, item.label].filter(value => Boolean(value)).join(' / ')
       if (item.value === currentValue) {
         return currentLabel
       } else if (Array.isArray(item.children)) {
         return this.getFieldValue(item.children, currentValue, currentLabel)
       }
-    }).join('') : ''
+    }).join('')
   }
 
   render(): ReactNode {

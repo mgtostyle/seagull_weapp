@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useState } from 'react'
 import type { GoodsDetailsKey } from './interface'
 import './update.less'
-import { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
 import { UsContainer, UsForm, UsUpload, UsInput, UsCascader, UsButton, UsDataNone, UsTextArea } from '@components/usIndex'
@@ -11,6 +11,10 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
   const { id } = (getCurrentInstance as any)().router.params
   
   const [formRef, setFormRef]= useState<any>(null)
+
+  const goodsInitialValues = {
+    priceType: 1
+  }
 
   const priceTypeRange = [
     {
@@ -26,18 +30,25 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
   const getGoodsDetail = async () => {
     try {
       let result = await $apis.wfood.goods.indexDetail.get(`/id/${id}`)
-      return result.data.detail
+      let { headImage, priceLimit, ...params } = result.data.detail
+      return Object.assign(goodsInitialValues, params, {
+        headImage: [{
+          uid: Date.now() + 1,
+          status: 'done',
+          url: headImage,
+          percent: 100
+        }],
+        price0: priceLimit?.[0] || '',
+        price1: priceLimit?.[1] || ''
+      })
     } catch (error) {
-      return {
-        priceType: 1
-      }
+      return goodsInitialValues
     }
   }
 
   const getCategorySelect = async () => {
     try {
       let result = await $apis.wfood.select.goodsCategory.post()
-      console.log(result.data.list)
       return result.data.list
     } catch (error) {
       return []
@@ -88,16 +99,49 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
     })
   }
 
+  const onSubmit = (values) => {
+    let { headImage, price0, price1, ...params } = values
+    $apis.wfood.goods.indexUpdate.post(Object.assign(
+      params,
+      id && { id },
+      {
+        headImage: headImage?.[0]?.url || '',
+        priceLimit: [price0, price1]
+      }
+    )).then(res => {
+      if (res.data.status === 1) {
+        id ? Taro.navigateBack({
+          delta: 1,
+          success: () => Taro.showToast({
+            title: '更新成功',
+            icon: 'success',
+            duration: 1500
+          })
+        }) : Taro.showModal({
+          title: '创建成功',
+          content: '该商品已经创建完成待审核，可选择前往审核发布或者继续创建',
+          confirmText: '前往审核',
+          cancelText: '继续创建',
+          success: resModal => resModal.confirm ? Taro.redirectTo({
+            url: '/wfood/pages/goodsMent/publish'
+          }) : Taro.redirectTo({
+            url: '/wfood/pages/goodsMent/update'
+          })
+        })
+      }
+    })
+  }
+
   return (
     <UsContainer title={id ? '编辑' : '创建'} back={1}>
       <UsForm
         formRef={node => setFormRef(node)}
-        request={getGoodsDetail}
+        request={id ? getGoodsDetail : goodsInitialValues}
         buttonConfig={{
           submitText: id ? '更新' : '创建'
         }}
-        onReset={() => formRef?.resetFields()}
-        onSubmit={values => console.log(values)}
+        onReset={() => formRef?.resetFields(goodsInitialValues)}
+        onSubmit={onSubmit}
       >
         <UsForm.Item label="名称" name="name">
           <UsInput placeholder='请输入...' />

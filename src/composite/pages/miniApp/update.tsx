@@ -38,9 +38,13 @@ const MiniAppUpdate: React.FC<PropsWithChildren<{ props: PageUpdateProps, $apis 
           duration: 2000
         })
       }
-    ]).post(Object.assign(values, id && { id }, {
-      logo: values?.logo?.[0]?.url || ''
-    })).then(res => res.data.status === 1 && Taro.navigateBack({
+    ]).post(Object.assign(
+      values,
+      id && { id },
+      {
+        logo: values?.logo?.[0]?.url || ''
+      }
+    )).then(res => res.data.status === 1 && Taro.navigateBack({
       delta: 1,
       success: () => Taro.showToast({
         title: id ? '更新成功' : '创建成功',

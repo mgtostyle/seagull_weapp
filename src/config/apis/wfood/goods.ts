@@ -10,3 +10,7 @@ export const publishList = new Request<any>('POST', '/wfood/platform/goods/publi
 export const indexDetail = new Request<string>('GET', '/wfood/platform/goods/detail', 'Suffix')
 
 export const indexUpdate = new Request<any>('POST', '/wfood/platform/goods/update', 'Object')
+
+export const indexStatus = new Request<string>('GET', '/wfood/platform/goods/status', 'Suffix')
+
+export const indexDelete = new Request<string>('DELETE', '/wfood/platform/goods/delete', 'Suffix')

@@ -53,14 +53,14 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
   }
 
   resetFields (params?: {[propsName: string]: any}) {
-    const { buttonConfig, initialValues }: PageProps = this.props
+    const { buttonConfig }: PageProps = this.props
     Taro.showModal({
       title: '提示',
       content: '再次确认是否清空当前数据，请谨慎操作此项！！！',
       confirmColor: less.usDangerColor,
       confirmText: buttonConfig?.resetText || '重置',
       success: res => res.confirm && this.setState({
-        initialValues: params ? Object.assign(initialValues, params) : {}
+        initialValues: params || {}
       }, () => console.log(this.state.initialValues))
     })
   }

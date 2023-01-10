@@ -1,0 +1,110 @@
+@import url('@assets/less/common.less');
+
+.inline_index_card{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+  &:last-child{
+    margin-bottom: 0;
+  }
+  .card_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20rpx 0;
+    margin: 0 20rpx;
+    border-bottom: 1PX solid @splitColor;
+    .time{
+      font-size: 24rpx;
+      color: @placeholderColor;
+    }
+    .status{
+      font-size: 24rpx;
+      color: @warnColor;
+    }
+  }
+  .card_index_message{
+    display: flex;
+    padding: 20rpx;
+    .message_image{
+      width: 160rpx;
+      height: 160rpx;
+      border-radius: 12rpx;
+    }
+    .message_info{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 20rpx;
+      .title{
+        font-size: 28rpx;
+        font-weight: bolder;
+        color: @textColor;
+        margin-bottom: 20rpx;
+      }
+      .desc{
+        font-size: 24rpx;
+        word-break: break-all;
+        color: @placeholderColor;
+      }
+      .number{
+        padding-top: 10rpx;
+      }
+      .market{
+        display: flex;
+        align-items: flex-end;
+        .sale{
+          font-size: 36rpx;
+          color: @dangerColor;
+          font-weight: bolder;
+          margin-bottom: -7rpx;
+          text{
+            font-size: 22rpx;
+            padding-right: 7rpx;
+          }
+        }
+        .now{
+          font-size: 22rpx;
+          color: @placeholderColor;
+          text-decoration: line-through;
+          margin-left: 16rpx;
+
+        }
+      }
+      .limit{
+        display: flex;
+        align-items: center;
+        .price{
+          display: flex;
+          align-items: flex-end;
+          color: @dangerColor;
+          font-weight: bolder;
+          font-size: 36rpx;
+          text{
+            font-size: 22rpx;
+            margin-bottom: 7rpx;
+            padding-right: 7rpx;
+          }
+        }
+        .line{
+          color: @dangerColor;
+          font-size: 22rpx;
+          padding: 0 8rpx;
+        }
+      }
+    }
+  }
+  .card_operate{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    grid-gap: 12rpx;
+    grid-auto-flow: row;
+    padding: 0 20rpx 20rpx;
+  }
+}
+
