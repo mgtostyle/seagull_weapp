@@ -10,12 +10,13 @@ class UsInput extends Component<PropsWithChildren<PageProps>> {
   }
 
   private onInput (e) {
-    const { setFieldValue } = this.props
+    const { onInput, setFieldValue } = this.props
     const { value } = e.detail
     typeof setFieldValue === 'function' && setFieldValue({
       value: isNaN(Number(value)) || value === '' ? value.toString() : Number(value),
       update: false
     })
+    typeof onInput === 'function' && onInput(e)
   }
 
   render (): ReactNode {

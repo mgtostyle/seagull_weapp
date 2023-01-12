@@ -22,6 +22,7 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
 
   useImperativeHandle(ref, () => ({
     setList,
+    setQuerySelect,
     reLoad: () => useRequest({ ...initialValues, page: 1 })
   }))
 
@@ -29,8 +30,7 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
     refresh: false,
     hitbottom: false,
     className: '',
-    noneConfig: {},
-    limit: 10
+    noneConfig: {}
   }, props)
 
   const [initialValues, setInitialValues] = useState<any>(Object.assign(typeof props?.limit === 'number' && {
@@ -42,14 +42,15 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
   const [refresh, setRefresh] = useState<'start' | 'loading' | 'end'>('start')
   const [hitbottom, setHitbottom] = useState<'hidden' | 'loading' | 'finish'>('hidden')
 
-  useEffect(() => {
-    const currentValues: any = props.initialValues
+  useEffect(() => setQuerySelect(props?.initialValues), [])
+
+  const setQuerySelect = (formValues: {[propsName: string]: any} = initialValues) => {
     if (typeof props.limit === 'number') {
-      currentValues.page = 1
-      currentValues.limit = props.limit
+      formValues.page = 1
+      formValues.limit = props.limit
     }
-    useRequest(currentValues)
-  }, [props.initialValues])
+    useRequest(formValues)
+  }
 
   const useRequest = async (formValues = initialValues, isRefresh: boolean = false) => {
     let result = await props.request<T>(formValues)
@@ -64,7 +65,7 @@ const ProTable = forwardRef(<T extends unknown>(props: ProTableProps, ref): Reac
     isRefresh && setTimeout(() => {
       Taro.stopPullDownRefresh()
       setRefresh('start')
-    }, 2000)
+    }, 800)
     setHitbottom(currentList.length < result.count ? 'hidden' : 'finish')
   }
 

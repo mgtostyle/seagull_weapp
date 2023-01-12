@@ -71,6 +71,7 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef(({ childr
   const resetFields = (params?: {[propsName: string]: any}) => {
     setCursor(0)
     setInitialValues(params || {})
+    typeof props.onSubmit === 'function' && props.onSubmit(params || {})
   }
 
   return (defaultProps.search || defaultProps.select) ? (
@@ -138,7 +139,7 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef(({ childr
                     >
                       <UsRadio.Group
                         initialValue={initialValues?.[(selects as ColumnItem)?.dataIndex]}
-                        onChange={(e) => onRadioChange((selects as ColumnItem)?.dataIndex, e.value)}
+                        setFieldValue={(e) => onRadioChange((selects as ColumnItem)?.dataIndex, e.value)}
                       >
                         {Object.keys(selects?.valueEnum || {}).map((value: string, index: number) => (
                           <UsRadio

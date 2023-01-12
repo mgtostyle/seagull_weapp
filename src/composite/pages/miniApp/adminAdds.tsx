@@ -142,7 +142,7 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
             value={detail.id}
             checked={detail.settled_in || adminList.map((item: AdminItem) => item.id).includes(detail.id)}
             disabled={detail.settled_in}
-            onChange={(_, status) => getAdminCheckbox(detail, status)}
+            setFieldValue={(_, status) => getAdminCheckbox(detail, status)}
           >
             <View className={`inline_checkbox_admin ${detail.status && 'active'}`}>
               <View className="admin_info">
@@ -153,7 +153,7 @@ const AdministratorAdds: React.FC<PropsWithChildren<{ props: PageAdminAddsProps,
                 />
                 <View className="name">{detail.nickName}</View>
               </View>
-              {!detail.settled_in && (
+              {detail.settled_in && (
                 <View className="admin_status">已入驻</View>
               )}
             </View>

@@ -11,6 +11,8 @@ import { QuerySelect, QuerySelectColumns, ProTable } from '@assembles/moduleInde
 const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
   const { title } = (getCurrentInstance as any)().router.params
+
+  const querySelectRef = useRef<any>()
   const proTableRef = useRef<any>()
   const [isJump, setIsJump] = useState<boolean>(false)
   const [cateId, setCateId] = useState<number>(0)
@@ -26,7 +28,7 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     },
     {
       name: '重置查询条件及内容',
-      result: () => console.log('重置')
+      result: () => querySelectRef.current.resetFields()
     },
     {
       name: '设置为快捷入口',
@@ -39,10 +41,10 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       title: '排序方式',
       dataIndex: 'order_by',
       valueEnum: {
-        weightAsc: '按权重升序',
-        weightDesc: '按权重降序',
-        updatedAtAsc: '按更新时间升序',
-        updatedAtDesc: '按更新时间降序'
+        'weight_ASC': '按权重升序',
+        'weight_DESC': '按权重降序',
+        'updatedAt_ASC': '按更新时间升序',
+        'updatedAt_DESC': '按更新时间降序'
       }
     },
     {
@@ -50,17 +52,17 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       dataIndex: 'status',
       valueEnum: {
         0: '全部',
-        1: '显示',
-        2: '隐藏'
+        1: '推荐中',
+        2: '已关闭'
       }
     }
   ]
 
   useDidShow(() => isJump && proTableRef.current?.reLoad())
 
-  const getCategoryList = async () => {
+  const getCategoryList = async (formValues: {[propsName: string]: any}) => {
     try {
-      let result = await $apis.wfood.category.indexList.post()
+      let result = await $apis.wfood.category.indexList.post(formValues)
       setIsJump(false)
       return result.data
     } catch (error) {
@@ -84,7 +86,15 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       res.data.status === 1 && Taro.showToast({
         title: status === 1 ? '已隐藏' : '已启用',
         icon: 'success',
-        duration: 3000
+        duration: 1500,
+        success: () => proTableRef.current.setList(list => list.map(element => {
+          if (element.id === id) element.status = status === 1 ? 2 : 1
+          element.list = element.list.map(item => {
+            if (item.id === id) item.status = status === 1 ? 2 : 1
+            return item
+          })
+          return element
+        }))
       })
     })
   }
@@ -111,11 +121,16 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       columns={containerColumns}
     >
       <QuerySelect
+        ref={querySelectRef}
         select
         columns={columns}
+        onSubmit={values => proTableRef.current.setQuerySelect(values)}
       />
       <ProTable
         ref={proTableRef}
+        refresh
+        hitbottom
+        limit={10}
         request={getCategoryList}
       >
         {detail => (
@@ -125,9 +140,9 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
               {((status) => {
                 switch (status) {
                   case 1:
-                    return (<View className="status show">正常</View>);
+                    return (<View className="status show">推荐中</View>);
                   case 2:
-                    return (<View className="status hide">关闭</View>);
+                    return (<View className="status hide">已关闭</View>);
                 }
               })(detail.status)}
             </View>
@@ -139,11 +154,11 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
               />
               <View className="message_info">
                 <View className="title">{detail.name}</View>
-                <View className="desc">权重 {detail.weight}，关联商品共计 0 件</View>
+                <View className="desc">权重 {detail.weight}，关联商品共计 {detail.goods_nums} 件</View>
               </View>
             </View>
             <View className="card_index_bottom">
-              {Boolean(detail.children?.length !== 0) && (
+              {Boolean(detail.list?.length !== 0) && (
                 <View className="card_more" onClick={() => setCateId(detail.id === cateId ? 0 : detail.id)}>
                   <View className={`iconfont ${cateId === detail.id ? 'icon-line-up' : 'icon-line-down'}`} />
                   <View className="text">子分类详情</View>
@@ -190,7 +205,7 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
             </View>
             {cateId === detail.id && (
               <View className="block_index_children">
-                {detail.children.map((item, index: number) => (
+                {detail.list.map((item, index: number) => (
                   <React.Fragment key={index}>
                     <View className="inline_children_detail" onClick={() => setChildCateId(item.id === childCateId ? 0 : item.id)}>
                       <UsImage
@@ -200,7 +215,7 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                       />
                       <View className="message_info">
                         <View className="title">{item.name}</View>
-                        <View className="desc">权重 {item.weight}，关联商品 0 件</View>
+                        <View className="desc">{item.status === 1 ? '展示' : '隐藏'}，权重 {item.weight}，拥有商品 {item.goods_nums} 件</View>
                       </View>
                     </View>
                     {item.id === childCateId && (
@@ -219,10 +234,10 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                         >编辑</UsButton>
                         <UsButton
                           size="mini"
-                          theme={detail.status === 1 ? 'danger' : 'default'}
+                          theme={item.status === 1 ? 'danger' : 'default'}
                           ghost
                           onClick={() => toCategoryStatus(item)}
-                        >{detail.status === 1 ? '隐藏' : '启用'}</UsButton>
+                        >{item.status === 1 ? '隐藏' : '启用'}</UsButton>
                         <UsButton
                           size="mini"
                           theme="danger"

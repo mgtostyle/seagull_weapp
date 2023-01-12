@@ -28,7 +28,7 @@ export default class Environment implements EnvironmentProps {
       case 'develop':
         return this.#local;
       case 'trial':
-        return process.env.NODE_ENV === 'development' ? development : production;
+        return process.env.NODE_ENV === 'development' ? development : development;
       default:
         return production;
     }
