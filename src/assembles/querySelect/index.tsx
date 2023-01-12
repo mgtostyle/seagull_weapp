@@ -131,7 +131,7 @@ const QuerySelect: React.FC<PropsWithChildren<PageProps>> = forwardRef(({ childr
               </ScrollView>
               {visible && (
                 <React.Fragment>
-                  <View className={less.select_back} />
+                  <View className={less.select_back} onClick={() => setVisible(!visible)} />
                   {Boolean(Object.keys(selects?.valueEnum || {}).length) ? (
                     <ScrollView
                       className={less.select_column}

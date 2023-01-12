@@ -41,17 +41,17 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       title: '排序方式',
       dataIndex: 'order_by',
       valueEnum: {
-        'weight_ASC': '按权重升序',
-        'weight_DESC': '按权重降序',
-        'updatedAt_ASC': '按更新时间升序',
-        'updatedAt_DESC': '按更新时间降序'
+        weight_ASC: '按权重升序',
+        weight_DESC: '按权重降序',
+        updatedAt_ASC: '按更新时间升序',
+        updatedAt_DESC: '按更新时间降序'
       }
     },
     {
       title: '状态',
       dataIndex: 'status',
       valueEnum: {
-        0: '全部',
+        default: '全部',
         1: '推荐中',
         2: '已关闭'
       }
