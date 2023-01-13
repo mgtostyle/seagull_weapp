@@ -18,7 +18,7 @@ const config = {
     }]
   ],
   env: {
-    LOCAL_ENV: '"local"'
+    LOCAL_ENV: '"test"'
   },
   defineConstants: {
   },

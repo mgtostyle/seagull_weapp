@@ -104,7 +104,11 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       res.data.status === 1 && Taro.showToast({
         title: status === 1 ? '已下架' : '已上架',
         icon: 'success',
-        duration: 3000
+        duration: 3000,
+        success: () => proTableRef.current.setList(list => list.map(element => {
+          if (element.id === id) element.status = status = 1 ? 3 : 1
+          return element
+        }))
       })
     })
   }
@@ -116,7 +120,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       success: resModal => {
         if (resModal.confirm) {
           $apis.wfood.goods.indexDelete.delete(`/${id}`).then(res => {
-            res.data.status === 1 && proTableRef.current?.reLoad()
+            res.data.status === 1 && proTableRef.current.setList(list => list.filter(element => element.id !== id))
           })
         }
       }
