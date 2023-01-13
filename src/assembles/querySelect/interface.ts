@@ -12,7 +12,7 @@ export interface ColumnItem {
   title: string;
   dataIndex: string;
   typeof?: 'string' | 'number';
-  request?: () => Promise<Array<OptionItem>>;
+  request?: (() => Promise<Array<OptionItem>>);
   valueEnum?: {[propsName: string]: any};
 }
 

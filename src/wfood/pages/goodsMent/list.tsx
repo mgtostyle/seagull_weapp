@@ -12,6 +12,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
   const { title } = (getCurrentInstance as any)().router.params
 
+  const querySelectRef = useRef<any>()
   const proTableRef = useRef<any>()
 
   const containerColumns = [
@@ -21,11 +22,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     },
     {
       name: '重置查询条件及内容',
-      result: () => console.log('重置')
-    },
-    {
-      name: '设置为快捷入口',
-      result: () => console.log('设置成功')
+      result: () => querySelectRef.current.resetFields()
     }
   ]
 
@@ -44,15 +41,30 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       title: '标价类型',
       dataIndex: 'priceType',
       valueEnum: {
+        default: '全部',
         1: '销售价/市场价',
         2: '区间价'
+      }
+    },
+    {
+      title: '所属类目',
+      dataIndex: 'categoryId',
+      request: () => getGoodsCategorySelect()
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueEnum: {
+        default: '全部',
+        1: '推荐中',
+        3: '已下架'
       }
     }
   ]
 
-  const getGoodsPublishList = async () => {
+  const getGoodsIndexList = async (formValues: {[propsName: string]: any}) => {
     try {
-      let result = await $apis.wfood.goods.indexList.post()
+      let result = await $apis.wfood.goods.indexList.post(formValues)
       return {
         list: result.data.list,
         count: result.data.count
@@ -62,6 +74,20 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
         list: [],
         count: 0
       }
+    }
+  }
+
+  const getGoodsCategorySelect = async () => {
+    try {
+      let result = await $apis.wfood.select.goodsCategory.post()
+      let flatten = (arr) => arr.reduce((init, next) => {
+        let { children, ...params } = next
+        init.push(params)
+        return init.concat(Array.isArray(children) ? flatten(children.map(item => ({ ...item, label: `${params.label}/${item.label}` }))) : [])
+      }, [{ label: '全部', value: 'default' }])
+      return flatten(result.data.list)
+    } catch (error) {
+      return []
     }
   }
 
@@ -105,15 +131,17 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       columns={containerColumns}
     >
       <QuerySelect
+        ref={querySelectRef}
         select
         columns={columns}
+        onSubmit={values => proTableRef.current.setQuerySelect(values)}
       />
       <ProTable
         ref={proTableRef}
         refresh
         hitbottom
-        // initialValues={querySelect}
-        request={getGoodsPublishList}
+        limit={10}
+        request={getGoodsIndexList}
       >
         {detail => (
           <View className="inline_index_card">
@@ -136,7 +164,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
               />
               <View className="message_info">
                 <View className="title">{detail.name}</View>
-                <View className="desc">{priceTypeLabel(detail.priceType)}</View>
+                <View className="desc">{priceTypeLabel(detail.priceType)}，{detail.category}</View>
                 {(type => {
                   switch (type) {
                     case 1:
@@ -144,10 +172,10 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                         <View className="number market">
                           <View className="sale">
                             <Text>¥</Text>
-                            {detail.priceLimit[0].toString().split('.')[0]}.
-                            <Text>{detail.priceLimit[0].toString().split('.')?.[1] || '00'}</Text>
+                            {detail.priceLimit[0].toFixed(2).split('.')[0]}.
+                            <Text>{detail.priceLimit[0].toFixed(2).split('.')?.[1] || '00'}</Text>
                           </View>
-                          <View className="now">¥ {detail.priceLimit[1]}</View>
+                          <View className="now">¥ {detail.priceLimit[1].toFixed(2)}</View>
                         </View>
                       );
                     case 2:
@@ -155,14 +183,14 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                         <View className="number limit">
                           <View className="price">
                             <Text>¥</Text>
-                            {detail.priceLimit[0].toString().split('.')[0]}.
-                            <Text>{detail.priceLimit[0].toString().split('.')?.[1] || '00'}</Text>
+                            {detail.priceLimit[0].toFixed(2).split('.')[0]}.
+                            <Text>{detail.priceLimit[0].toFixed(2).split('.')?.[1] || '00'}</Text>
                           </View>
                           <View className="line">-</View>
                           <View className="price">
                             <Text>¥</Text>
-                            {detail.priceLimit[1].toString().split('.')[0]}.
-                            <Text>{detail.priceLimit[1].toString().split('.')?.[1] || '00'}</Text>
+                            {detail.priceLimit[1].toFixed(2).split('.')[0]}.
+                            <Text>{detail.priceLimit[1].toFixed(2).split('.')?.[1] || '00'}</Text>
                           </View>
                         </View>
                       );

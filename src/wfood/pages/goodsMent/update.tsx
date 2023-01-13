@@ -136,7 +136,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
     <UsContainer title={id ? '编辑' : '创建'} back={1}>
       <UsForm
         formRef={node => setFormRef(node)}
-        request={id ? getGoodsDetail : goodsInitialValues}
+        request={id ? getGoodsDetail : async () => goodsInitialValues}
         buttonConfig={{
           submitText: id ? '更新' : '创建'
         }}

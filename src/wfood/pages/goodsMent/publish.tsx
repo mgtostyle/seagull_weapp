@@ -12,16 +12,13 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
   const { title } = (getCurrentInstance as any)().router.params
 
+  const querySelectRef = useRef<any>()
   const proTableRef = useRef<any>()
 
   const containerColumns = [
     {
       name: '重置查询条件及内容',
-      result: () => console.log('重置')
-    },
-    {
-      name: '设置为快捷入口',
-      result: () => console.log('设置成功')
+      result: () => querySelectRef.current.resetFields()
     }
   ]
 
@@ -40,15 +37,21 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       title: '标价类型',
       dataIndex: 'priceType',
       valueEnum: {
+        default: '全部',
         1: '销售价/市场价',
         2: '区间价'
       }
+    },
+    {
+      title: '所属类目',
+      dataIndex: 'categoryId',
+      request: () => getGoodsCategorySelect()
     }
   ]
 
-  const getGoodsPublishList = async () => {
+  const getGoodsPublishList = async (formValues: {[propsName: string]: any}) => {
     try {
-      let result = await $apis.wfood.goods.publishList.post()
+      let result = await $apis.wfood.goods.publishList.post(formValues)
       return {
         list: result.data.list,
         count: result.data.count
@@ -61,6 +64,20 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     }
   }
 
+  const getGoodsCategorySelect = async () => {
+    try {
+      let result = await $apis.wfood.select.goodsCategory.post()
+      let flatten = (arr) => arr.reduce((init, next) => {
+        let { children, ...params } = next
+        init.push(params)
+        return init.concat(Array.isArray(children) ? flatten(children.map(item => ({ ...item, label: `${params.label}/${item.label}` }))) : [])
+      }, [{ label: '全部', value: 'default' }])
+      return flatten(result.data.list)
+    } catch (error) {
+      return []
+    }
+  }
+
   const toGoodsEdit = (id?: number) => {
     let params = {
       url: '/wfood/pages/goodsMent/update'
@@ -69,12 +86,13 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     Taro.navigateTo(params)
   }
 
-  const toGoodsStatus = (id: number, status: 1 | 2 | 3) => {
-    $apis.wfood.goods.indexStatus.get(`/${id}/${status === 1 ? 2 : 1}`).then(res => {
+  const toGoodsStatus = (id: number) => {
+    $apis.wfood.goods.indexStatus.get(`/${id}/1`).then(res => {
       res.data.status === 1 && Taro.showToast({
-        title: status === 1 ? '已隐藏' : '已启用',
+        title: '发布成功',
         icon: 'success',
-        duration: 3000
+        duration: 1500,
+        success: () => proTableRef.current.setList(list => list.filter(element => element.id !== id))
       })
     })
   }
@@ -86,7 +104,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       success: resModal => {
         if (resModal.confirm) {
           $apis.wfood.goods.indexDelete.delete(`/${id}`).then(res => {
-            res.data.status === 1 && proTableRef.current?.reLoad()
+            res.data.status === 1 && proTableRef.current.setList(list => list.filter(element => element.id !== id))
           })
         }
       }
@@ -101,14 +119,16 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
       columns={containerColumns}
     >
       <QuerySelect
+        ref={querySelectRef}
         select
         columns={columns}
+        onSubmit={values => proTableRef.current.setQuerySelect(values)}
       />
       <ProTable
         ref={proTableRef}
         refresh
         hitbottom
-        // initialValues={querySelect}
+        limit={10}
         request={getGoodsPublishList}
       >
         {detail => (
@@ -125,7 +145,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
               />
               <View className="message_info">
                 <View className="title">{detail.name}</View>
-                <View className="desc">{priceTypeLabel(detail.priceType)}</View>
+                <View className="desc">{priceTypeLabel(detail.priceType)}，{detail.category}</View>
                 {(type => {
                   switch (type) {
                     case 1:
@@ -133,10 +153,10 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                         <View className="number market">
                           <View className="sale">
                             <Text>¥</Text>
-                            {detail.priceLimit[0].toString().split('.')[0]}.
-                            <Text>{detail.priceLimit[0].toString().split('.')?.[1] || '00'}</Text>
+                            {detail.priceLimit[0].toFixed(2).split('.')[0]}.
+                            <Text>{detail.priceLimit[0].toFixed(2).split('.')?.[1] || '00'}</Text>
                           </View>
-                          <View className="now">¥ {detail.priceLimit[1]}</View>
+                          <View className="now">¥ {detail.priceLimit[1].toFixed(2)}</View>
                         </View>
                       );
                     case 2:
@@ -144,14 +164,14 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                         <View className="number limit">
                           <View className="price">
                             <Text>¥</Text>
-                            {detail.priceLimit[0].toString().split('.')[0]}.
-                            <Text>{detail.priceLimit[0].toString().split('.')?.[1] || '00'}</Text>
+                            {detail.priceLimit[0].toFixed(2).split('.')[0]}.
+                            <Text>{detail.priceLimit[0].toFixed(2).split('.')?.[1] || '00'}</Text>
                           </View>
                           <View className="line">-</View>
                           <View className="price">
                             <Text>¥</Text>
-                            {detail.priceLimit[1].toString().split('.')[0]}.
-                            <Text>{detail.priceLimit[1].toString().split('.')?.[1] || '00'}</Text>
+                            {detail.priceLimit[1].toFixed(2).split('.')[0]}.
+                            <Text>{detail.priceLimit[1].toFixed(2).split('.')?.[1] || '00'}</Text>
                           </View>
                         </View>
                       );
@@ -174,7 +194,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
               <UsButton
                 size="mini"
                 theme="warn"
-                onClick={() => toGoodsStatus(detail.id, 2)}
+                onClick={() => toGoodsStatus(detail.id)}
               >发布</UsButton>
               <UsButton
                 size="mini"
