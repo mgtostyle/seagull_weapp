@@ -1,5 +1,30 @@
 @import url('@assets/less/common.less');
 
+.inline_parameter_list{
+  display: table;
+  border-collapse: collapse;
+  border: 1PX solid @splitColor;
+  margin: 20rpx 20rpx 0;
+  .inline_parameter_item{
+    position: relative;
+    display: table-row;
+    .item_message{
+      display: table-cell;
+      vertical-align: middle;
+      .label{
+        width: 120rpx;
+        white-space: nowrap;
+      }
+      .value{
+        width: 100rpx;
+      }
+    }
+
+  }
+}
+.inline_parameter_button{
+  margin: 20rpx;
+}
 .inline_detail_list{
   display: flex;
   flex-direction: column;
@@ -26,27 +51,6 @@
         padding: 0;
       }
     }
-    .item_operate{
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      grid-gap: 10rpx;
-      padding: 10rpx;
-      .iconfont{
-        display: block;
-        text-align: center;
-        width: 40rpx;
-        height: 40rpx;
-        line-height: 40rpx;
-        border-radius: 6rpx;
-        background-color: @textColor;
-        color: #ffffff;
-        font-size: 28rpx;
-      }
-    }
   }
 }
 .block_detail_operate{
@@ -54,4 +58,25 @@
   align-items: center;
   padding: 20rpx;
   grid-gap: 20rpx;
+}
+.block_common_operate{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  grid-gap: 10rpx;
+  padding: 10rpx;
+  .iconfont{
+    display: block;
+    text-align: center;
+    width: 40rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    border-radius: 6rpx;
+    background-color: @textColor;
+    color: #ffffff;
+    font-size: 28rpx;
+  }
 }

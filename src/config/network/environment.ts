@@ -24,13 +24,11 @@ export default class Environment implements EnvironmentProps {
   }
 
   env () {
-    switch (Taro.getAccountInfoSync().miniProgram.envVersion) {
-      case 'develop':
-        return this.#local;
-      case 'trial':
-        return process.env.NODE_ENV === 'development' ? development : development;
-      default:
-        return production;
+    let envVersion = Taro.getAccountInfoSync()?.miniProgram?.envVersion
+    if (envVersion === 'develop' || envVersion === 'trial') {
+      return this.#local;
+    } else {
+      return production;
     }
   }
 

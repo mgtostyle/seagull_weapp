@@ -177,10 +177,40 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
             request={getCategorySelect}
           />
         </UsForm.Item>
+        <UsForm.Consumer label="规格参数">
+          {({ initialValues }) => (
+            <React.Fragment>
+              {/* {Array.isArray(initialValues?.parameters) && !Boolean(initialValues?.parameters?.length) ? ( */}
+                <View className="inline_parameter_list">
+                  {[{},{},{}].map((element, index: number, parametersArr) => (
+                    <View className="inline_parameter_item" key={index}>
+                      <View className="item_message">
+                        <UsInput className="label" placeholder="属性" />
+                        <UsTextArea className="value" placeholder="请输入属性值..." />
+                      </View>
+                      <View className="block_common_operate" onClick={e => e.stopPropagation()}>
+                        {Boolean(parametersArr.length - 1 > index) && (
+                          <View className="iconfont" onClick={() => setGoodsDetailsItemDown(index)}>↓</View>
+                        )}
+                        {Boolean(index > 0) && (
+                          <View className="iconfont" onClick={() => setGoodsDetailsItemUp(index)}>↑</View>
+                        )}
+                        <View className="iconfont icon-line-delete1" onClick={() => setGoodsDetailsItemDelete(index)} />
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              {/* ) : (
+                <UsDataNone>暂无数据，点击下方添加相应选项并进行内容编辑</UsDataNone>
+              )} */}
+              <UsButton className="inline_parameter_button" size="mini" ghost>创建参数例</UsButton>
+            </React.Fragment>
+          )}
+        </UsForm.Consumer>
         <UsForm.Consumer label="详情配置">
           {({ initialValues }) => (
             <React.Fragment>
-              {Array.isArray(initialValues.details) && Boolean(initialValues.details.length > 0) ? (
+              {Array.isArray(initialValues?.details) && !Boolean(initialValues?.details?.length) ? (
                 <View className="inline_detail_list">
                   {initialValues.details.map((element, index: number, detailsArr) => (
                     <View className="inline_detail_item" key={index}>
@@ -228,7 +258,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
                             return false
                         }
                       })(element)}
-                      <View className="item_operate" onClick={e => e.stopPropagation()}>
+                      <View className="block_common_operate" onClick={e => e.stopPropagation()}>
                         {Boolean(detailsArr.length - 1 > index) && (
                           <View className="iconfont" onClick={() => setGoodsDetailsItemDown(index)}>↓</View>
                         )}

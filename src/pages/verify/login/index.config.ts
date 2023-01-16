@@ -1,3 +1,4 @@
 export default definePageConfig({
-  disableScroll: true
+  disableScroll: true,
+  enableShareAppMessage: true
 })
