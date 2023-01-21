@@ -215,7 +215,7 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
                   {initialValues.parameters.map((element, index: number, parametersArr) => (
                     <View className="inline_parameter_item" key={index}>
                       <View className="item_cell item_label">
-                        <UsInput
+                        <UsTextArea
                           className="input"
                           placeholder="属性..."
                           value={element.label}
