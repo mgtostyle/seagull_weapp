@@ -3,23 +3,33 @@
 .inline_parameter_list{
   display: table;
   border-collapse: collapse;
-  border: 1PX solid @splitColor;
+  border: 1rpx solid @splitColor;
   margin: 20rpx 20rpx 0;
   .inline_parameter_item{
-    position: relative;
     display: table-row;
-    .item_message{
+    .item_cell{
       display: table-cell;
+      border: 1rpx solid @splitColor;
+    }
+    .item_label{
+      width: 120rpx;
       vertical-align: middle;
-      .label{
-        width: 120rpx;
-        white-space: nowrap;
-      }
-      .value{
-        width: 100rpx;
+      .input{
+        display: block;
+        width: auto;
+        height: 100%;
+        text-align: center;
       }
     }
-
+    .item_value{
+      position: relative;
+      width: auto;
+      .textarea{
+        display: block;
+        width: auto;
+        height: 100%;
+      }
+    }
   }
 }
 .inline_parameter_button{

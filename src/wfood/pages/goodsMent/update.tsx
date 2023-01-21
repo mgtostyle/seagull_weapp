@@ -55,6 +55,38 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
     }
   }
 
+  const setGoodsParameterItemCreate = () => {
+    let parameters = formRef.getFieldValue('parameters') || []
+    formRef.setFieldValue({
+      name: 'parameters',
+      value: parameters.concat([{ label: '', content: '' }])
+    })
+  }
+
+  const setGoodsParameterLabelChange = (current: number, params) => {
+    let parameters = formRef.getFieldValue('parameters') || []
+    formRef.setFieldValue({
+      name: 'parameters',
+      value: parameters.map((item, index: number) => {
+        if (current === index) item.label = params.value
+        return item
+      }),
+      update: params?.update
+    })
+  }
+
+  const setGoodsParameterContentChange = (current: number, params) => {
+    let parameters = formRef.getFieldValue('parameters') || []
+    formRef.setFieldValue({
+      name: 'parameters',
+      value: parameters.map((item, index: number) => {
+        if (current === index) item.content = params.value
+        return item
+      }),
+      update: params?.update
+    })
+  }
+
   const setGoodsDetailsItemCreate = (key: GoodsDetailsKey) => {
     let details = formRef.getFieldValue('details') || []
     formRef.setFieldValue({
@@ -75,26 +107,26 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
     })
   }
 
-  const setGoodsDetailsItemUp = (index: number) => {
-    let details = formRef.getFieldValue('details') || []
+  const setFilterItemUp = (key: 'parameters' | 'details', index: number) => {
+    let details = formRef.getFieldValue(key) || []
     formRef.setFieldValue({
-      name: 'details',
+      name: key,
       value: $filter.swapItems(details, index, index - 1)
     })
   }
 
-  const setGoodsDetailsItemDown = (index: number) => {
-    let details = formRef.getFieldValue('details') || []
+  const setFilterItemDown = (key: 'parameters' | 'details', index: number) => {
+    let details = formRef.getFieldValue(key) || []
     formRef.setFieldValue({
-      name: 'details',
+      name: key,
       value: $filter.swapItems(details, index, index + 1)
     })
   }
 
-  const setGoodsDetailsItemDelete = (index: number) => {
-    let details = formRef.getFieldValue('details') || []
+  const setFilterItemDelete = (key: 'parameters' | 'details', index: number) => {
+    let details = formRef.getFieldValue(key) || []
     formRef.setFieldValue({
-      name: 'details',
+      name: key,
       value: details.filter((_, number: number) => number !== index)
     })
   }
@@ -173,44 +205,59 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
           )}
         </UsForm.Consumer>
         <UsForm.Item label="所属分类" name="categoryId">
-          <UsCascader
-            request={getCategorySelect}
-          />
+          <UsCascader request={getCategorySelect} />
         </UsForm.Item>
         <UsForm.Consumer label="规格参数">
           {({ initialValues }) => (
             <React.Fragment>
-              {/* {Array.isArray(initialValues?.parameters) && !Boolean(initialValues?.parameters?.length) ? ( */}
+              {Array.isArray(initialValues?.parameters) && Boolean(initialValues?.parameters?.length) ? (
                 <View className="inline_parameter_list">
-                  {[{},{},{}].map((element, index: number, parametersArr) => (
+                  {initialValues.parameters.map((element, index: number, parametersArr) => (
                     <View className="inline_parameter_item" key={index}>
-                      <View className="item_message">
-                        <UsInput className="label" placeholder="属性" />
-                        <UsTextArea className="value" placeholder="请输入属性值..." />
+                      <View className="item_cell item_label">
+                        <UsInput
+                          className="input"
+                          placeholder="属性..."
+                          value={element.label}
+                          setFieldValue={e => setGoodsParameterLabelChange(index, e)}
+                        />
                       </View>
-                      <View className="block_common_operate" onClick={e => e.stopPropagation()}>
-                        {Boolean(parametersArr.length - 1 > index) && (
-                          <View className="iconfont" onClick={() => setGoodsDetailsItemDown(index)}>↓</View>
-                        )}
-                        {Boolean(index > 0) && (
-                          <View className="iconfont" onClick={() => setGoodsDetailsItemUp(index)}>↑</View>
-                        )}
-                        <View className="iconfont icon-line-delete1" onClick={() => setGoodsDetailsItemDelete(index)} />
+                      <View className="item_cell item_value">
+                        <UsTextArea
+                          className="textarea"
+                          placeholder="请输入属性值..."
+                          value={element.content}
+                          setFieldValue={e => setGoodsParameterContentChange(index, e)}
+                        />
+                        <View className="block_common_operate" onClick={e => e.stopPropagation()}>
+                          {Boolean(parametersArr.length - 1 > index) && (
+                            <View className="iconfont" onClick={() => setFilterItemDown('parameters', index)}>↓</View>
+                          )}
+                          {Boolean(index > 0) && (
+                            <View className="iconfont" onClick={() => setFilterItemUp('parameters', index)}>↑</View>
+                          )}
+                          <View className="iconfont icon-line-delete1" onClick={() => setFilterItemDelete('parameters', index)} />
+                        </View>
                       </View>
                     </View>
                   ))}
                 </View>
-              {/* ) : (
+              ) : (
                 <UsDataNone>暂无数据，点击下方添加相应选项并进行内容编辑</UsDataNone>
-              )} */}
-              <UsButton className="inline_parameter_button" size="mini" ghost>创建参数例</UsButton>
+              )}
+              <UsButton
+                className="inline_parameter_button"
+                size="mini"
+                ghost
+                onClick={setGoodsParameterItemCreate}
+              >创建参数例</UsButton>
             </React.Fragment>
           )}
         </UsForm.Consumer>
         <UsForm.Consumer label="详情配置">
           {({ initialValues }) => (
             <React.Fragment>
-              {Array.isArray(initialValues?.details) && !Boolean(initialValues?.details?.length) ? (
+              {Array.isArray(initialValues?.details) && Boolean(initialValues?.details?.length) ? (
                 <View className="inline_detail_list">
                   {initialValues.details.map((element, index: number, detailsArr) => (
                     <View className="inline_detail_item" key={index}>
@@ -260,12 +307,12 @@ const GoodsUpdate: React.FC<PropsWithChildren<{ $apis, $filter }>> = ({ $apis, $
                       })(element)}
                       <View className="block_common_operate" onClick={e => e.stopPropagation()}>
                         {Boolean(detailsArr.length - 1 > index) && (
-                          <View className="iconfont" onClick={() => setGoodsDetailsItemDown(index)}>↓</View>
+                          <View className="iconfont" onClick={() => setFilterItemDown('details', index)}>↓</View>
                         )}
                         {Boolean(index > 0) && (
-                          <View className="iconfont" onClick={() => setGoodsDetailsItemUp(index)}>↑</View>
+                          <View className="iconfont" onClick={() => setFilterItemUp('details', index)}>↑</View>
                         )}
-                        <View className="iconfont icon-line-delete1" onClick={() => setGoodsDetailsItemDelete(index)} />
+                        <View className="iconfont icon-line-delete1" onClick={() => setFilterItemDelete('details', index)} />
                       </View>
                     </View>
                   ))}
