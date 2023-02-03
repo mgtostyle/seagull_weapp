@@ -3,6 +3,7 @@ import type { CategoryUpdateParams } from './interface'
 import './list.less'
 import Taro, { getCurrentInstance, useDidShow } from '@tarojs/taro'
 import { View } from '@tarojs/components'
+import { useSelector } from "react-redux"
 import moment from 'moment'
 
 import { UsContainer, UsImage, UsButton } from '@components/usIndex'
@@ -12,6 +13,7 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
   const { title } = (getCurrentInstance as any)().router.params
 
+  const storeWfood = useSelector(state => (state as any).wfood)
   const querySelectRef = useRef<any>()
   const proTableRef = useRef<any>()
   const [isJump, setIsJump] = useState<boolean>(false)
@@ -71,6 +73,14 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
         count: 0
       }
     }
+  }
+
+  const toCategoryReview = (id: number) => {
+    Taro.navigateToMiniProgram({
+      appId: storeWfood.appid,
+      path: `/classify/pages/category/index?id=${id}&from=composite`,
+      envVersion: Taro.getAccountInfoSync()?.miniProgram?.envVersion
+    })
   }
 
   const toCategoryEdit = (params: CategoryUpdateParams) => {
@@ -178,6 +188,7 @@ const CategoryList: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
                 >新增标签类</UsButton>
                 <UsButton
                   size="mini"
+                  onClick={() => toCategoryReview(detail.id)}
                 >预览效果</UsButton>
                 <UsButton
                   size="mini"

@@ -17,9 +17,6 @@ const config = {
       cssModules: 'component'
     }]
   ],
-  env: {
-    LOCAL_ENV: '"prod"'
-  },
   defineConstants: {
   },
   copy: {

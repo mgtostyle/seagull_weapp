@@ -46,7 +46,7 @@ export default class Request<T> extends Https<T> {
   #method (type: FormDataType, params: T) {
     switch (type) {
       case 'Suffix':
-        return this.#default().setPromise(this.#joggle + params)
+        return this.#default().setPromise(this.#joggle + (params || ''))
       default:
         return this.#default().setPromise(this.#joggle, params)
     }

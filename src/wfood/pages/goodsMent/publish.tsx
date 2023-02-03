@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useRef } from 'react'
 import './list.less'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
+import { useSelector } from "react-redux"
 import moment from 'moment'
 
 import { priceTypeLabel } from './filter'
@@ -12,6 +13,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
 
   const { title } = (getCurrentInstance as any)().router.params
 
+  const storeWfood = useSelector(state => (state as any).wfood)
   const querySelectRef = useRef<any>()
   const proTableRef = useRef<any>()
 
@@ -76,6 +78,14 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
     } catch (error) {
       return []
     }
+  }
+
+  const toGoodsReview = (id: number) => {
+    Taro.navigateToMiniProgram({
+      appId: storeWfood.appid,
+      path: `/source/pages/goods/detail?id=${id}&from=composite`,
+      envVersion: Taro.getAccountInfoSync()?.miniProgram?.envVersion
+    })
   }
 
   const toGoodsEdit = (id?: number) => {
@@ -184,7 +194,7 @@ const GoodsPublish: React.FC<PropsWithChildren<{ $apis }>> = ({ $apis }) => {
             <View className="card_operate">
               <UsButton
                 size="mini"
-                onClick={() => Taro.showToast({ title: '暂未开发', icon: 'none' })}
+                onClick={() => toGoodsReview(detail.id)}
               >预览效果</UsButton>
               <UsButton
                 size="mini"

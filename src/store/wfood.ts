@@ -3,7 +3,8 @@ import type { UserInfoProps } from './interface'
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export const initialValues = {
-  userInfo: {}
+  userInfo: {},
+  appid: 'wxddaba6b5ff5ebfc7'
 }
 
 export const wfoodSlice = createSlice({
