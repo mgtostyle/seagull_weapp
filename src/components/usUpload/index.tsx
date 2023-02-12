@@ -52,7 +52,7 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
         value: initialValue
       })
     }
-    // 上传接口
+    // 上传接口案例，以setCurrentImage方式导出
     // this.$apis.composite.common.uploadSingleImage.operate({
     //   taskCb: task => task.onProgressUpdate(res => setCurrentImage({
     //     percent: res.progress

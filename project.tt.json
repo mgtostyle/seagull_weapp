@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "./",
   "projectname": "seagull_weapp",
-  "appid": "wxc3c4b5bcef853b6d",
+  "appid": "",
   "setting": {
     "es6": false,
     "minified": false

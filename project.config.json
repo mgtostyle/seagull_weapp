@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "seagull_weapp",
   "description": "Integrated seagull weapp platform for quick login of applet and operation of database information",
-  "appid": "wxc3c4b5bcef853b6d",
+  "appid": "",
   "setting": {
     "urlCheck": true,
     "es6": false,
