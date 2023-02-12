@@ -52,19 +52,20 @@ class UsUpload extends Component<PropsWithChildren<PageProps>> {
         value: initialValue
       })
     }
-    this.$apis.composite.common.uploadSingleImage.operate({
-      taskCb: task => task.onProgressUpdate(res => setCurrentImage({
-        percent: res.progress
-      }))
-    }).upload({
-      source: detail.url,
-      name: 'singleImage'
-    }).then(res => setCurrentImage({
-      status: 'done',
-      url: res.data.imageUrl
-    })).catch((err) => setCurrentImage({
-      status: err
-    }))
+    // 上传接口
+    // this.$apis.composite.common.uploadSingleImage.operate({
+    //   taskCb: task => task.onProgressUpdate(res => setCurrentImage({
+    //     percent: res.progress
+    //   }))
+    // }).upload({
+    //   source: detail.url,
+    //   name: 'singleImage'
+    // }).then(res => setCurrentImage({
+    //   status: 'done',
+    //   url: res.data.imageUrl
+    // })).catch((err) => setCurrentImage({
+    //   status: err
+    // }))
   }
 
   private onDelete (e, current: number) {

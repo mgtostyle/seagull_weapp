@@ -1,8 +1,8 @@
 {
-  "name": "composite_mini_app",
+  "name": "seagull_weapp",
   "version": "1.0.0",
   "private": true,
-  "description": "Integrated composite platform for quick login of applet and operation of database information",
+  "description": "Integrated seagull weapp platform for quick login of applet and operation of database information",
   "templateInfo": {
     "name": "default",
     "typescript": true,

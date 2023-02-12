@@ -1,7 +1,7 @@
 const path = require('path')
 
 const config = {
-  projectName: 'composite_mini_app',
+  projectName: 'seagull_weapp',
   date: '2022-10-20',
   designWidth: 750,
   deviceRatio: {

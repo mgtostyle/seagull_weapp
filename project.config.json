@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "./dist",
-  "projectname": "composite_mini_app",
-  "description": "Integrated composite platform for quick login of applet and operation of database information",
+  "projectname": "seagull_weapp",
+  "description": "Integrated seagull weapp platform for quick login of applet and operation of database information",
   "appid": "wxc3c4b5bcef853b6d",
   "setting": {
     "urlCheck": true,
