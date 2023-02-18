@@ -1,8 +1,8 @@
 {
   "miniprogramRoot": "./dist",
-  "projectname": "seagull_weapp",
-  "description": "Integrated seagull weapp platform for quick login of applet and operation of database information",
-  "appid": "",
+  "projectname": "wms_mini_app",
+  "description": "Integrated wms mini app platform for quick login of applet and operation of database information",
+  "appid": "wxcd3afb5cde0983dd",
   "setting": {
     "urlCheck": true,
     "es6": false,

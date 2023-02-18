@@ -6,7 +6,7 @@ import { UsContainer } from '@components/usIndex'
 const Index: React.FC<PropsWithChildren> = () => {
 
   return (
-    <UsContainer title="seagull组件库"></UsContainer>
+    <UsContainer title="控制台"></UsContainer>
   )
 
 }

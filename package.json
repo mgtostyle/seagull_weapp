@@ -1,8 +1,8 @@
 {
-  "name": "seagull_weapp",
+  "name": "wms_mini_app",
   "version": "1.0.0",
   "private": true,
-  "description": "Integrated seagull weapp platform for quick login of applet and operation of database information",
+  "description": "Integrated wms mini app platform for quick login of applet and operation of database information",
   "templateInfo": {
     "name": "default",
     "typescript": true,

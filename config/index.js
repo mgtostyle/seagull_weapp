@@ -1,7 +1,7 @@
 const path = require('path')
 
 const config = {
-  projectName: 'seagull_weapp',
+  projectName: 'wms_mini_app',
   date: '2022-10-20',
   designWidth: 750,
   deviceRatio: {

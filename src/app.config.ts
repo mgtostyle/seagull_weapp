@@ -1,7 +1,15 @@
 export default defineAppConfig({
-  entryPagePath: 'pages/index/index',
+  entryPagePath: 'authorize/pages/login/index',
   pages: [
     'pages/index/index'
+  ],
+  subPackages: [
+    {
+      root: 'authorize',
+      pages: [
+        'pages/login/index'
+      ]
+    }
   ],
   window: {
     backgroundTextStyle: 'light',

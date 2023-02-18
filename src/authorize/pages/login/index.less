@@ -1,0 +1,132 @@
+@import url('@assets/less/common.less');
+page{
+  background-color: #ffffff;
+}
+.inline_index_bubble{
+  position: fixed;
+  border-radius: 50%;
+  animation-name: jump;
+  animation-duration: 20s;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  opacity: 0.4;
+}
+@keyframes jump {
+  0%{
+    transform: translateY(0);
+  }
+  2%{
+    transform: translateY(0);
+  }
+  4%{
+    transform: translateY(-30px);
+  }
+  5%{
+    transform: translateY(0);
+  }
+  6%{
+    transform: translateY(-15px);
+  }
+  8%{
+    transform: translateY(0);
+  }
+  10%{
+    transform: translateY(0);
+  }
+  100%{
+    transform: translateY(0);
+  }
+}
+.block_form_container{
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 150rpx;
+  .inline_password_header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 300rpx;
+    .title{
+      font-size: 48rpx;
+      color: @textColor;
+      margin-bottom: 20rpx;
+    }
+    .english{
+      font-size: 24rpx;
+      color: @labelColor;
+    }
+  }
+  .inline_password_box{
+    display: flex;
+    flex-direction: column;
+    .inline_input{
+      display: flex;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 100rpx;
+      border: 1PX solid @splitColor;
+      width: 600rpx;
+      box-sizing: content-box;
+      margin-bottom: 60rpx;
+      .iconfont{
+        margin-left: 32rpx;
+        font-size: 42rpx;
+        color: @placeholderColor;
+      }
+      .input{
+        flex: 1;
+        height: 85rpx;
+        margin: 0 20rpx;
+        font-size: 32rpx;
+        color: @textColor;
+      }
+      .placeholder{
+        font-size: 32rpx;
+        color: @placeholderColor;
+      }
+    }
+  }
+  .inline_wechat_box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .avatarUrl{
+      width: 200rpx;
+      height: 200rpx;
+      object-fit: cover;
+    }
+    .nickName{
+      font-size: 32rpx;
+      color: @textColor;
+      margin-top: 20rpx;
+    }
+  }
+  .inline_form_button{
+    position: fixed;
+    left: 50%;
+    bottom: 240rpx;
+    transform: translateX(-50%);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .inline_mode{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 600rpx;
+      margin-bottom: 20rpx;
+      .mode{
+        padding: 20rpx;
+        font-size: 24rpx;
+        color: @labelColor;
+      }
+    }
+  }
+}
