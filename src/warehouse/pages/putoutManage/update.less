@@ -1,0 +1,32 @@
+@import url('@assets/less/common.less');
+
+.parameter_index_table{
+  display: table;
+  margin: 24rpx;
+  width: calc(100vw - 88rpx - 2PX);
+  border: 1PX solid #f4f4f4;
+  .parameter_row{
+    display: table-row;
+    &.head{
+      .cell{
+        background-color: #f4f4f4;
+      }
+    }
+    .cell{
+      display: table-cell;
+      background-color: #ffffff;
+      font-size: 24rpx;
+      color: @placeholderColor;
+      border: 1PX solid #f4f4f4;
+      padding: 20rpx;
+    }
+    .label{
+      width: min-content;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .content{
+      width: max-content;
+    }
+  }
+}

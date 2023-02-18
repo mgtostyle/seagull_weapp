@@ -11,6 +11,7 @@ export interface PageProps extends FormProps {
   formRef?;
   initialValues: {[propsName: string]: any};
   request: (() => Promise<{[propsName: string]: any}>);
+  buttonVisible: boolean;
   buttonConfig?: ButtonConfig;
   setFieldValue?: (fieldValue: FieldValue) => void;
   onReset?: () => void;

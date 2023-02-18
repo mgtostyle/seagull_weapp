@@ -43,7 +43,7 @@ export default class Https<ReqOptions> extends Environment implements HttpsProps
           'X-Requested-With': 'XMLHttpRequest'
         },
         token && {
-          authorization: `Bearer ${token}`
+          'cookie': token
         })
       }
       if (Object.prototype.toString.call(params) === '[object Object]') handler.data = params
@@ -60,7 +60,6 @@ export default class Https<ReqOptions> extends Environment implements HttpsProps
 
   setUpload (joggle: string, params: UploadFileOptions) {
     const { DOMAIN_NAME } = this.#environment
-    const { clientInfo } = this.#requestDefaultParams
     const token = Taro.getStorageSync('token')
     const uploadHandler = (resolve, reject) => {
       let handler: UploadFileParams = {
@@ -68,10 +67,10 @@ export default class Https<ReqOptions> extends Environment implements HttpsProps
         filePath: params.source,
         name: params.name,
         header: Object.assign({
-          'client-info': JSON.stringify(clientInfo),
+          'X-Requested-With': 'XMLHttpRequest'
         },
         token && {
-          'Set-Cookie': `Bearer ${token}`
+          'cookie': token
         }),
         success: (result) => result.statusCode === 200
         ? ((res) => this.#default().#setSuccess(res, resolve))(JSON.parse(result.data))
@@ -112,18 +111,18 @@ export default class Https<ReqOptions> extends Environment implements HttpsProps
     switch (res.error) {
       case 0:
         return resolve(result)
-      // case 403:
-      //   Taro.removeStorageSync('token')
-      //   Taro.showModal({
-      //     title: '访问过期',
-      //     content: '抱歉！访问时间已过期，需要重新登录验证管理员信息，点击确认退出并返回登录界面。',
-      //     showCancel: false,
-      //     confirmText: '我知道了',
-      //     success: res_modal => res_modal.confirm && Taro.reLaunch({
-      //       url: '/pages/verify/login/index'
-      //     })
-      //   })
-      //   break;
+      case -1:
+        Taro.removeStorageSync('token')
+        Taro.showModal({
+          title: '访问过期',
+          content: '抱歉！访问时间已过期，需要重新登录验证管理员信息，点击确认退出并返回登录界面。',
+          showCancel: false,
+          confirmText: '我知道了',
+          success: res_modal => res_modal.confirm && Taro.reLaunch({
+            url: '/authorize/pages/login/index'
+          })
+        })
+        break;
       // case 500:
       //   return Taro.showModal({
       //     title: '请求异常',

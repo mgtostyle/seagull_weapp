@@ -1,13 +1,29 @@
 export default defineAppConfig({
-  entryPagePath: 'authorize/pages/login/index',
+  entryPagePath: 'pages/index/index',
   pages: [
-    'pages/index/index'
+    'pages/index/index',
+    'pages/scane/index'
   ],
   subPackages: [
     {
       root: 'authorize',
       pages: [
         'pages/login/index'
+      ]
+    },
+    {
+      root: 'warehouse',
+      pages: [
+        'pages/entryManage/list',
+        'pages/entryManage/update',
+        'pages/putoutManage/list',
+        'pages/putoutManage/update'
+      ]
+    },
+    {
+      root: 'product',
+      pages: [
+        'pages/goodsManage/list'
       ]
     }
   ],

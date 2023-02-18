@@ -11,6 +11,8 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
 
   static defaultProps: PageProps = {
     initialValues: {},
+    buttonVisible: true,
+    buttonConfig: {},
     request: async () => ({})
   }
 
@@ -80,7 +82,7 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
   }
 
   render (): ReactNode {
-    const { onReset, buttonConfig, ...params }: PageProps = this.props
+    const { onReset, buttonVisible, buttonConfig, ...params }: PageProps = this.props
     const { resetText, submitText, resetButtonProps, submitButtonProps } = (buttonConfig as ButtonConfig)
     const { safeAreaHeight } = this.props.global
     const { visible, initialValues, shouldComponentUpdate }: PageState = this.state
@@ -111,26 +113,28 @@ class UsForm extends Component<PropsWithChildren<PageProps & ReturnType<typeof m
             return false
           }
         })}
-        <View className={less.inline_item_submit}>
-          <View
-            className={less.submit_box}
-            style={{
-              marginBottom: `${safeAreaHeight}rpx`
-            }}
-          >
-            <UsButton
-              {...resetButtonProps}
-              className={less.button}
-              ghost
-              onClick={onReset}
-            >{resetText || '重置'}</UsButton>
-            <UsButton
-              {...submitButtonProps}
-              className={less.button}
-              formType="submit"
-            >{submitText || '提交'}</UsButton>
+        {buttonVisible && (
+          <View className={less.inline_item_submit}>
+            <View
+              className={less.submit_box}
+              style={{
+                marginBottom: `${safeAreaHeight}rpx`
+              }}
+            >
+              <UsButton
+                {...resetButtonProps}
+                className={less.button}
+                ghost
+                onClick={onReset}
+              >{resetText || '重置'}</UsButton>
+              <UsButton
+                {...submitButtonProps}
+                className={less.button}
+                formType="submit"
+              >{submitText || '提交'}</UsButton>
+            </View>
           </View>
-        </View>
+        )}
       </Form>
     )
   }
